@@ -1,7 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
-import card.CmdCard;
+import card.base.CmdCard;
 import token.Mech;
 import token.Token;
 
