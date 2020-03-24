@@ -1,9 +1,6 @@
 package logic;
 
 import java.util.ArrayList;
-
-import javax.smartcardio.Card;
-
 import card.base.CmdCard;
 import token.Mech;
 import token.Token;
@@ -18,14 +15,11 @@ public class GameController {
 	private static int damageCount;
 	private static boolean selectable;
 	private static ArrayList<CmdCard> draftedCard;
-	public static initializeBoard() {
-		
+	public static void initializeBoard() {
+		board = new Board();
 	}
 	public static Board getBoard() {
 		return board;
-	}
-	public static void draw() {
-		
 	}
 	public static void update() {
 		

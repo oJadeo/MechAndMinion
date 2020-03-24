@@ -1,6 +1,9 @@
 package tile;
 
+import logic.Direction;
+import logic.GameController;
 import logic.Sprite;
+import token.Minion;
 
 public class SpawnTile extends Tile{
 
@@ -10,7 +13,7 @@ public class SpawnTile extends Tile{
 		
 	}
 	public void spawn() {
-		Minion newMinion = new Minion(this.getLocationX(),this.getLocationY());
+		Minion newMinion = new Minion(Direction.UP,this);
 		GameController.getBoard().getMinionList().add(newMinion);
 	}
 

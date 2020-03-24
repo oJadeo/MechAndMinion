@@ -169,4 +169,11 @@ public class Board {
 	public void update() {
 		
 	}
+	public ArrayList<Minion> getMinionList() {
+		// TODO Auto-generated method stub
+		return this.minionList;
+	}
+	public ArrayList<SpawnTile> getSpawnTileList(){
+		return this.spawnTileList;
+	}
 }

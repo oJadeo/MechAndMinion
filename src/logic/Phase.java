@@ -6,6 +6,5 @@ public enum Phase {
 	Execute, 
 	MinionMove,
 	MinionSpawn,
-	MinionAttack
-	
+	MinionAttack,
 }
