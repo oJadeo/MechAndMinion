@@ -7,10 +7,13 @@ import tile.Tile;
 
 public class Mech extends Token{
 	private CmdBoard cmdBoard;
-	public Mech(Direction dir,Tile selfTile) {
+	private int no;
+	public Mech(Direction dir,Tile selfTile,int no) {
 		super(dir,selfTile);
 		this.setSpriteValue(Sprite.MECH1);
-		this.cmdBoard = new CmdBoard();
+		this.no = no;
+		this.cmdBoard = new CmdBoard(no);
+		
 	}
 	@Override
 	public void damaged() {

@@ -9,13 +9,11 @@ public abstract class CmdCard {
 	private int spriteValue;
 	public CmdCard() {
 	}
-	public abstract void execute();
+	public abstract boolean execute();
 	public void setCardType(CardType cardType) {
 		this.cardType = cardType;
 	}
-	public void setSpriteValue(int spriteValue) {
-		this.spriteValue = spriteValue;
-	}
+	public abstract void setSpriteValue(int spriteValue);
 	public CardType getCardType() {
 		return this.cardType;
 	}
@@ -23,6 +21,12 @@ public abstract class CmdCard {
 		return this.spriteValue;
 	}
 
+	public void setProgrammedMech(Mech programmedMech) {
+		this.programmedMech = programmedMech;
+	}
+	public Mech getProgrammedMech() {
+		return this.programmedMech;
+	}
 	
 	
 }
