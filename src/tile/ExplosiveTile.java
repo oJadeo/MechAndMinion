@@ -11,5 +11,10 @@ public class ExplosiveTile extends Tile{
 	}
 	public void trigger(Token token) {
 		ArrayList<Tile> selectedTile = GameController.getBoard().getBorder(token.getSelfTile(),1);
+		for(Tile tile:selectedTile) {
+			if(tile.getToken instanceof Minion) {
+				tile.getToken().damaged();
+			}
+		}
 	}
 }

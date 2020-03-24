@@ -11,7 +11,7 @@ public class SpawnTile extends Tile{
 	}
 	public void spawn() {
 		Minion newMinion = new Minion(this.getLocationX(),this.getLocationY());
-		
+		GameController.getBoard().getMinionList().add(newMinion);
 	}
 
 }
