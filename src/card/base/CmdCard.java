@@ -22,7 +22,7 @@ public abstract class CmdCard {
 	public int getSpriteValue() {
 		return this.spriteValue;
 	}
-	
+
 	
 	
 }
