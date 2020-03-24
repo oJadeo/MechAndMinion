@@ -1,5 +1,9 @@
 package card.base;
 
+import java.util.ArrayList;
+
+import logic.Direction;
+
 public interface Rotate {
-	public void spin();
+	public ArrayList<Direction> spin(int tier) ;
 }

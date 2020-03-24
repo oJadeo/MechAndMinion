@@ -20,13 +20,13 @@ public abstract class CmdCard {
 	public int getSpriteValue() {
 		return this.spriteValue;
 	}
+
 	public void setProgrammedMech(Mech programmedMech) {
 		this.programmedMech = programmedMech;
 	}
 	public Mech getProgrammedMech() {
 		return this.programmedMech;
 	}
-	
 	
 	
 }
