@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javax.smartcardio.Card;
 
-import card.CmdCard;
+import card.base.CmdCard;
 import token.Mech;
 import token.Token;
 

@@ -2,7 +2,7 @@ package logic;
 
 import java.util.ArrayList;
 
-import card.CmdCard;
+import card.base.CmdCard;
 
 public class CmdBox {
 	private ArrayList<CmdCard> cmdCardList;

@@ -1,4 +1,4 @@
-package card;
+package card.base;
 
 import logic.CardType;
 import token.Mech;
