@@ -1,8 +1,7 @@
 package tile;
 
 import logic.Sprite;
-
-import java.util.ArrayList;
+import token.Token;
 
 import logic.Direction;
 

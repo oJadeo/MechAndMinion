@@ -1,10 +1,11 @@
 package tile;
 
 import logic.Sprite;
+import token.Token;
 
 public class Tile {
-	public static final int DIMENSIONX;
-	public static final int DIMENSIONY;
+	public static final int DIMENSIONX = 48;
+	public static final int DIMENSIONY = 48;
 	private int locationX;
 	private int locationY;
 	private Token token;
@@ -23,6 +24,9 @@ public class Tile {
 	}
 	public void setLocationY(int locationY) {
 		this.locationY = locationY;
+	}
+	public Token getToken() {
+		return this.token;
 	}
 	public void setToken(Token token) {
 		this.token = token;

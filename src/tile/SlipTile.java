@@ -1,6 +1,8 @@
 package tile;
 
+import logic.GameController;
 import logic.Sprite;
+import token.Token;
 
 public class SlipTile extends MoveTile{
 
@@ -10,4 +12,5 @@ public class SlipTile extends MoveTile{
 	}
 	public void trigger(Token token) {
 		GameController.move(token,token.getDirection());
+	}
 }
