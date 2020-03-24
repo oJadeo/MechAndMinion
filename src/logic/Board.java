@@ -158,16 +158,20 @@ public class Board {
 		return result;
 	}
 	public ArrayList<Tile> getBorder(Tile tile,int range){
-		Direction dir = ALL;
-		ArrayList<Tile> result = this.getAdjacentTile(tile, range, dir);
-		result.addAll(this.getDiagonalTile(tile, range, dir));
+		ArrayList<Tile> result = new ArrayList<Tile>();
+		int x = tile.getLocationX();
+		int y = tile.getLocationY();
+		for(int i = x-range;i<=x+range;i++) {
+			for(int j = y-range;j<=y+range;j++) {
+				if (0 <= i && i < BOARDSIZEX && 0 <= j && j < BOARDSIZEY) {
+					result.add(tileBoard[i][j]);
+				}
+			}
+		}
 		return result;
 	}
 	public Boolean isMovePossible(int x,int y) {
 		return x>=0 && x<BOARDSIZEX && y>=0 && y<BOARDSIZEY;
-	}
-	public void update() {
-		
 	}
 	public ArrayList<Minion> getMinionList() {
 		// TODO Auto-generated method stub
@@ -175,5 +179,8 @@ public class Board {
 	}
 	public ArrayList<SpawnTile> getSpawnTileList(){
 		return this.spawnTileList;
+	}
+	public void update() {
+		
 	}
 }

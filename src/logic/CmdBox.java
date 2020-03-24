@@ -9,35 +9,40 @@ public class CmdBox {
 		this.cmdCardList = new ArrayList<CmdCard>();
 	}
 	public Boolean addCmdCard(CmdCard selectedCard) {
-		if(this.cmdCardList.get(0).getCardType() == selectedCard.getCardType()) {
+		if(this.cmdCardList.get(this.cmdCardList.size()-1).getCardType() == selectedCard.getCardType()) {
 			switch(this.cmdCardList.size()) {
+			case 0:
+				this.cmdCardList.add(selectedCard);
+				selectedCard.setSpriteValue(1);
+				GameController.update();
+				break;
 			case 1:
 				this.cmdCardList.add(selectedCard);
-				selectedCard.setSpriteValue(0);
+				selectedCard.setSpriteValue(2);
 				GameController.update();
 				break;
 			case 2:
 				this.cmdCardList.add(selectedCard);
-				selectedCard.setSpriteValue(0);
+				selectedCard.setSpriteValue(3);
 				GameController.update();
 				break;
 			case 3:
 				this.cmdCardList.set(2, selectedCard);
-				selectedCard.setSpriteValue(0);
+				selectedCard.setSpriteValue(3);
 				GameController.update();
 				break;
 			}
 			return true;
-		}
+		}return false;
 	}
-	public Boolean addDamageCard() {
-		
+	public void addDamageCard(CmdCard damageCard) {
+		this.cmdCardList.add(damageCard);
 	}
 	public void update() {
 		
 	}
-	public void execute() {
-		
+	public boolean execute() {
+		return this.cmdCardList.get(this.cmdCardList.size()-1).execute();
 	}
 
 }
