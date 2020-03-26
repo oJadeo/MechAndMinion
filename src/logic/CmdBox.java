@@ -2,11 +2,13 @@ package logic;
 
 import java.util.ArrayList;
 import card.base.CmdCard;
-
 public class CmdBox {
 	private ArrayList<CmdCard> cmdCardList;
 	public CmdBox() {
 		this.cmdCardList = new ArrayList<CmdCard>();
+		for(int  i=0;i<6;i++) {
+			this.cmdCardList.add(null);
+		}
 	}
 	public Boolean addCmdCard(CmdCard selectedCard) {
 		if(this.cmdCardList.get(this.cmdCardList.size()-1).getCardType() == selectedCard.getCardType()) {
@@ -42,7 +44,8 @@ public class CmdBox {
 		
 	}
 	public boolean execute() {
-		return this.cmdCardList.get(this.cmdCardList.size()-1).execute();
+		//return this.cmdCardList.get(this.cmdCardList.size()-1).execute();
+		return true;
 	}
 
 }

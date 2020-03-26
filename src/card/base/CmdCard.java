@@ -9,7 +9,7 @@ public abstract class CmdCard {
 	private int spriteValue;
 	public CmdCard() {
 	}
-	public abstract boolean execute();
+	public abstract void execute();
 	public void setCardType(CardType cardType) {
 		this.cardType = cardType;
 	}

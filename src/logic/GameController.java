@@ -2,8 +2,8 @@ package logic;
 
 import java.util.ArrayList;
 import card.base.CmdCard;
-import token.Mech;
-import token.Token;
+import tile.*;
+import token.*;
 
 public class GameController {
 	private static Board board;
@@ -18,7 +18,7 @@ public class GameController {
 	private static int programCount;
 	public static void initializeGame() {
 		initializeBoard();
-		draftedCard = new DraftedCard();
+		//draftedCard = new DraftedCard();
 		redMech = new Mech(Direction.DOWN,board.getTile(0,0),0);
 		blueMech = new Mech(Direction.UP,board.getTile(9, 9),1);
 		currentPhase = Phase.Program;
@@ -29,6 +29,39 @@ public class GameController {
 	}
 	public static void initializeBoard() {
 		board = new Board();
+		int specialTileNum = 0;
+		while(specialTileNum < 6) {
+			GameController.randomTile();
+			specialTileNum += 1;
+		}
+	}
+	public static void randomTile() {
+		//random location that is not already special tile
+		int randomX;
+		int randomY;
+		do {
+		randomX = (int) (Math.random()*10);
+		randomY = (int) (Math.random()*10);
+		System.out.println(randomX+randomY);
+		}while(board.isSpecial(randomX,randomY));
+		
+		int random = (int) (Math.random()*4);
+		switch(random) {
+		case 0:
+			board.setTile(randomX,randomY,new ExplosiveTile(randomX,randomY));
+			break;
+		case 1:
+			board.setTile(randomX,randomY,new MoveTile(randomX,randomY));
+			break;
+		case 2:
+			board.setTile(randomX,randomY,new SpinTile(randomX,randomY));
+			break;
+		case 3:
+			board.setTile(randomX,randomY,new SlipTile(randomX,randomY));
+			break;
+		default:
+			break;
+		}
 	}
 	public static Board getBoard() {
 		return board;
@@ -65,12 +98,6 @@ public class GameController {
 	public static void setProgram(Mech selectedMech,int commardSlot,CmdCard selectedCard) {
 		
 	}
-	public static void repair(Mech selectedMech) {
-		
-	}
-	public static void reprogram(Mech selectedMech) {
-		
-	}
 	public static void move(Token selectedToken, Direction dir) {
 		
 	}
@@ -81,7 +108,6 @@ public class GameController {
 		
 	}
 	public static void select(ArrayList<Object> selectable) {
-		
 	}
 	public static void execute(int programCount) {
 		if(programCount==12) {

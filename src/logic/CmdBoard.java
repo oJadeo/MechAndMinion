@@ -10,8 +10,8 @@ public class CmdBoard {
 	public final int OFFSETY = 120;
 	
 	public CmdBoard(int no) {
-		CmdBox cmdbox1 = new CmdBox(); 
-		this.cmdBoxList.add(cmdbox1);
+		this.cmdBoxList = new ArrayList<CmdBox>();
+		this.cmdBoxList.add(new CmdBox());
 		CmdBox cmdbox2 = new CmdBox(); 
 		this.cmdBoxList.add(cmdbox2);
 		CmdBox cmdbox3 = new CmdBox(); 
