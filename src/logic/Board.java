@@ -208,10 +208,10 @@ public class Board {
 					}
 				}
 				if(tileBoard[i][j].getToken() instanceof Mech) {
-					result += " 1 ";
+					result += " " + (((Mech) tileBoard[i][j].getToken()).getNo()+1)+" ";
 				}
 				if(tileBoard[i][j].getToken() instanceof Minion) {
-					result += " 2 ";
+					result += " * ";
 				}
 				
 			}

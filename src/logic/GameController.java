@@ -8,7 +8,9 @@ import token.*;
 public class GameController {
 	private static Board board;
 	private static Mech redMech;
+	private static int redMechProgram;
 	private static Mech blueMech;
+	private static int blueMechProgram;
 	private static Phase currentPhase;
 	private static int turnCount;
 	private static int score;
@@ -16,16 +18,22 @@ public class GameController {
 	private static ArrayList<Object> selectable;
 	private static DraftedCard draftedCard;
 	private static int programCount;
+	private static boolean gameEnd;
+	
 	public static void initializeGame() {
 		initializeBoard();
-		//draftedCard = new DraftedCard();
+		draftedCard = new DraftedCard();
 		redMech = new Mech(Direction.DOWN,board.getTile(0,0),0);
-		blueMech = new Mech(Direction.UP,board.getTile(9, 9),1);
+		redMechProgram = 0;
+		blueMech = new Mech(Direction.UP,board.getTile(9,9),1);
+		blueMechProgram = 0;
 		currentPhase = Phase.Program;
 		turnCount = 1;
 		score = 0;
 		damageCount =0;
 		programCount = 0;
+		gameEnd = false;
+		update();
 	}
 	public static void initializeBoard() {
 		board = new Board();
@@ -42,7 +50,6 @@ public class GameController {
 		do {
 		randomX = (int) (Math.random()*10);
 		randomY = (int) (Math.random()*10);
-		System.out.println(randomX+randomY);
 		}while(board.isSpecial(randomX,randomY));
 		
 		int random = (int) (Math.random()*4);
@@ -78,13 +85,18 @@ public class GameController {
 		return board;
 	}
 	public static void update() {
-		getBoard().update();
+		board.update();
+		draftedCard.update();
+		redMech.update();
+		blueMech.update();
 	}
 	public static void nextPhase() {
 		switch(currentPhase) {
 		case Program:
-			currentPhase = Phase.Execute;
 			draftedCard.reDeal();
+			redMechProgram = 0;
+			blueMechProgram = 0;
+			currentPhase = Phase.Execute;
 			execute(programCount);
 			break;
 		case Execute:
@@ -139,8 +151,24 @@ public class GameController {
 			break;
 		}
 	}
-	public static void setProgram(Mech selectedMech,int commardSlot,CmdCard selectedCard) {
-		
+	public static void setProgram(int no,int cmdSlot,int selectedCardSlot) {
+		if(draftedCard.getDraftedCardList().get(selectedCardSlot)==null) {
+			System.out.println("can select empty card");
+		}if(no == 0 && redMechProgram < 2) {
+			redMech.getCmdBoard().getCmdBox(cmdSlot).addCmdCard(draftedCard.getDraftedCardList().get(selectedCardSlot));
+			draftedCard.getDraftedCardList().set(selectedCardSlot, null);
+			redMechProgram += 1;
+		}else if(no == 1 && blueMechProgram < 2) {
+			blueMech.getCmdBoard().getCmdBox(cmdSlot).addCmdCard(draftedCard.getDraftedCardList().get(selectedCardSlot));
+			draftedCard.getDraftedCardList().set(selectedCardSlot, null);
+			blueMechProgram += 1;
+		}else {
+			System.out.println("error");
+		}
+		if(redMechProgram + blueMechProgram == 4) {
+			nextPhase();
+		}	
+		update();
 	}
 	public static boolean move(Token selectedToken, Direction dir) {
 		if(getBoard().getAdjacentTile(selectedToken.getSelfTile(), 1, dir).size() == 0) {
@@ -182,5 +210,10 @@ public class GameController {
 			System.out.println("You Die");
 		}
 	}
-	
+	public static boolean getGameEnd() {
+		return gameEnd;
+	}
+	public static Phase getCurrentPhase() {
+		return currentPhase;
+	}
 }

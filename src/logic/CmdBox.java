@@ -6,11 +6,12 @@ public class CmdBox {
 	private ArrayList<CmdCard> cmdCardList;
 	public CmdBox() {
 		this.cmdCardList = new ArrayList<CmdCard>();
-		for(int  i=0;i<6;i++) {
-			this.cmdCardList.add(null);
-		}
+		this.cmdCardList.add(null);
 	}
 	public void addCmdCard(CmdCard selectedCard) {
+		if(this.cmdCardList.get(this.cmdCardList.size()-1)==null) {
+			this.cmdCardList.add(selectedCard);
+		}
 		if(this.cmdCardList.get(this.cmdCardList.size()-1).getCardType() == selectedCard.getCardType()) {
 			switch(this.cmdCardList.size()) {
 			case 0:
@@ -52,8 +53,8 @@ public class CmdBox {
 		//return this.cmdCardList.get(this.cmdCardList.size()-1).execute();
 		return true;
 	}
-	public ArrayList<CmdCard> getCmdCardList() {
-		return cmdCardList;
+	public void setCmdCardList(ArrayList<CmdCard> cmdCardList) {
+		this.cmdCardList = cmdCardList;
 	}
 	public ArrayList<CmdCard> getCmdCardList(){
 		return this.cmdCardList;
