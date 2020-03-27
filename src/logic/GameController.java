@@ -15,7 +15,8 @@ public class GameController {
 	private static int turnCount;
 	private static int score;
 	private static int damageCount;
-	private static ArrayList<Object> selectable;
+	private static ArrayList<Object> selectable = new ArrayList<Object>();
+	private static int selectTimes;
 	private static DraftedCard draftedCard;
 	private static int programCount;
 	private static boolean gameEnd;
@@ -42,6 +43,11 @@ public class GameController {
 			GameController.randomTile();
 			specialTileNum += 1;
 		}
+		for(int i = 0;i<3;i++) {
+			creatSpawnTile();
+		}
+		Minion testMinion = new Minion(Direction.UP,board.getTile(0,1));
+		Minion testMinion2 = new Minion(Direction.UP,board.getTile(0,2));
 	}
 	public static void randomTile() {
 		//random location that is not already special tile
@@ -76,7 +82,6 @@ public class GameController {
 		do {
 		randomX = (int) (Math.random()*10);
 		randomY = (int) (Math.random()*10);
-		System.out.println(randomX+randomY);
 		}while(board.isSpecial(randomX,randomY));
 		
 		board.setTile(randomX, randomY,new SpawnTile(randomX, randomY));
@@ -85,10 +90,41 @@ public class GameController {
 		return board;
 	}
 	public static void update() {
-		board.update();
-		draftedCard.update();
-		redMech.update();
-		blueMech.update();
+		switch(currentPhase) {
+		case Program:
+			board.update();
+			draftedCard.update();
+			redMech.update();
+			blueMech.update();
+			break;
+		case Execute:
+			board.update();
+			redMech.update();
+			blueMech.update();
+			System.out.println("times = "+selectable.size());
+			String result = "selectable = [";
+			for(Object e: selectable) {
+				if(e instanceof Tile) {
+					result += " ["+((Tile)e).getLocationX()+","+((Tile)e).getLocationY()+"] ";
+				}
+				if(e instanceof Token) {
+					result += " ["+((Token)e).getSelfTile().getLocationX()+","+((Token)e).getSelfTile().getLocationY()+"] ";
+				}
+				if(e instanceof Direction) {
+					result += " ["+e+"] ";
+				}
+			}
+			result += "]";
+			System.out.println(result);
+			break;
+		default:
+			board.update();
+			draftedCard.update();
+			redMech.update();
+			blueMech.update();
+			break;
+		}
+		
 	}
 	public static void nextPhase() {
 		switch(currentPhase) {
@@ -155,10 +191,12 @@ public class GameController {
 		if(draftedCard.getDraftedCardList().get(selectedCardSlot)==null) {
 			System.out.println("can select empty card");
 		}if(no == 0 && redMechProgram < 2) {
+			draftedCard.getDraftedCardList().get(selectedCardSlot).setProgrammedMech(redMech);
 			redMech.getCmdBoard().getCmdBox(cmdSlot).addCmdCard(draftedCard.getDraftedCardList().get(selectedCardSlot));
 			draftedCard.getDraftedCardList().set(selectedCardSlot, null);
 			redMechProgram += 1;
 		}else if(no == 1 && blueMechProgram < 2) {
+			draftedCard.getDraftedCardList().get(selectedCardSlot).setProgrammedMech(blueMech);
 			blueMech.getCmdBoard().getCmdBox(cmdSlot).addCmdCard(draftedCard.getDraftedCardList().get(selectedCardSlot));
 			draftedCard.getDraftedCardList().set(selectedCardSlot, null);
 			blueMechProgram += 1;
@@ -186,22 +224,39 @@ public class GameController {
 		};
 		return false;
 	}
-	public static void select(ArrayList<Object> selectable) {
+	public static void setSelectable(ArrayList<Object> selectable) {
+		GameController.selectable = selectable;
+	}
+	public static void setSelectTimes(int selectTimes) {
+		GameController.selectTimes = selectTimes;
+		if(selectTimes == 0) {
+			execute(programCount+1);
+		}
+	}
+	public static void select(int i) {
+		if(i > selectable.size() || i < 0) {
+			//exception
+		}else if(selectable.get(i) instanceof Token) {
+			((Token)selectable.get(i)).damaged();
+			selectable.remove(i);
+			selectTimes -= 1;
+		}
+		if(selectTimes == 0) {
+			execute(programCount+1);
+		}else {
+			update();
+		}
 	}
 	public static void execute(int programCount) {
 		if(programCount==12) {
 			nextPhase();
 		}else {
-			boolean keepGoing;
 			if(programCount<6) {
-				keepGoing = redMech.getCmdBoard().getCmdBox(programCount).execute(); 
+				redMech.getCmdBoard().getCmdBox(programCount).execute(); 
 			}else {
-				keepGoing = blueMech.getCmdBoard().getCmdBox(programCount-6).execute();
+				blueMech.getCmdBoard().getCmdBox(programCount-6).execute();
 			}
 			programCount++;
-			if(keepGoing) {
-				execute(programCount);
-			}
 		}
 	}
 	public static void addDamgeCount(int i) {
@@ -215,5 +270,8 @@ public class GameController {
 	}
 	public static Phase getCurrentPhase() {
 		return currentPhase;
+	}
+	public static int getProgramCount() {
+		return programCount;
 	}
 }

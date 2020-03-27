@@ -17,22 +17,18 @@ public class CmdBox {
 			case 0:
 				this.cmdCardList.add(selectedCard);
 				selectedCard.setSpriteValue(1);
-				GameController.update();
 				break;
 			case 1:
 				this.cmdCardList.add(selectedCard);
 				selectedCard.setSpriteValue(2);
-				GameController.update();
 				break;
 			case 2:
 				this.cmdCardList.add(selectedCard);
 				selectedCard.setSpriteValue(3);
-				GameController.update();
 				break;
 			case 3:
 				this.cmdCardList.set(2, selectedCard);
 				selectedCard.setSpriteValue(3);
-				GameController.update();
 				break;
 			}
 		}else {
@@ -49,9 +45,12 @@ public class CmdBox {
 	public void update() {
 		
 	}
-	public boolean execute() {
-		//return this.cmdCardList.get(this.cmdCardList.size()-1).execute();
-		return true;
+	public void execute() {
+		if(this.cmdCardList.get(this.cmdCardList.size()-1)==null) {
+			GameController.execute(GameController.getProgramCount()+1);
+		}else {
+			this.cmdCardList.get(this.cmdCardList.size()-1).execute();
+		}
 	}
 	public void setCmdCardList(ArrayList<CmdCard> cmdCardList) {
 		this.cmdCardList = cmdCardList;

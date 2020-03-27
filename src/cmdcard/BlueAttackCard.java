@@ -18,16 +18,17 @@ public class BlueAttackCard extends CmdCard implements Attack {
 		this.spriteValue = CardSprite.BLUE_ATTACK_CARD_1;
 	}
 	@Override
-	public ArrayList<Token> attack(int tier) {
-		ArrayList<Token> result = new ArrayList<>();
-		int x = this.getProgrammedMech().getSelfTile().getLocationX();
-		int y = this.getProgrammedMech().getSelfTile().getLocationY();
-		Mech mech = (Mech) GameController.getBoard().getTile(x, y).getToken();
+	public ArrayList<Object> attack(int tier) {
+		ArrayList<Object> result = new ArrayList<Object>();
+		Mech mech = this.getProgrammedMech();
 		Direction dir = mech.getDirection();
 		ArrayList<Tile> tileList = GameController.getBoard().getAdjacentTile(mech.getSelfTile(), 10, dir);
-		for(int i=0;i<tier;i++) {
+		for(int i=0;i<tileList.size();i++) {
 			if(tileList.get(i).getToken() instanceof Token) {
-				result.add((Token)tileList.get(i).getToken());
+				result.add((Object)tileList.get(i).getToken());
+			}
+			if(result.size()==tier) {
+				break;
 			}
 		}
 		return result;
@@ -35,10 +36,8 @@ public class BlueAttackCard extends CmdCard implements Attack {
 	@Override
 	public void execute() {
 		int tier = this.getCmdBox().getCmdCardList().size();
-		for(Token token: attack(tier)) {
-			token.damaged();
-		}
-		
+		GameController.setSelectable(this.attack(tier));
+		GameController.setSelectTimes(tier);
 	}
 	@Override
 	public void setSpriteValue(int tier) {
@@ -52,7 +51,6 @@ public class BlueAttackCard extends CmdCard implements Attack {
 		case 3:
 			this.spriteValue = CardSprite.BLUE_ATTACK_CARD_3;
 			break;
-		
 		}
 		
 	}

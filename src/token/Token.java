@@ -8,8 +8,8 @@ public abstract class Token {
 	private Tile selftile;
 	private int spriteValue;
 	public Token(Direction dir,Tile selfTile) {
-		this.dir = dir;
-		this.selftile = selfTile;
+		this.setDirection(dir);
+		this.setSelfTile(selfTile);;
 		selfTile.setToken(this);
 	}
 	public abstract void damaged();

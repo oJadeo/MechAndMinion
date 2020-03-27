@@ -1,6 +1,5 @@
 package tile;
 
-import logic.GameController;
 import logic.Sprite;
 
 public class SlipTile extends MoveTile{

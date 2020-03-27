@@ -30,6 +30,7 @@ public class CmdBoard {
 			this.cmdBoxList.add(new CmdBox());
 		}
 		this.setStartPostionX(1000*no);
+		this.no =no;
 	}
 	private void setStartPostionX(int startPositionX) {
 		// TODO Auto-generated method stub
@@ -43,7 +44,7 @@ public class CmdBoard {
 		this.cmdBoxList.set(slot, cmdBox);
 	}
 	public void update() {
-		String result = no+" Mech : [";
+		String result = (no+1) +" Mech : [";
 		for(CmdBox cmdBox:cmdBoxList) {
 			CmdCard card = cmdBox.getCmdCardList().get(cmdBox.getCmdCardList().size()-1);
 			if(card instanceof BlueAttackCard) {

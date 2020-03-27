@@ -16,12 +16,12 @@ public class Board {
 	public Board() {
 		for(int i=0;i<BOARDSIZEX;i++) {
 			for(int j=0;j<BOARDSIZEY;j++) {
-				this.tileBoard[i][j] = new Tile(i,j);
+				this.tileBoard[i][j] = new Tile(j,i);
 			}
 		}
 	}
 	public Tile getTile(int x,int y) {
-		return this.tileBoard[x][y];
+		return this.tileBoard[y][x];
 	}
 	public void setTile(int x,int y,Tile newTile) {
 		this.tileBoard[y][x] = newTile;
@@ -201,8 +201,10 @@ public class Board {
 						result += " M ";
 					}else if(tileBoard[i][j] instanceof SpinTile) {
 						result += " S ";
-					}else if(tileBoard[i][j] instanceof SpinTile) {
+					}else if(tileBoard[i][j] instanceof SlipTile) {
 						result += " L ";
+					}else if(tileBoard[i][j] instanceof SpawnTile) {
+						result += " # ";
 					}else{
 					result += " 0 ";
 					}

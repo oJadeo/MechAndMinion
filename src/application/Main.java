@@ -20,8 +20,15 @@ public class Main {
 				System.out.print("Select Slot :");
 				int selectedSlot = kb.nextInt();
 				GameController.setProgram(selectedMech-1, selectedSlot-1, selectedCard-1);
+				break;
 			case Execute:
+				System.out.println("Select Target");
+				int selectedObjected = kb.nextInt();
+				GameController.select(selectedObjected-1);
+				break;
+			case MinionMove:
 				System.out.println("Pass");
+				
 			default:
 				break;
 			}
