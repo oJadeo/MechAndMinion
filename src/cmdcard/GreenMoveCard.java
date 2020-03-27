@@ -10,6 +10,7 @@ import logic.GameController;
 import logic.Sprite;
 import tile.Tile;
 import token.Mech;
+import token.Token;
 
 public class GreenMoveCard extends CmdCard implements Move {
 	private int spriteValue;
@@ -52,7 +53,7 @@ public class GreenMoveCard extends CmdCard implements Move {
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		//
 		
 	}
 	public void setSpriteValue(int tier) {

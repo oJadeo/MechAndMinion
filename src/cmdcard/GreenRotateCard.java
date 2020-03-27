@@ -16,8 +16,8 @@ public class GreenRotateCard extends CmdCard implements Rotate {
 	}
 	
 	public ArrayList<Direction> spin(int tier) {
-		int x = this.getProgrammedMech().getSelfTile().getLocationX;
-		int y = this.getProgrammedMech().getSelfTile().getLocationY;
+		int x = this.getProgrammedMech().getSelfTile().getLocationX();
+		int y = this.getProgrammedMech().getSelfTile().getLocationY();
 		Mech mech = (Mech) GameController.getBoard().getTile(x, y).getToken();
 		Direction dir = mech.getDirection();
 		ArrayList<Direction> dirList =new ArrayList<>();

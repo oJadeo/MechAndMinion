@@ -55,5 +55,8 @@ public class CmdBox {
 	public ArrayList<CmdCard> getCmdCardList() {
 		return cmdCardList;
 	}
+	public ArrayList<CmdCard> getCmdCardList(){
+		return this.cmdCardList;
+	}
 
 }
