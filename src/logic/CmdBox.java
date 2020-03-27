@@ -44,5 +44,8 @@ public class CmdBox {
 	public boolean execute() {
 		return this.cmdCardList.get(this.cmdCardList.size()-1).execute();
 	}
+	public ArrayList<CmdCard> getCmdCardList(){
+		return this.cmdCardList;
+	}
 
 }

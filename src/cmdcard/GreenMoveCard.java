@@ -10,6 +10,7 @@ import logic.GameController;
 import logic.Sprite;
 import tile.Tile;
 import token.Mech;
+import token.Token;
 
 public class GreenMoveCard extends CmdCard implements Move {
 	private int spriteValue;
@@ -18,8 +19,8 @@ public class GreenMoveCard extends CmdCard implements Move {
 	}
 	@Override
 	public ArrayList<Tile> move(int tier) {
-		int x = this.getProgrammedMech().getSelfTile().getLocationX;
-		int y = this.getProgrammedMech().getSelfTile().getLocationY;
+		int x = this.getProgrammedMech().getSelfTile().getLocationX();
+		int y = this.getProgrammedMech().getSelfTile().getLocationY();
 		Mech mech = (Mech) GameController.getBoard().getTile(x, y).getToken();
 		Direction dir = mech.getDirection();
 		ArrayList<Tile> tileList = GameController.getBoard().getAdjacentTile(mech.getSelfTile(),tier,dir);
@@ -52,7 +53,7 @@ public class GreenMoveCard extends CmdCard implements Move {
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		//
 		
 	}
 	public void setSpriteValue(int tier) {

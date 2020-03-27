@@ -1,15 +1,17 @@
 package card.base;
 
 import logic.CardType;
+import logic.CmdBox;
 import token.Mech;
 
 public abstract class CmdCard {
 	private CardType cardType;
 	private Mech programmedMech;
-	private int spriteValue;
+	protected int spriteValue;
+	private CmdBox cmdBox;
 	public CmdCard() {
 	}
-	public abstract boolean execute();
+	public abstract void execute();
 	public void setCardType(CardType cardType) {
 		this.cardType = cardType;
 	}
@@ -27,6 +29,8 @@ public abstract class CmdCard {
 	public Mech getProgrammedMech() {
 		return this.programmedMech;
 	}
-	
+	public CmdBox getCmdBox() {
+		return this.cmdBox;
+	}
 	
 }
