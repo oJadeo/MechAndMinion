@@ -2,6 +2,9 @@ package logic;
 
 import java.util.ArrayList;
 import card.base.CmdCard;
+import exception.IndexOutOfRangeException;
+import exception.SelectEmptyCardException;
+import exception.SelectMechException;
 import tile.*;
 import token.*;
 
@@ -187,11 +190,25 @@ public class GameController {
 			break;
 		}
 	}
-	public static void setProgram(int no,int cmdSlot,int selectedCardSlot) {
+	public static void setProgram(int no,int cmdSlot,int selectedCardSlot) throws SelectEmptyCardException,IndexOutOfRangeException,SelectMechException{
+		if(selectedCardSlot < 0 && selectedCardSlot>6) {
+			throw new IndexOutOfRangeException("Can't put number out of slot(Card Slot)");
+		}
+		if(no != 0 || no != 1) {
+			throw new SelectMechException("Can't select unless 1 or 2 in Select Mech");
+		}
+		if(cmdSlot <0 && cmdSlot >6) {
+			throw new IndexOutOfRangeException("Can't put number out of slot(CommandSlot)");
+		}
 		if(draftedCard.getDraftedCardList().get(selectedCardSlot)==null) {
+<<<<<<< HEAD
 			System.out.println("can select empty card");
 		}if(no == 0 && redMechProgram < 2) {
 			draftedCard.getDraftedCardList().get(selectedCardSlot).setProgrammedMech(redMech);
+=======
+			throw new SelectEmptyCardException("Can't select empty card");
+		}else if(no == 0 && redMechProgram < 2) {
+>>>>>>> 7b2ea1071e58a4553e929d5a7d3b51302c17e070
 			redMech.getCmdBoard().getCmdBox(cmdSlot).addCmdCard(draftedCard.getDraftedCardList().get(selectedCardSlot));
 			draftedCard.getDraftedCardList().set(selectedCardSlot, null);
 			redMechProgram += 1;
