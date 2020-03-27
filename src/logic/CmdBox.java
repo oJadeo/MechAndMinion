@@ -10,7 +10,7 @@ public class CmdBox {
 			this.cmdCardList.add(null);
 		}
 	}
-	public Boolean addCmdCard(CmdCard selectedCard) {
+	public void addCmdCard(CmdCard selectedCard) {
 		if(this.cmdCardList.get(this.cmdCardList.size()-1).getCardType() == selectedCard.getCardType()) {
 			switch(this.cmdCardList.size()) {
 			case 0:
@@ -34,11 +34,16 @@ public class CmdBox {
 				GameController.update();
 				break;
 			}
-			return true;
-		}return false;
+		}else {
+			cmdCardList.clear();
+			cmdCardList.add(selectedCard);
+		}
+		selectedCard.setCmdBox(this);
 	}
 	public void addDamageCard(CmdCard damageCard) {
+		this.cmdCardList.clear();
 		this.cmdCardList.add(damageCard);
+		damageCard.setCmdBox(this);
 	}
 	public void update() {
 		
@@ -46,6 +51,9 @@ public class CmdBox {
 	public boolean execute() {
 		//return this.cmdCardList.get(this.cmdCardList.size()-1).execute();
 		return true;
+	}
+	public ArrayList<CmdCard> getCmdCardList() {
+		return cmdCardList;
 	}
 
 }

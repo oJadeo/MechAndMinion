@@ -10,18 +10,9 @@ public class CmdBoard {
 	public final int OFFSETY = 120;
 	
 	public CmdBoard(int no) {
-		this.cmdBoxList = new ArrayList<CmdBox>();
+		for(int i =0;i<6;i++) {
 		this.cmdBoxList.add(new CmdBox());
-		CmdBox cmdbox2 = new CmdBox(); 
-		this.cmdBoxList.add(cmdbox2);
-		CmdBox cmdbox3 = new CmdBox(); 
-		this.cmdBoxList.add(cmdbox3);
-		CmdBox cmdbox4 = new CmdBox(); 
-		this.cmdBoxList.add(cmdbox4);
-		CmdBox cmdbox5 = new CmdBox(); 
-		this.cmdBoxList.add(cmdbox5);
-		CmdBox cmdbox6 = new CmdBox(); 
-		this.cmdBoxList.add(cmdbox6);
+		}
 		this.setStartPostionX(1000*no);
 	}
 	private void setStartPostionX(int startPositionX) {
@@ -31,6 +22,9 @@ public class CmdBoard {
 	}
 	public CmdBox getCmdBox(int slot) {
 		return this.getCmdBox(slot);
+	}
+	public void setCmdBox(int slot, CmdBox cmdBox) {
+		this.cmdBoxList.set(slot, cmdBox);
 	}
 	public void Update() {
 		
