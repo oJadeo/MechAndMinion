@@ -2,6 +2,9 @@ package application;
 
 import java.util.Scanner;
 
+import exception.IndexOutOfRangeException;
+import exception.SelectEmptyCardException;
+import exception.SelectMechException;
 import logic.GameController;
 
 public class Main {
@@ -19,7 +22,16 @@ public class Main {
 				int selectedMech = kb.nextInt();
 				System.out.print("Select Slot :");
 				int selectedSlot = kb.nextInt();
-				GameController.setProgram(selectedMech-1, selectedSlot-1, selectedCard-1);
+				try{
+					GameController.setProgram(selectedMech-1, selectedSlot-1, selectedCard-1);
+				}catch(SelectEmptyCardException se){
+					System.out.println(se.message);
+				}catch(IndexOutOfRangeException io) {
+					System.out.println(io.message);
+				}catch(SelectMechException sm) {
+					System.out.println(sm.message);
+				}
+				break;
 			case Execute:
 				System.out.println("Pass");
 			default:

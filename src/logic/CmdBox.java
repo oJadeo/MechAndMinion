@@ -17,22 +17,18 @@ public class CmdBox {
 			case 0:
 				this.cmdCardList.add(selectedCard);
 				selectedCard.setSpriteValue(1);
-				GameController.update();
 				break;
 			case 1:
 				this.cmdCardList.add(selectedCard);
 				selectedCard.setSpriteValue(2);
-				GameController.update();
 				break;
 			case 2:
 				this.cmdCardList.add(selectedCard);
 				selectedCard.setSpriteValue(3);
-				GameController.update();
 				break;
 			case 3:
 				this.cmdCardList.set(2, selectedCard);
 				selectedCard.setSpriteValue(3);
-				GameController.update();
 				break;
 			}
 		}else {

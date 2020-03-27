@@ -33,44 +33,44 @@ public class Board {
 		switch(dir) {
 		case LEFT:
 			for (int i=1;i<=range;i++) {
-				if (x-i >= 0) {
+				if (isMovePossible(x-i,y)) {
 					result.add(tileBoard[y][x-i]);
 				}
 			}
 			break;
 		case UP:
 			for(int i=1;i<=range;i++) {
-				if(y-i >= 0) {
+				if(isMovePossible(x,y-i)) {
 					result.add(tileBoard[y-i][x]);
 				}
 			}
 			break;
 		case RIGHT:
 			for(int i=1;i<=range;i++) {
-				if(x+i < BOARDSIZEX) {
+				if(isMovePossible(x+i,y)) {
 					result.add(tileBoard[y][x+i]);
 				}
 			}
 			break;
 		case DOWN:
 			for(int i=1;i<=range;i++) {
-				if(y+i < BOARDSIZEY) {
+				if(isMovePossible(x,y+i)) {
 					result.add(tileBoard[y+i][x]);
 				}
 			}
 			break;
 		case ALL:
 			for (int i=1;i<=range;i++) {
-				if (x-i >= 0) {
+				if (isMovePossible(x-i,y)) {
 					result.add(tileBoard[y][x-i]);
 				}
-				if(y-i >= 0) {
+				if(isMovePossible(x,y-i)) {
 					result.add(tileBoard[y-i][x]);
 				}
-				if(x+i < BOARDSIZEX) {
+				if(isMovePossible(x+i,y)) {
 					result.add(tileBoard[y][x+i]);
 				}
-				if(y+i < BOARDSIZEY) {
+				if(isMovePossible(x,y+i)) {
 					result.add(tileBoard[y+i][x]);
 				}
 			}
@@ -87,11 +87,11 @@ public class Board {
 		switch(dir) {
 		case LEFT:
 			for(int i=1;i<range;i++) {
-				if(x-i>=0) {
-					if(y-i>=0) {
+				if(isMovePossible(x-i,y)) {
+					if(isMovePossible(x,y-i)) {
 						result.add(tileBoard[y-i][x-i]);
 					}
-					if(y+i<BOARDSIZEY) {
+					if(isMovePossible(x,y+i)) {
 						result.add(tileBoard[y-i][x+i]);
 					}
 				}
@@ -99,11 +99,11 @@ public class Board {
 			break;
 		case UP:
 			for(int i=1;i<=range;i++) {
-				if(y-i >= 0) {
-					if(x+i<BOARDSIZEX) {
+				if(isMovePossible(x,y-i)) {
+					if(isMovePossible(x+i,y)) {
 						result.add(tileBoard[y+i][x-i]);
 					}
-					if(x-i>=0) {
+					if(isMovePossible(x-i,y)) {
 						result.add(tileBoard[y-i][x-i]);
 					}
 				}
@@ -111,11 +111,11 @@ public class Board {
 			break;
 		case RIGHT:
 			for(int i=1;i<range;i++) {
-				if(x+i<BOARDSIZEX) {
-					if(y-i>=0) {
+				if(isMovePossible(x+i,y)) {
+					if(isMovePossible(x,y-i)) {
 						result.add(tileBoard[y+i][x-i]);
 					}
-					if(y+i<BOARDSIZEY) {
+					if(isMovePossible(x,y+i)) {
 						result.add(tileBoard[y+i][x+i]);
 					}
 				}
@@ -123,11 +123,11 @@ public class Board {
 			break;
 		case DOWN:
 			for(int i=1;i<=range;i++) {
-				if(y+i < BOARDSIZEY) {
-					if(x+i<BOARDSIZEX) {
+				if(isMovePossible(x,y+i)) {
+					if(isMovePossible(x+i,y)) {
 						result.add(tileBoard[y+i][x+i]);
 					}
-					if(x-i>=0) {
+					if(isMovePossible(x-i,y)) {
 						result.add(tileBoard[y-i][x+i]);
 					}
 				}
@@ -135,19 +135,19 @@ public class Board {
 			break;
 		case ALL:
 			for(int i=1;i<=range;i++) {
-				if(y-i >= 0) {
-					if(x+i<BOARDSIZEX) {
+				if(isMovePossible(x,y-i)) {
+					if(isMovePossible(x+i,y)) {
 						result.add(tileBoard[y+i][x-i]);
 					}
-					if(x-i>=0) {
+					if(isMovePossible(x-i,y)) {
 						result.add(tileBoard[y-i][x-i]);
 					}
 				}
-				if(y+i < BOARDSIZEY) {
-					if(x+i<BOARDSIZEX) {
+				if(isMovePossible(x,y+i)) {
+					if(isMovePossible(x+i,y)) {
 						result.add(tileBoard[y+i][x+i]);
 					}
-					if(x-i>=0) {
+					if(isMovePossible(x-i,y)) {
 						result.add(tileBoard[y-i][x+i]);
 					}
 				}
