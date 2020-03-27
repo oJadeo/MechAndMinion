@@ -27,7 +27,6 @@ public class MoveTile extends Tile{
 		}
 	}
 	public void trigger(Token token) {
-		token.setDirection(this.dir);
 		GameController.move(token, this.dir);
 	}
 }

@@ -1,5 +1,5 @@
 package card.base;
 
-public interface Instance {
+public interface Instant {
 	public void trigger();
 }

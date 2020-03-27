@@ -10,6 +10,7 @@ public abstract class Token {
 	public Token(Direction dir,Tile selfTile) {
 		this.dir = dir;
 		this.selftile = selfTile;
+		selfTile.setToken(this);
 	}
 	public abstract void damaged();
 	public Direction getDirection() {

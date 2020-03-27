@@ -2,8 +2,8 @@ package logic;
 
 import java.util.ArrayList;
 import card.base.CmdCard;
-import token.Mech;
-import token.Token;
+import tile.*;
+import token.*;
 
 public class GameController {
 	private static Board board;
@@ -18,7 +18,7 @@ public class GameController {
 	private static int programCount;
 	public static void initializeGame() {
 		initializeBoard();
-		draftedCard = new DraftedCard();
+		//draftedCard = new DraftedCard();
 		redMech = new Mech(Direction.DOWN,board.getTile(0,0),0);
 		blueMech = new Mech(Direction.UP,board.getTile(9, 9),1);
 		currentPhase = Phase.Program;
@@ -29,59 +29,136 @@ public class GameController {
 	}
 	public static void initializeBoard() {
 		board = new Board();
+		int specialTileNum = 0;
+		while(specialTileNum < 6) {
+			GameController.randomTile();
+			specialTileNum += 1;
+		}
+	}
+	public static void randomTile() {
+		//random location that is not already special tile
+		int randomX;
+		int randomY;
+		do {
+		randomX = (int) (Math.random()*10);
+		randomY = (int) (Math.random()*10);
+		System.out.println(randomX+randomY);
+		}while(board.isSpecial(randomX,randomY));
+		
+		int random = (int) (Math.random()*4);
+		switch(random) {
+		case 0:
+			board.setTile(randomX,randomY,new ExplosiveTile(randomX,randomY));
+			break;
+		case 1:
+			board.setTile(randomX,randomY,new MoveTile(randomX,randomY));
+			break;
+		case 2:
+			board.setTile(randomX,randomY,new SpinTile(randomX,randomY));
+			break;
+		case 3:
+			board.setTile(randomX,randomY,new SlipTile(randomX,randomY));
+			break;
+		default:
+			break;
+		}
+	}
+	public static void creatSpawnTile() {
+		int randomX;
+		int randomY;
+		do {
+		randomX = (int) (Math.random()*10);
+		randomY = (int) (Math.random()*10);
+		System.out.println(randomX+randomY);
+		}while(board.isSpecial(randomX,randomY));
+		
+		board.setTile(randomX, randomY,new SpawnTile(randomX, randomY));
 	}
 	public static Board getBoard() {
 		return board;
 	}
 	public static void update() {
-		
+		getBoard().update();
 	}
 	public static void nextPhase() {
 		switch(currentPhase) {
 		case Program:
-			execute(programCount);
 			currentPhase = Phase.Execute;
+			draftedCard.reDeal();
+			execute(programCount);
 			break;
 		case Execute:
-			//MakeMinionMove
+			programCount = 0;
+			currentPhase = Phase.MinionMove;
+			switch((int) (Math.random()*4)) {
+			case 0:
+				for(Minion e: getBoard().getMinionList()) {
+					move(e,Direction.UP);
+				}
+				break;
+			case 1:
+				for(Minion e: getBoard().getMinionList()) {
+					move(e,Direction.DOWN);
+				}
+				break;
+			case 2:
+				for(Minion e: getBoard().getMinionList()) {
+					move(e,Direction.LEFT);
+				}
+				break;
+			case 3:
+				for(Minion e: getBoard().getMinionList()) {
+					move(e,Direction.RIGHT);
+				}
+				break;
+			default:
+				break;
+			}
 			break;
 		case MinionMove:
-			//CreatNewMinion
-			break;
-		case MinionSpawn:
-			//MakeMinionAttack
+			currentPhase = Phase.MinionAttack;
+			for(Minion minion:getBoard().getMinionList()) {
+				minion.attack();
+			}
+			nextPhase();
 			break;
 		case MinionAttack:
-			draftedCard.reDeal();
+			currentPhase = Phase.MinionSpawn;
+			for(SpawnTile spawnTile: getBoard().getSpawnTileList()) {
+				spawnTile.spawn();
+			}
+			nextPhase();
+			break;
+		case MinionSpawn:
+			currentPhase = Phase.Program;
 			update();
-			programCount = 0;
+			turnCount += 1;
+			if(turnCount%3 == 0) {
+				creatSpawnTile();
+			}
 			break;
 		}
-		
-	}
-	public static void nextTurn() {
-		
 	}
 	public static void setProgram(Mech selectedMech,int commardSlot,CmdCard selectedCard) {
 		
 	}
-	public static void repair(Mech selectedMech) {
-		
-	}
-	public static void reprogram(Mech selectedMech) {
-		
-	}
-	public static void move(Token selectedToken, Direction dir) {
-		
-	}
-	public static void rotate(Token selectedToken,int rotdegree) {
-		
-	}
-	public static void damage(Token selectedToken) {
-		
+	public static boolean move(Token selectedToken, Direction dir) {
+		if(getBoard().getAdjacentTile(selectedToken.getSelfTile(), 1, dir).size() == 0) {
+			return false;
+		}
+		if(getBoard().getAdjacentTile(selectedToken.getSelfTile(), 1, dir).get(0).getToken() == null ||
+				move(getBoard().getAdjacentTile(selectedToken.getSelfTile(), 1, dir).get(0).getToken(),dir)) {
+			getBoard().getAdjacentTile(selectedToken.getSelfTile(), 1, dir).get(0).setToken(selectedToken);
+			selectedToken.getSelfTile().setToken(null);
+			selectedToken.setSelfTile(getBoard().getAdjacentTile(selectedToken.getSelfTile(), 1, dir).get(0));
+			if(selectedToken.getSelfTile() instanceof SlipTile) {
+				move(selectedToken,dir);
+			}
+			return true;
+		};
+		return false;
 	}
 	public static void select(ArrayList<Object> selectable) {
-		
 	}
 	public static void execute(int programCount) {
 		if(programCount==12) {
@@ -99,6 +176,11 @@ public class GameController {
 			}
 		}
 	}
-	
+	public static void addDamgeCount(int i) {
+		damageCount += 1;
+		if(damageCount == 10) {
+			System.out.println("You Die");
+		}
+	}
 	
 }
