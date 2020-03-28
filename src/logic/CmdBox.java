@@ -47,7 +47,8 @@ public class CmdBox {
 	}
 	public void execute() {
 		if(this.cmdCardList.get(this.cmdCardList.size()-1)==null) {
-			GameController.execute(GameController.getProgramCount()+1);
+			GameController.setProgramCount(GameController.getProgramCount()+1);
+			GameController.execute(GameController.getProgramCount());
 		}else {
 			this.cmdCardList.get(this.cmdCardList.size()-1).execute();
 		}

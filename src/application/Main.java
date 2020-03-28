@@ -22,9 +22,6 @@ public class Main {
 				int selectedMech = kb.nextInt();
 				System.out.print("Select Slot :");
 				int selectedSlot = kb.nextInt();
-<<<<<<< HEAD
-				GameController.setProgram(selectedMech-1, selectedSlot-1, selectedCard-1);
-=======
 				try{
 					GameController.setProgram(selectedMech-1, selectedSlot-1, selectedCard-1);
 				}catch(SelectEmptyCardException se){
@@ -34,16 +31,19 @@ public class Main {
 				}catch(SelectMechException sm) {
 					System.out.println(sm.message);
 				}
->>>>>>> 7b2ea1071e58a4553e929d5a7d3b51302c17e070
 				break;
 			case Execute:
 				System.out.println("Select Target");
 				int selectedObjected = kb.nextInt();
-				GameController.select(selectedObjected-1);
+				try{
+					GameController.select(selectedObjected-1);
+				}catch(IndexOutOfRangeException io) {
+					System.out.println(io.message);
+				}
 				break;
 			case MinionMove:
 				System.out.println("Pass");
-				
+				break;
 			default:
 				break;
 			}

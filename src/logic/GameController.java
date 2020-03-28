@@ -104,7 +104,7 @@ public class GameController {
 			board.update();
 			redMech.update();
 			blueMech.update();
-			System.out.println("times = "+selectable.size());
+			System.out.println("times = "+selectTimes);
 			String result = "selectable = [";
 			for(Object e: selectable) {
 				if(e instanceof Tile) {
@@ -194,21 +194,17 @@ public class GameController {
 		if(selectedCardSlot < 0 && selectedCardSlot>6) {
 			throw new IndexOutOfRangeException("Can't put number out of slot(Card Slot)");
 		}
-		if(no != 0 || no != 1) {
+		if(no != 0 && no != 1) {
 			throw new SelectMechException("Can't select unless 1 or 2 in Select Mech");
 		}
 		if(cmdSlot <0 && cmdSlot >6) {
 			throw new IndexOutOfRangeException("Can't put number out of slot(CommandSlot)");
 		}
 		if(draftedCard.getDraftedCardList().get(selectedCardSlot)==null) {
-<<<<<<< HEAD
-			System.out.println("can select empty card");
-		}if(no == 0 && redMechProgram < 2) {
-			draftedCard.getDraftedCardList().get(selectedCardSlot).setProgrammedMech(redMech);
-=======
 			throw new SelectEmptyCardException("Can't select empty card");
-		}else if(no == 0 && redMechProgram < 2) {
->>>>>>> 7b2ea1071e58a4553e929d5a7d3b51302c17e070
+		}
+		if(no == 0 && redMechProgram < 2) {
+			draftedCard.getDraftedCardList().get(selectedCardSlot).setProgrammedMech(redMech);
 			redMech.getCmdBoard().getCmdBox(cmdSlot).addCmdCard(draftedCard.getDraftedCardList().get(selectedCardSlot));
 			draftedCard.getDraftedCardList().set(selectedCardSlot, null);
 			redMechProgram += 1;
@@ -247,24 +243,29 @@ public class GameController {
 	public static void setSelectTimes(int selectTimes) {
 		GameController.selectTimes = selectTimes;
 		if(selectTimes == 0) {
-			execute(programCount+1);
+			programCount+= 1;
+			execute(programCount);
 		}
 	}
-	public static void select(int i) {
-		if(i > selectable.size() || i < 0) {
-			//exception
+	public static void select(int i) throws IndexOutOfRangeException {
+		if(i >= selectable.size() || i < 0) {
+			throw new IndexOutOfRangeException("No target No."+(i+1));
 		}else if(selectable.get(i) instanceof Token) {
 			((Token)selectable.get(i)).damaged();
 			selectable.remove(i);
 			selectTimes -= 1;
+			System.out.println(selectTimes);
 		}
+		
 		if(selectTimes == 0) {
-			execute(programCount+1);
+			programCount += 1;
+			execute(programCount);
 		}else {
 			update();
 		}
 	}
 	public static void execute(int programCount) {
+		System.out.println("Executing Program No."+(programCount+1));
 		if(programCount==12) {
 			nextPhase();
 		}else {
@@ -290,5 +291,8 @@ public class GameController {
 	}
 	public static int getProgramCount() {
 		return programCount;
+	}
+	public static void setProgramCount(int programCount) {
+		GameController.programCount = programCount;
 	}
 }

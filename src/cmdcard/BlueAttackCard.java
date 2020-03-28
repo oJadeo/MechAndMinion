@@ -37,7 +37,7 @@ public class BlueAttackCard extends CmdCard implements Attack {
 	public void execute() {
 		int tier = this.getCmdBox().getCmdCardList().size();
 		GameController.setSelectable(this.attack(tier));
-		GameController.setSelectTimes(tier);
+		GameController.setSelectTimes(this.attack(tier).size());
 	}
 	@Override
 	public void setSpriteValue(int tier) {
