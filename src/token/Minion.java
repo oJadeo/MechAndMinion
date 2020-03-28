@@ -12,6 +12,7 @@ public class Minion extends Token{
 	public void damaged() {
 		GameController.getBoard().getMinionList().remove(this);
 		this.getSelfTile().setToken(null);
+		GameController.addScore();
 	}
 	public void attack() {
 		for(Tile e:GameController.getBoard().getBorder(getSelfTile(), 1)) {

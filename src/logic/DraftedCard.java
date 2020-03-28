@@ -14,7 +14,7 @@ public class DraftedCard {
 	public DraftedCard() {
 		this.draftedCardList = new ArrayList<CmdCard>();
 		for(int i=0;i<6;i++) {
-			this.draftedCardList.add(new BlueAttackCard());
+			this.draftedCardList.add(new BlueRotateCard());
 			//this.draftedCardList.add(randomCard());
 		}
 	}

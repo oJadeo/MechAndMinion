@@ -2,9 +2,8 @@ package logic;
 
 import java.util.ArrayList;
 import card.base.CmdCard;
-import exception.IndexOutOfRangeException;
-import exception.SelectEmptyCardException;
-import exception.SelectMechException;
+import cmdcard.*;
+import exception.*;
 import tile.*;
 import token.*;
 
@@ -18,10 +17,11 @@ public class GameController {
 	private static int turnCount;
 	private static int score;
 	private static int damageCount;
+	private static int programCount;
 	private static ArrayList<Object> selectable = new ArrayList<Object>();
 	private static int selectTimes;
+	private static CmdCard executingProgram;
 	private static DraftedCard draftedCard;
-	private static int programCount;
 	private static boolean gameEnd;
 	
 	public static void initializeGame() {
@@ -37,7 +37,6 @@ public class GameController {
 		damageCount =0;
 		programCount = 0;
 		gameEnd = false;
-		update();
 	}
 	public static void initializeBoard() {
 		board = new Board();
@@ -89,21 +88,22 @@ public class GameController {
 		
 		board.setTile(randomX, randomY,new SpawnTile(randomX, randomY));
 	}
-	public static Board getBoard() {
-		return board;
-	}
+	
 	public static void update() {
 		switch(currentPhase) {
 		case Program:
+			System.out.println("Score: "+score);
 			board.update();
 			draftedCard.update();
 			redMech.update();
 			blueMech.update();
 			break;
 		case Execute:
+			System.out.println("Score: "+score);
 			board.update();
 			redMech.update();
 			blueMech.update();
+			System.out.println("Executing Program No."+(programCount+1));
 			System.out.println("times = "+selectTimes);
 			String result = "selectable = [";
 			for(Object e: selectable) {
@@ -119,8 +119,21 @@ public class GameController {
 			}
 			result += "]";
 			System.out.println(result);
+			if(selectable.size() != 0) {
+				if(selectable.get(0) instanceof Tile) {
+					System.out.println("Select Target Tile");
+				}
+				if(selectable.get(0) instanceof Direction) {
+					System.out.println("Select Target Direction");
+				}
+				if(selectable.get(0) instanceof Token) {
+					System.out.println("Select Target Token");
+				}
+				
+			}
 			break;
 		default:
+			System.out.println("Score: "+score);
 			board.update();
 			draftedCard.update();
 			redMech.update();
@@ -218,8 +231,7 @@ public class GameController {
 		}
 		if(redMechProgram + blueMechProgram == 4) {
 			nextPhase();
-		}	
-		update();
+		}
 	}
 	public static boolean move(Token selectedToken, Direction dir) {
 		if(getBoard().getAdjacentTile(selectedToken.getSelfTile(), 1, dir).size() == 0) {
@@ -230,9 +242,10 @@ public class GameController {
 			getBoard().getAdjacentTile(selectedToken.getSelfTile(), 1, dir).get(0).setToken(selectedToken);
 			selectedToken.getSelfTile().setToken(null);
 			selectedToken.setSelfTile(getBoard().getAdjacentTile(selectedToken.getSelfTile(), 1, dir).get(0));
-			if(selectedToken.getSelfTile() instanceof SlipTile) {
+			//add trigger SpecialTile
+			/*if(selectedToken.getSelfTile() instanceof SlipTile) {
 				move(selectedToken,dir);
-			}
+			}*/
 			return true;
 		};
 		return false;
@@ -243,6 +256,7 @@ public class GameController {
 	public static void setSelectTimes(int selectTimes) {
 		GameController.selectTimes = selectTimes;
 		if(selectTimes == 0) {
+			System.out.println("No target");
 			programCount+= 1;
 			execute(programCount);
 		}
@@ -250,12 +264,43 @@ public class GameController {
 	public static void select(int i) throws IndexOutOfRangeException {
 		if(i >= selectable.size() || i < 0) {
 			throw new IndexOutOfRangeException("No target No."+(i+1));
-		}else if(selectable.get(i) instanceof Token) {
-			((Token)selectable.get(i)).damaged();
-			selectable.remove(i);
-			selectTimes -= 1;
-			System.out.println(selectTimes);
 		}
+		if(executingProgram instanceof BlueAttackCard) {
+			if(selectable.get(i) instanceof Token) {
+				((Token)selectable.get(i)).damaged();
+				selectable.remove(i);
+				selectTimes -= 1;
+			}
+		}
+		if(executingProgram instanceof BlueMoveCard) {
+			if(selectable.get(i) instanceof Tile) {
+				move(executingProgram.getProgrammedMech(), executingProgram.getProgrammedMech().getDirection());
+				selectTimes -= 1;
+				if(selectTimes != 0) {
+					setSelectable(((BlueMoveCard) executingProgram).attack(1));
+				}
+			}else if(selectable.get(i) instanceof Token) {
+				((Token)selectable.get(i)).damaged();
+				selectable.remove(i);
+				setSelectable(((BlueMoveCard) executingProgram).move(1));
+			}
+		}
+		if(executingProgram instanceof BlueRotateCard) {
+			if(selectable.get(i) instanceof Direction) {
+				executingProgram.getProgrammedMech().setDirection((Direction) selectable.get(i));
+				setSelectable(((BlueRotateCard) executingProgram).attack(executingProgram.getCmdBox().getCmdCardList().size()));
+				if(selectable.size()>executingProgram.getCmdBox().getCmdCardList().size()) {
+					setSelectTimes(executingProgram.getCmdBox().getCmdCardList().size());
+				}else {
+					setSelectTimes(selectable.size());
+				}
+			}else if(selectable.get(i) instanceof Token) {
+				((Token)selectable.get(i)).damaged();
+				selectable.remove(i);
+				selectTimes -= 1;
+			}
+		}
+		
 		
 		if(selectTimes == 0) {
 			programCount += 1;
@@ -265,7 +310,6 @@ public class GameController {
 		}
 	}
 	public static void execute(int programCount) {
-		System.out.println("Executing Program No."+(programCount+1));
 		if(programCount==12) {
 			nextPhase();
 		}else {
@@ -277,11 +321,15 @@ public class GameController {
 			programCount++;
 		}
 	}
-	public static void addDamgeCount(int i) {
+	public static void addDamgeCount() {
 		damageCount += 1;
 		if(damageCount == 10) {
-			System.out.println("You Die");
+			gameEnd = true;
 		}
+	}
+	
+	public static Board getBoard() {
+		return board;
 	}
 	public static boolean getGameEnd() {
 		return gameEnd;
@@ -294,5 +342,11 @@ public class GameController {
 	}
 	public static void setProgramCount(int programCount) {
 		GameController.programCount = programCount;
+	}
+	public static void addScore() {
+		score += 1;
+	}
+	public static void setExecutingProgram(CmdCard executingProgram) {
+		GameController.executingProgram = executingProgram;
 	}
 }

@@ -14,6 +14,7 @@ public class Main {
 		Scanner kb = new Scanner(System.in);
 		GameController.initializeGame();
 		while(!GameController.getGameEnd()) {
+			GameController.update();
 			switch(GameController.getCurrentPhase()) {
 			case Program:
 				System.out.print("Select Card :");
@@ -33,7 +34,6 @@ public class Main {
 				}
 				break;
 			case Execute:
-				System.out.println("Select Target");
 				int selectedObjected = kb.nextInt();
 				try{
 					GameController.select(selectedObjected-1);
@@ -42,7 +42,7 @@ public class Main {
 				}
 				break;
 			case MinionMove:
-				System.out.println("Pass");
+				GameController.addDamgeCount();
 				break;
 			default:
 				break;

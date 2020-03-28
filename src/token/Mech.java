@@ -61,7 +61,7 @@ public class Mech extends Token{
 		default:
 			break;
 		}
-		GameController.addDamgeCount(1);
+		GameController.addDamgeCount();
 	}
 	public CmdBoard getCmdBoard() {
 		return this.cmdBoard;

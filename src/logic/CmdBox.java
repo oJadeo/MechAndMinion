@@ -10,9 +10,9 @@ public class CmdBox {
 	}
 	public void addCmdCard(CmdCard selectedCard) {
 		if(this.cmdCardList.get(this.cmdCardList.size()-1)==null) {
+			this.cmdCardList.clear();
 			this.cmdCardList.add(selectedCard);
-		}
-		if(this.cmdCardList.get(this.cmdCardList.size()-1).getCardType() == selectedCard.getCardType()) {
+		}else if(this.cmdCardList.get(this.cmdCardList.size()-1).getCardType() == selectedCard.getCardType()) {
 			switch(this.cmdCardList.size()) {
 			case 0:
 				this.cmdCardList.add(selectedCard);
@@ -50,6 +50,7 @@ public class CmdBox {
 			GameController.setProgramCount(GameController.getProgramCount()+1);
 			GameController.execute(GameController.getProgramCount());
 		}else {
+			GameController.setExecutingProgram(this.cmdCardList.get(this.cmdCardList.size()-1));
 			this.cmdCardList.get(this.cmdCardList.size()-1).execute();
 		}
 	}
