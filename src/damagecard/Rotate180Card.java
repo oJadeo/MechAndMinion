@@ -13,7 +13,7 @@ public class Rotate180Card extends CmdCard implements OnGoing{
 	}
 	
 	@Override
-	public void execute() {
+	public void execute(int tier) {
 		// TODO Auto-generated method stub
 		switch(this.getProgrammedMech().getDirection()) {
 		case UP:

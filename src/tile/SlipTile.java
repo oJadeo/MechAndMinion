@@ -1,9 +1,8 @@
 package tile;
 
-import logic.GameController;
 import logic.Sprite;
 
-public class SlipTile extends MoveTile{
+public class SlipTile extends Tile {
 
 	public SlipTile(int locationX, int locationY) {
 		super(locationX, locationY);

@@ -7,18 +7,21 @@ import logic.Direction;
 import logic.GameController;
 import token.Mech;
 
-public class BackMoveCard extends CmdCard implements OnGoing{
+public class BackMoveCard extends CmdCard implements OnGoing {
 	Direction dir;
+
 	public BackMoveCard(Mech programmedMech) {
 		dir = Direction.DOWN;
 		this.setSpriteValue(CardSprite.BACK_MOVE);
 		this.setProgrammedMech(programmedMech);
 	}
+
 	@Override
-	public void execute() {
+	public void execute(int tier) {
 		// TODO Auto-generated method stub
 		GameController.move(this.getProgrammedMech(), dir);
 	}
+
 	@Override
 	public void setSpriteValue(int spriteValue) {
 		// TODO Auto-generated method stub

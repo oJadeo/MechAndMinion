@@ -5,28 +5,28 @@ import token.Token;
 
 import logic.Direction;
 
-public class SpinTile extends Tile{
+public class SpinTile extends Tile {
 	private int spinValue;
+
 	public SpinTile(int locationX, int locationY) {
 		super(locationX, locationY);
 		double random = Math.random();
-		if (random <= 1.0/3.0) {
+		if (random <= 1.0 / 3.0) {
 			this.spinValue = 90;
 			this.setSpriteValue(Sprite.SPIN_TILE_90);
-		}
-		else if(random <= 2.0/3.0) {
+		} else if (random <= 2.0 / 3.0) {
 			this.spinValue = 180;
 			this.setSpriteValue(Sprite.SPIN_TILE_180);
-		}
-		else {
+		} else {
 			this.spinValue = 270;
 			this.setSpriteValue(Sprite.SPIN_TILE_270);
 		}
 	}
+
 	public void trigger(Token token) {
-		switch(this.spinValue) {
+		switch (this.spinValue) {
 		case 90:
-			switch(token.getDirection()) {
+			switch (token.getDirection()) {
 			case LEFT:
 				token.setDirection(Direction.UP);
 				break;
@@ -44,7 +44,7 @@ public class SpinTile extends Tile{
 			}
 			break;
 		case 180:
-			switch(token.getDirection()) {
+			switch (token.getDirection()) {
 			case LEFT:
 				token.setDirection(Direction.RIGHT);
 				break;
@@ -62,7 +62,7 @@ public class SpinTile extends Tile{
 			}
 			break;
 		case 270:
-			switch(token.getDirection()) {
+			switch (token.getDirection()) {
 			case LEFT:
 				token.setDirection(Direction.DOWN);
 				break;

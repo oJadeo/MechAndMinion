@@ -1,63 +1,56 @@
 package cmdcard;
 
 import java.util.ArrayList;
+import card.base.*;
+import logic.*;
+import token.*;
 
-import card.base.CmdCard;
-import card.base.Move;
-import logic.CardSprite;
-import logic.Direction;
-import logic.GameController;
-import logic.Sprite;
-import tile.Tile;
-import token.Mech;
-import token.Token;
+public class GreenMoveCard extends CmdCard implements Move ,OnGoing{
 
-public class GreenMoveCard extends CmdCard implements Move {
-	private int spriteValue;
 	public GreenMoveCard() {
 		this.spriteValue = CardSprite.GREEN_MOVE_CARD_1;
 	}
+
 	@Override
-	public ArrayList<Tile> move(int tier) {
-		int x = this.getProgrammedMech().getSelfTile().getLocationX();
-		int y = this.getProgrammedMech().getSelfTile().getLocationY();
-		Mech mech = (Mech) GameController.getBoard().getTile(x, y).getToken();
+	public ArrayList<Object> move(int tier) {
+		Mech mech = this.getProgrammedMech();
 		Direction dir = mech.getDirection();
-		ArrayList<Tile> tileList = GameController.getBoard().getAdjacentTile(mech.getSelfTile(),tier,dir);
-		switch(dir) {
-		
+		ArrayList<Object> resultList = new ArrayList<Object>();
+		switch (dir) {
 		case UP:
-			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(),tier,Direction.RIGHT));
-			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(),tier,Direction.LEFT));
+			resultList.add((Object)Direction.LEFT);
+			resultList.add((Object)Direction.UP);
+			resultList.add((Object)Direction.RIGHT);
 			break;
 		case DOWN:
-			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(),tier,Direction.RIGHT));
-			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(),tier,Direction.LEFT));
+			resultList.add((Object)Direction.LEFT);
+			resultList.add((Object)Direction.DOWN);
+			resultList.add((Object)Direction.RIGHT);
 			break;
 		case RIGHT:
-			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(),tier,Direction.DOWN));
-			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(),tier,Direction.UP));
+			resultList.add((Object)Direction.UP);
+			resultList.add((Object)Direction.RIGHT);
+			resultList.add((Object)Direction.DOWN);
 			break;
 		case LEFT:
-			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(),tier,Direction.DOWN));
-			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(),tier,Direction.UP));
+			resultList.add((Object)Direction.DOWN);
+			resultList.add((Object)Direction.LEFT);
+			resultList.add((Object)Direction.UP);
 			break;
 		default:
 			break;
 		}
-		return tileList;
-		
-		
-
+		return resultList;
 	}
 
 	@Override
-	public void execute() {
-		//
-		
+	public void execute(int tier) {
+		GameController.setSelectable(move(tier));
+		GameController.setSelectTimes(tier);
 	}
+
 	public void setSpriteValue(int tier) {
-		switch(tier) {
+		switch (tier) {
 		case 1:
 			this.spriteValue = CardSprite.GREEN_MOVE_CARD_1;
 			break;
@@ -67,7 +60,7 @@ public class GreenMoveCard extends CmdCard implements Move {
 		case 3:
 			this.spriteValue = CardSprite.GREEN_MOVE_CARD_3;
 			break;
-		
+
 		}
 	}
 

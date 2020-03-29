@@ -1,8 +1,5 @@
 package logic;
 
 public enum CardType {
-	Red,
-	Green,
-	Blue,
-	Yellow
+	Red, Green, Blue, Yellow
 }

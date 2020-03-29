@@ -1,102 +1,106 @@
 package cmdcard;
 
-import card.base.CmdCard;
-
 import java.util.ArrayList;
+import card.base.*;
+import logic.*;
+import tile.*;
+import token.*;
 
-import card.base.Attack;
-import card.base.Rotate;
-import logic.CardSprite;
-import logic.Direction;
-import logic.GameController;
-import tile.Tile;
-import token.Mech;
-import token.Token;
-
-public class BlueRotateCard extends CmdCard implements Rotate, Attack {
-	private int spriteValue;
+public class BlueRotateCard extends CmdCard implements Rotate, Attack ,OnGoing {
+	
 	public BlueRotateCard() {
 		this.spriteValue = CardSprite.BLUE_ROTATE_CARD_1;
 	}
+
 	@Override
-	public ArrayList<Token> attack(int tier) {
-		ArrayList<Token> result = new ArrayList<>();
+	public ArrayList<Object> attack(int tier) {
+		ArrayList<Object> result = new ArrayList<Object>();
 		int x = this.getProgrammedMech().getSelfTile().getLocationX();
 		int y = this.getProgrammedMech().getSelfTile().getLocationY();
-		ArrayList<Tile> tileList = GameController.getBoard().getBorder(GameController.getBoard().getTile(x,y), tier);
-		for(Tile tile:tileList) {
-			if(tile.getToken() instanceof Token) {
-				result.add((Token)tile.getToken());
+		for (Tile tile : GameController.getBoard().getBorder(GameController.getBoard().getTile(x, y), 1)) {
+			if (tile.getToken() instanceof Token) {
+				if (!tile.getToken().equals(this.getProgrammedMech())) {
+					result.add((Object) tile.getToken());
+				}
 			}
 		}
 		return result;
 	}
+
 	@Override
-	public ArrayList<Direction> spin(int tier) {
-		int x = this.getProgrammedMech().getSelfTile().getLocationX();
-		int y = this.getProgrammedMech().getSelfTile().getLocationY();
-		Mech mech = (Mech) GameController.getBoard().getTile(x, y).getToken();
-		Direction dir = mech.getDirection();
-		ArrayList<Direction> dirList =new ArrayList<>();
-		switch(tier) {
+	public ArrayList<Object> rotate(int tier) {
+		ArrayList<Object> resultList = new ArrayList<Object>();
+		switch (tier) {
 		case 1:
-			switch(dir) {
+			switch (this.getProgrammedMech().getDirection()) {
 			case UP:
-				dirList.add(Direction.RIGHT);
+				resultList.add((Object) Direction.RIGHT);
+				resultList.add((Object) Direction.LEFT);
 				break;
 			case RIGHT:
-				dirList.add(Direction.DOWN);
+				resultList.add((Object) Direction.DOWN);
+				resultList.add((Object) Direction.UP);
 				break;
 			case DOWN:
-				dirList.add(Direction.LEFT);
+				resultList.add((Object) Direction.LEFT);
+				resultList.add((Object) Direction.RIGHT);
 				break;
 			case LEFT:
-				dirList.add(Direction.UP);
+				resultList.add((Object) Direction.UP);
+				resultList.add((Object) Direction.DOWN);
 				break;
 			default:
 				break;
 			}
+			break;
 		case 2:
-			switch(dir) {
+			switch (this.getProgrammedMech().getDirection()) {
 			case UP:
-				dirList.add(Direction.RIGHT);
-				dirList.add(Direction.LEFT);
-				dirList.add(Direction.DOWN);
+				resultList.add((Object) Direction.RIGHT);
+				resultList.add((Object) Direction.LEFT);
+				resultList.add((Object) Direction.DOWN);
 				break;
 			case RIGHT:
-				dirList.add(Direction.DOWN);
-				dirList.add(Direction.LEFT);
-				dirList.add(Direction.UP);
+				resultList.add((Object) Direction.DOWN);
+				resultList.add((Object) Direction.LEFT);
+				resultList.add((Object) Direction.UP);
 				break;
 			case LEFT:
-				dirList.add(Direction.DOWN);
-				dirList.add(Direction.RIGHT);
-				dirList.add(Direction.UP);
+				resultList.add((Object) Direction.DOWN);
+				resultList.add((Object) Direction.RIGHT);
+				resultList.add((Object) Direction.UP);
 				break;
 			case DOWN:
-				dirList.add(Direction.RIGHT);
-				dirList.add(Direction.LEFT);
-				dirList.add(Direction.UP);
+				resultList.add((Object) Direction.RIGHT);
+				resultList.add((Object) Direction.LEFT);
+				resultList.add((Object) Direction.UP);
 				break;
 			default:
 				break;
 			}
+			break;
 		case 3:
-			dirList.add(Direction.ALL);
+			resultList.add((Object) Direction.UP);
+			resultList.add((Object) Direction.DOWN);
+			resultList.add((Object) Direction.RIGHT);
+			resultList.add((Object) Direction.LEFT);
 			break;
 		default:
 			break;
 		}
-		return dirList;
+		return resultList;
 	}
+
 	@Override
-	public void execute() {
+	public void execute(int tier) {
 		// TODO Auto-generated method stub
-		
+		GameController.setSelectable(rotate(tier));
+		GameController.setSelectTimes(1);
 	}
+
 	@Override
 	public void setSpriteValue(int tier) {
-		switch(tier) {
+		switch (tier) {
 		case 1:
 			this.spriteValue = CardSprite.BLUE_ROTATE_CARD_1;
 			break;
@@ -106,8 +110,6 @@ public class BlueRotateCard extends CmdCard implements Rotate, Attack {
 		case 3:
 			this.spriteValue = CardSprite.BLUE_ROTATE_CARD_3;
 			break;
-		
 		}
-		
 	}
 }

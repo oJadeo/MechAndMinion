@@ -6,7 +6,7 @@ import logic.CardSprite;
 import logic.CmdBox;
 import token.Mech;
 
-public class Swap56card extends CmdCard implements Instant{
+public class Swap56card extends CmdCard implements Instant {
 	public Swap56card(Mech programmedMech) {
 		// TODO Auto-generated constructor stub
 		this.setProgrammedMech(programmedMech);
@@ -17,14 +17,8 @@ public class Swap56card extends CmdCard implements Instant{
 	public void trigger() {
 		// TODO Auto-generated method stub
 		CmdBox temp = this.getProgrammedMech().getCmdBoard().getCmdBox(5);
-		this.getProgrammedMech().getCmdBoard().setCmdBox(5,this.getProgrammedMech().getCmdBoard().getCmdBox(6));
+		this.getProgrammedMech().getCmdBoard().setCmdBox(5, this.getProgrammedMech().getCmdBoard().getCmdBox(6));
 		this.getProgrammedMech().getCmdBoard().setCmdBox(6, temp);
-	}
-
-	@Override
-	public void execute() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -32,6 +26,5 @@ public class Swap56card extends CmdCard implements Instant{
 		// TODO Auto-generated method stub
 		this.spriteValue = spriteValue;
 	}
-	
 
 }

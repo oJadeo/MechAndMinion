@@ -6,16 +6,16 @@ import logic.CardSprite;
 import logic.Direction;
 import token.Mech;
 
-public class Rotate270Card extends CmdCard implements OnGoing{
+public class Rotate270Card extends CmdCard implements OnGoing {
 	public Rotate270Card(Mech programmedMech) {
 		this.setSpriteValue(CardSprite.TURN_LEFT);
 		this.setProgrammedMech(programmedMech);
 	}
-	
+
 	@Override
-	public void execute() {
+	public void execute(int tier) {
 		// TODO Auto-generated method stub
-		switch(this.getProgrammedMech().getDirection()) {
+		switch (this.getProgrammedMech().getDirection()) {
 		case UP:
 			this.getProgrammedMech().setDirection(Direction.LEFT);
 			break;
@@ -30,9 +30,9 @@ public class Rotate270Card extends CmdCard implements OnGoing{
 			break;
 		default:
 			break;
-			
+
 		}
-		
+
 	}
 
 	@Override
@@ -40,6 +40,5 @@ public class Rotate270Card extends CmdCard implements OnGoing{
 		// TODO Auto-generated method stub
 		this.spriteValue = spriteValue;
 	}
-	
 
 }

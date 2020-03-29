@@ -4,71 +4,79 @@ import card.base.CmdCard;
 
 import java.util.ArrayList;
 
-import card.base.Attack;
-import card.base.Move;
-import logic.CardSprite;
-import logic.Direction;
-import logic.GameController;
-import logic.Sprite;
-import tile.Tile;
-import token.Mech;
-import token.Minion;
-import token.Token;
+import card.base.*;
+import logic.*;
+import tile.*;
+import token.*;
 
-public class RedMoveCard extends CmdCard implements Attack, Move {
+public class RedMoveCard extends CmdCard implements Attack, Move, OnGoing {
+
 	public RedMoveCard() {
 		this.spriteValue = CardSprite.RED_MOVE_CARD_1;
 	}
-	public ArrayList<Tile> move(int tier) {
-		Mech mech = this.getProgrammedMech();
-		Direction dir = mech.getDirection();
-		GameController.move(mech, dir);
-		ArrayList<Tile> tileList = GameController.getBoard().getAdjacentTile(mech.getSelfTile(),tier,dir);
-		return tileList;
-		
+
+	public ArrayList<Object> move(int tier) {
+		ArrayList<Object> resultList = new ArrayList<Object>();
+		ArrayList<Tile> tileList = GameController.getBoard().getAdjacentTile(this.getProgrammedMech().getSelfTile(), 1,
+				this.getProgrammedMech().getDirection());
+		for (Tile e : tileList) {
+			resultList.add((Object) e);
+		}
+		return resultList;
 	}
-	public ArrayList<Token> attack(int tier) {
-		ArrayList<Token> result = new ArrayList<>();
-		Mech mech = this.getProgrammedMech();
-		Direction dir = mech.getDirection();
-		ArrayList<Tile> tileList = new ArrayList<>();
-		switch(dir) {
+
+	public ArrayList<Object> attack(int tier) {
+		ArrayList<Object> resultList = new ArrayList<Object>();
+		ArrayList<Tile> tileList = new ArrayList<Tile>();
+		switch (this.getProgrammedMech().getDirection()) {
 		case UP:
-			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(),1,Direction.RIGHT));
-			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(),1,Direction.LEFT));
+			tileList.addAll(GameController.getBoard().getAdjacentTile(this.getProgrammedMech().getSelfTile(), 1,
+					Direction.RIGHT));
+			tileList.addAll(GameController.getBoard().getAdjacentTile(this.getProgrammedMech().getSelfTile(), 1,
+					Direction.LEFT));
 			break;
 		case DOWN:
-			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(),1,Direction.RIGHT));
-			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(),1,Direction.LEFT));
+			tileList.addAll(GameController.getBoard().getAdjacentTile(this.getProgrammedMech().getSelfTile(), 1,
+					Direction.RIGHT));
+			tileList.addAll(GameController.getBoard().getAdjacentTile(this.getProgrammedMech().getSelfTile(), 1,
+					Direction.LEFT));
 			break;
 		case RIGHT:
-			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(),1,Direction.UP));
-			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(),1,Direction.DOWN));
+			tileList.addAll(
+					GameController.getBoard().getAdjacentTile(this.getProgrammedMech().getSelfTile(), 1, Direction.UP));
+			tileList.addAll(GameController.getBoard().getAdjacentTile(this.getProgrammedMech().getSelfTile(), 1,
+					Direction.DOWN));
 			break;
 		case LEFT:
-			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(),1,Direction.UP));
-			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(),1,Direction.DOWN));
+			tileList.addAll(
+					GameController.getBoard().getAdjacentTile(this.getProgrammedMech().getSelfTile(), 1, Direction.UP));
+			tileList.addAll(GameController.getBoard().getAdjacentTile(this.getProgrammedMech().getSelfTile(), 1,
+					Direction.DOWN));
 			break;
 		default:
 			break;
 		}
-		for(Tile tile:tileList) {
-			if(tile.getToken() instanceof Token) {
-				result.add((Token)tile.getToken());
+		for (Tile tile : tileList) {
+			if (tile.getToken() instanceof Token && !tile.getToken().equals(this.getProgrammedMech())) {
+				resultList.add((Object) tile.getToken());
 			}
 		}
-		return result;
+		return resultList;
 	}
-	public void execute() {
-		int tier = this.getCmdBox().getCmdCardList().size();
-		for(int i=0;i<tier;i++) {
-			move(tier);
-			attack(tier);
-		}	
+
+	@Override
+	public void execute(int tier) {
+		if (move(tier).size() != 0) {
+			GameController.setSelectable(move(tier));
+			GameController.setSelectTimes(tier);
+		} else {
+			GameController.setSelectTimes(0);
+		}
 	}
+
 	@Override
 	public void setSpriteValue(int tier) {
-		switch(tier) {
+		switch (tier) {
 		case 1:
 			this.spriteValue = CardSprite.RED_MOVE_CARD_1;
 			break;
@@ -78,9 +86,9 @@ public class RedMoveCard extends CmdCard implements Attack, Move {
 		case 3:
 			this.spriteValue = CardSprite.RED_MOVE_CARD_3;
 			break;
-		
+
 		}
-		
+
 	}
 
 }
