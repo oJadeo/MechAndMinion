@@ -4,23 +4,25 @@ import logic.*;
 import damagecard.*;
 import tile.Tile;
 
-public class Mech extends Token{
+public class Mech extends Token {
 	private CmdBoard cmdBoard;
 	private int no;
-	public Mech(Direction dir,Tile selfTile,int no) {
-		super(dir,selfTile);
+
+	public Mech(Direction dir, Tile selfTile, int no) {
+		super(dir, selfTile);
 		if (no == 0) {
 			this.setSpriteValue(Sprite.MECH1);
-		}else {
+		} else {
 			this.setSpriteValue(Sprite.MECH2);
 		}
 		this.no = no;
 		this.cmdBoard = new CmdBoard(no);
 	}
+
 	@Override
 	public void damaged() {
-		int slot = (int) (Math.random()*6);
-		switch((int) (Math.random()*11)) {
+		int slot = (int) (Math.random() * 6);
+		switch ((int) (Math.random() * 11)) {
 		case 0:
 			this.cmdBoard.getCmdBox(slot).addDamageCard(new BackMoveCard(this));
 			break;
@@ -63,15 +65,19 @@ public class Mech extends Token{
 		}
 		GameController.addDamgeCount();
 	}
+
 	public CmdBoard getCmdBoard() {
 		return this.cmdBoard;
 	}
+
 	public void setCmdBoard(CmdBoard cmdBoard) {
 		this.cmdBoard = cmdBoard;
 	}
+
 	public void update() {
 		this.cmdBoard.update();
 	}
+
 	public int getNo() {
 		return no;
 	}

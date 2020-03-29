@@ -18,64 +18,68 @@ import cmdcard.YellowRotateCard;
 
 public class CmdBoard {
 	private ArrayList<CmdBox> cmdBoxList;
-	private int startPositionX=0;
-	private int startPositionY=480;
+	private int startPositionX = 0;
+	private int startPositionY = 480;
 	private int no;
 	public final int OFFSETX = 100;
 	public final int OFFSETY = 120;
-	
+
 	public CmdBoard(int no) {
 		this.cmdBoxList = new ArrayList<CmdBox>();
-		for(int i =0;i<6;i++) {
+		for (int i = 0; i < 6; i++) {
 			this.cmdBoxList.add(new CmdBox());
 		}
-		this.setStartPostionX(1000*no);
-		this.no =no;
+		this.setStartPostionX(1000 * no);
+		this.no = no;
 	}
+
 	private void setStartPostionX(int startPositionX) {
 		// TODO Auto-generated method stub
 		this.startPositionX = startPositionX;
-		
+
 	}
+
 	public CmdBox getCmdBox(int slot) {
 		return this.cmdBoxList.get(slot);
 	}
+
 	public void setCmdBox(int slot, CmdBox cmdBox) {
 		this.cmdBoxList.set(slot, cmdBox);
 	}
+
 	public void update() {
-		String result = (no+1) +" Mech : [";
-		for(CmdBox cmdBox:cmdBoxList) {
-			CmdCard card = cmdBox.getCmdCardList().get(cmdBox.getCmdCardList().size()-1);
-			if(card instanceof BlueAttackCard) {
+		String result = (no + 1) + " Mech : [";
+		for (CmdBox cmdBox : cmdBoxList) {
+			CmdCard card = cmdBox.getCmdCardList().get(cmdBox.getCmdCardList().size() - 1);
+			if (card instanceof BlueAttackCard) {
 				result += " BA ";
-			}else if(card instanceof BlueMoveCard) {
+			} else if (card instanceof BlueMoveCard) {
 				result += " BM ";
-			}else if(card instanceof BlueRotateCard) {
+			} else if (card instanceof BlueRotateCard) {
 				result += " BR ";
-			}else if(card instanceof RedAttackCard) {
+			} else if (card instanceof RedAttackCard) {
 				result += " RA ";
-			}else if(card instanceof RedRotateCard) {
+			} else if (card instanceof RedRotateCard) {
 				result += " RR ";
-			}else if(card instanceof RedMoveCard) {
+			} else if (card instanceof RedMoveCard) {
 				result += " RM ";
-			}else if(card instanceof GreenAttackCard) {
+			} else if (card instanceof GreenAttackCard) {
 				result += " GA ";
-			}else if(card instanceof GreenMoveCard) {
+			} else if (card instanceof GreenMoveCard) {
 				result += " GM ";
-			}else if(card instanceof GreenRotateCard) {
+			} else if (card instanceof GreenRotateCard) {
 				result += " GR ";
-			}else if(card instanceof YellowAttackCard) {
+			} else if (card instanceof YellowAttackCard) {
 				result += " YA ";
-			}else if(card instanceof YellowMoveCard) {
+			} else if (card instanceof YellowMoveCard) {
 				result += " YM ";
-			}else if(card instanceof YellowRotateCard) {
+			} else if (card instanceof YellowRotateCard) {
 				result += " YR ";
-			}else if(card == null) {
+			} else if (card == null) {
 				result += " [] ";
 			}
 		}
 		result += "]";
 		System.out.println(result);
-	}	
+	}
 }

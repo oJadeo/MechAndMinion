@@ -1,19 +1,22 @@
 package logic;
 
 import java.util.ArrayList;
-import card.base.CmdCard;
+import card.base.*;
+
 public class CmdBox {
 	private ArrayList<CmdCard> cmdCardList;
+
 	public CmdBox() {
 		this.cmdCardList = new ArrayList<CmdCard>();
 		this.cmdCardList.add(null);
 	}
+
 	public void addCmdCard(CmdCard selectedCard) {
-		if(this.cmdCardList.get(this.cmdCardList.size()-1)==null) {
+		if (this.cmdCardList.get(this.cmdCardList.size() - 1) == null) {
 			this.cmdCardList.clear();
 			this.cmdCardList.add(selectedCard);
-		}else if(this.cmdCardList.get(this.cmdCardList.size()-1).getCardType() == selectedCard.getCardType()) {
-			switch(this.cmdCardList.size()) {
+		} else if (this.cmdCardList.get(this.cmdCardList.size() - 1).getCardType() == selectedCard.getCardType()) {
+			switch (this.cmdCardList.size()) {
 			case 0:
 				this.cmdCardList.add(selectedCard);
 				selectedCard.setSpriteValue(1);
@@ -31,33 +34,38 @@ public class CmdBox {
 				selectedCard.setSpriteValue(3);
 				break;
 			}
-		}else {
+		} else {
 			cmdCardList.clear();
 			cmdCardList.add(selectedCard);
 		}
 		selectedCard.setCmdBox(this);
 	}
+
 	public void addDamageCard(CmdCard damageCard) {
 		this.cmdCardList.clear();
 		this.cmdCardList.add(damageCard);
 		damageCard.setCmdBox(this);
 	}
+
 	public void update() {
-		
+
 	}
+
 	public void execute() {
-		if(this.cmdCardList.get(this.cmdCardList.size()-1)==null) {
-			GameController.setProgramCount(GameController.getProgramCount()+1);
+		if (this.cmdCardList.get(this.cmdCardList.size() - 1) == null) {
+			GameController.setProgramCount(GameController.getProgramCount() + 1);
 			GameController.execute(GameController.getProgramCount());
-		}else {
-			GameController.setExecutingProgram(this.cmdCardList.get(this.cmdCardList.size()-1));
-			this.cmdCardList.get(this.cmdCardList.size()-1).execute();
+		} else {
+			GameController.setExecutingProgram(this.cmdCardList.get(this.cmdCardList.size() - 1));
+			((OnGoing) this.cmdCardList.get(this.cmdCardList.size() - 1)).execute(this.cmdCardList.size());
 		}
 	}
+
 	public void setCmdCardList(ArrayList<CmdCard> cmdCardList) {
 		this.cmdCardList = cmdCardList;
 	}
-	public ArrayList<CmdCard> getCmdCardList(){
+
+	public ArrayList<CmdCard> getCmdCardList() {
 		return this.cmdCardList;
 	}
 

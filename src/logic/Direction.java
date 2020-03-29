@@ -1,9 +1,5 @@
 package logic;
 
 public enum Direction {
-	LEFT,
-	RIGHT,
-	UP,
-	DOWN,
-	ALL
+	LEFT, RIGHT, UP, DOWN, ALL
 }

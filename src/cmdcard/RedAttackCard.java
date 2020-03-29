@@ -1,91 +1,97 @@
 package cmdcard;
 
-import card.base.CmdCard;
-import logic.CardSprite;
-import logic.Direction;
-import logic.GameController;
-import tile.Tile;
-import token.Mech;
-import token.Minion;
-import token.Token;
+import card.base.*;
+import logic.*;
+import tile.*;
+import token.*;
 
 import java.util.ArrayList;
 
 import card.base.Attack;
 
-public class RedAttackCard extends CmdCard implements Attack {
-	private int spriteValue ;
+public class RedAttackCard extends CmdCard implements Attack, OnGoing {
+
 	public RedAttackCard() {
 		this.spriteValue = CardSprite.RED_ATTACK_CARD_1;
 	}
+
 	@Override
-	public ArrayList<Token> attack(int tier) {
-		ArrayList<Token> result = new ArrayList<>();
-		int x = this.getProgrammedMech().getSelfTile().getLocationX();
-		int y = this.getProgrammedMech().getSelfTile().getLocationY();
-		Mech mech = (Mech) GameController.getBoard().getTile(x, y).getToken();
+	public ArrayList<Object> attack(int tier) {
+		ArrayList<Object> resultList = new ArrayList<Object>();
+		Mech mech = this.getProgrammedMech();
+		int x = mech.getSelfTile().getLocationX();
+		int y = mech.getSelfTile().getLocationX();
 		Direction dir = mech.getDirection();
 		ArrayList<Tile> tileList = new ArrayList<>();
-		switch(tier) {
+		switch (tier) {
 		case 1:
-			tileList.addAll(GameController.getBoard().getAdjacentTile(GameController.getBoard().getTile(x,y),2,dir));
+			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(), 2, dir));
 			break;
 		case 2:
-			tileList.addAll(GameController.getBoard().getAdjacentTile(GameController.getBoard().getTile(x,y),2,dir));
-			tileList.addAll(GameController.getBoard().getDiagonalTile(GameController.getBoard().getTile(x,y),2,dir));
+			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(), 2, dir));
+			tileList.addAll(GameController.getBoard().getDiagonalTile(mech.getSelfTile(), 2, dir));
 			break;
 		case 3:
-			tileList.addAll(GameController.getBoard().getAdjacentTile(GameController.getBoard().getTile(x,y),2,dir));
-			tileList.addAll(GameController.getBoard().getDiagonalTile(GameController.getBoard().getTile(x,y),2,dir));
-			switch(dir) {
+			tileList.addAll(GameController.getBoard().getAdjacentTile(mech.getSelfTile(), 2, dir));
+			tileList.addAll(GameController.getBoard().getDiagonalTile(mech.getSelfTile(), 2, dir));
+			switch (dir) {
 			case UP:
-				if(GameController.getBoard().isMovePossible(x-1, y-2)) {
-					tileList.add(GameController.getBoard().getTile(x-1, y-2));
-				}if(GameController.getBoard().isMovePossible(x+1, y-2)) {
-					tileList.add(GameController.getBoard().getTile(x+1, y-2));
+				if (GameController.getBoard().isMovePossible(x - 1, y - 2)) {
+					tileList.add(GameController.getBoard().getTile(x - 1, y - 2));
+				}
+				if (GameController.getBoard().isMovePossible(x + 1, y - 2)) {
+					tileList.add(GameController.getBoard().getTile(x + 1, y - 2));
 				}
 				break;
 			case DOWN:
-				if(GameController.getBoard().isMovePossible(x-1, y+2)) {
-					tileList.add(GameController.getBoard().getTile(x-1, y+2));
-				}if(GameController.getBoard().isMovePossible(x+1, y+2)) {
-					tileList.add(GameController.getBoard().getTile(x+1, y+2));
+				if (GameController.getBoard().isMovePossible(x - 1, y + 2)) {
+					tileList.add(GameController.getBoard().getTile(x - 1, y + 2));
+				}
+				if (GameController.getBoard().isMovePossible(x + 1, y + 2)) {
+					tileList.add(GameController.getBoard().getTile(x + 1, y + 2));
 				}
 				break;
 			case RIGHT:
-				if(GameController.getBoard().isMovePossible(x+2, y-1)) {
-					tileList.add(GameController.getBoard().getTile(x+2, y-1));
-				}if(GameController.getBoard().isMovePossible(x+2, y+1)) {
-					tileList.add(GameController.getBoard().getTile(x+2, y+1));
+				if (GameController.getBoard().isMovePossible(x + 2, y - 1)) {
+					tileList.add(GameController.getBoard().getTile(x + 2, y - 1));
+				}
+				if (GameController.getBoard().isMovePossible(x + 2, y + 1)) {
+					tileList.add(GameController.getBoard().getTile(x + 2, y + 1));
 				}
 				break;
 			case LEFT:
-				if(GameController.getBoard().isMovePossible(x-2, y-1)) {
-					tileList.add(GameController.getBoard().getTile(x-2, y-1));
-				}if(GameController.getBoard().isMovePossible(x-2, y+1)) {
-					tileList.add(GameController.getBoard().getTile(x-2, y+1));
+				if (GameController.getBoard().isMovePossible(x - 2, y - 1)) {
+					tileList.add(GameController.getBoard().getTile(x - 2, y - 1));
 				}
+				if (GameController.getBoard().isMovePossible(x - 2, y + 1)) {
+					tileList.add(GameController.getBoard().getTile(x - 2, y + 1));
+				}
+			default:
+				break;
 			}
 			break;
 		default:
 			break;
 		}
-		for(Tile tile:tileList) {
-			if(tile.getToken() instanceof Token) {
-				result.add((Token)tile.getToken());
+		for (Tile tile : tileList) {
+			if (tile.getToken() instanceof Token && !tile.getToken().equals(this.getProgrammedMech())) {
+				resultList.add((Object) tile.getToken());
 			}
 		}
-		return result;
-		
+		return resultList;
+
 	}
 
 	@Override
-	public void execute() {
-
+	public void execute(int tier) {
+		// TODO Auto-generated method stub
+		GameController.setSelectable(attack(tier));
+		GameController.setSelectTimes(attack(tier).size());
 	}
+
 	@Override
 	public void setSpriteValue(int tier) {
-		switch(tier) {
+		switch (tier) {
 		case 1:
 			this.spriteValue = CardSprite.RED_ATTACK_CARD_1;
 			break;
@@ -95,9 +101,7 @@ public class RedAttackCard extends CmdCard implements Attack {
 		case 3:
 			this.spriteValue = CardSprite.RED_ATTACK_CARD_3;
 			break;
-		
+
 		}
 	}
-	
-
 }
