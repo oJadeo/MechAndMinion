@@ -10,6 +10,7 @@ public class DraftedCard {
 	private int statingPositionY;
 	public final int OFFSETX = 0;
 	public final int OFFSETY = 0;
+	
 
 	public DraftedCard() {
 		this.draftedCardList = new ArrayList<CmdCard>();
@@ -18,7 +19,13 @@ public class DraftedCard {
 			// this.draftedCardList.add(randomCard());
 		}
 	}
-
+	public DraftedCard(CmdCard cmdCard) {
+		this.draftedCardList = new ArrayList<CmdCard>();
+		for (int i = 0; i < 6; i++) {
+			this.draftedCardList.add(cmdCard);
+			
+		}
+	}
 	public CmdCard randomCard() {
 		CmdCard newCard = null;
 		switch ((int)(Math.random()*12)) {

@@ -39,6 +39,37 @@ public class GameController {
 		programCount = 0;
 		gameEnd = false;
 	}
+	
+	public static void initializeTest() {
+		currentPhase = Phase.Program;
+		turnCount = 1;
+		score = 0;
+		damageCount = 0;
+		programCount = 0;
+		gameEnd = false;
+		board = new Board();
+		redMechProgram = 0;
+		blueMechProgram = 0;
+	}
+	public static void setDraftedCard(CmdCard cmdCard) {
+		draftedCard = new DraftedCard(cmdCard);
+	}
+	
+	public static void setRedMech(Mech redMech) {
+		GameController.redMech = redMech;
+	}
+	
+    public static void setBlueMech(Mech blueMech) {
+		GameController.blueMech = blueMech;
+	}
+    
+    public static Minion setMinion(int x,int y) {
+    	return new Minion(Direction.UP, board.getTile(x,y));
+    	
+    }
+    public static ArrayList<Object> getSelectable(){
+    	return selectable;
+    }
 
 	public static void initializeBoard() {
 		board = new Board();
@@ -394,7 +425,7 @@ public class GameController {
 
 	public static void execute(int programCount) {
 		if (programCount == 12) {
-			nextPhase();
+			//nextPhase();
 		} else {
 			if (programCount < 6) {
 				redMech.getCmdBoard().getCmdBox(programCount).execute();
@@ -439,4 +470,6 @@ public class GameController {
 	public static void setExecutingProgram(CmdCard executingProgram) {
 		GameController.executingProgram = executingProgram;
 	}
+
+
 }

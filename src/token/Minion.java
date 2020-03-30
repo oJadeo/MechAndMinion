@@ -7,6 +7,7 @@ import tile.Tile;
 public class Minion extends Token {
 	public Minion(Direction dir, Tile selfTile) {
 		super(dir, selfTile);
+		GameController.getBoard().getMinionList().add(this);
 	}
 
 	public void damaged() {

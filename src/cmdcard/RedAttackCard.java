@@ -20,7 +20,7 @@ public class RedAttackCard extends CmdCard implements Attack, OnGoing {
 		ArrayList<Object> resultList = new ArrayList<Object>();
 		Mech mech = this.getProgrammedMech();
 		int x = mech.getSelfTile().getLocationX();
-		int y = mech.getSelfTile().getLocationX();
+		int y = mech.getSelfTile().getLocationY();
 		Direction dir = mech.getDirection();
 		ArrayList<Tile> tileList = new ArrayList<>();
 		switch (tier) {

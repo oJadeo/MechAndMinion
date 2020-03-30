@@ -20,7 +20,7 @@ public class BlueMoveCard extends CmdCard implements Attack, Move ,OnGoing {
 		Mech mech = this.getProgrammedMech();
 		Direction dir = mech.getDirection();
 		ArrayList<Object> tileList = new ArrayList<Object>();
-		for (Tile e : GameController.getBoard().getAdjacentTile(mech.getSelfTile(), tier, dir)) {
+		for (Tile e : GameController.getBoard().getAdjacentTile(mech.getSelfTile(), 1, dir)) {
 			tileList.add((Object) e);
 		}
 		return tileList;
