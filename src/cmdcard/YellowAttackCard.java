@@ -1,50 +1,44 @@
 package cmdcard;
 
-import card.base.CmdCard;
-import logic.CardSprite;
-import logic.Direction;
-import logic.GameController;
-import tile.Tile;
-import token.Mech;
-import token.Minion;
-import token.Token;
-
+import card.base.*;
+import logic.*;
+import tile.*;
+import token.*;
 import java.util.ArrayList;
 
-import card.base.Attack;
+public class YellowAttackCard extends CmdCard implements Attack, OnGoing {
 
-public class YellowAttackCard extends CmdCard implements Attack {
-
-	private int spriteValue;
 	public YellowAttackCard() {
 		this.spriteValue = CardSprite.YELLOW_ATTACK_CARD_1;
 	}
-	public ArrayList<Token> attack(int tier) {
-		// TODO Auto-generated method stub
-		
-		ArrayList<Token> result = new ArrayList<>();
-		int x = this.getProgrammedMech().getSelfTile().getLocationX();
-		int y = this.getProgrammedMech().getSelfTile().getLocationY();
-		ArrayList<Tile> tileList = GameController.getBoard().getAdjacentTile(GameController.getBoard().getTile(x,y), 1, Direction.ALL);
-		for(Tile tile:tileList) {
-			if(tile.getToken() instanceof Token) {
-				result.add((Token)tile.getToken());
+
+	@Override
+	public ArrayList<Object> attack(int tier) {
+		// TODO Auto-generated method
+		ArrayList<Object> resultList = new ArrayList<Object>();
+		for (Tile tile : GameController.getBoard().getDiagonalTile(this.getProgrammedMech().getSelfTile(), 1,
+				Direction.ALL)) {
+			if (tile.getToken() instanceof Token && !tile.getToken().equals(this.getProgrammedMech())) {
+				resultList.add((Object) tile.getToken());
 			}
 		}
-		return result;
-		
-		
+		return resultList;
 	}
 
 	@Override
-	public void execute() {
+	public void execute(int tier) {
 		// TODO Auto-generated method stub
-		
+		if(attack(tier).size()!=0) {
+			GameController.setSelectable(attack(tier));
+			GameController.setSelectTimes(tier*2);
+		}else {
+			GameController.setSelectTimes(0);
+		}
 	}
 
 	@Override
 	public void setSpriteValue(int tier) {
-		switch(tier) {
+		switch (tier) {
 		case 1:
 			this.spriteValue = CardSprite.YELLOW_ATTACK_CARD_1;
 			break;
@@ -54,7 +48,7 @@ public class YellowAttackCard extends CmdCard implements Attack {
 		case 3:
 			this.spriteValue = CardSprite.YELLOW_ATTACK_CARD_3;
 			break;
-		
+
 		}
 	}
 }

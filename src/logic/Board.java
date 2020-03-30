@@ -96,7 +96,7 @@ public class Board {
 						result.add(tileBoard[y - i][x - i]);
 					}
 					if (isMovePossible(x, y + i)) {
-						result.add(tileBoard[y - i][x + i]);
+						result.add(tileBoard[y + i][x - i]);
 					}
 				}
 			}
@@ -105,7 +105,7 @@ public class Board {
 			for (int i = 1; i <= range; i++) {
 				if (isMovePossible(x, y - i)) {
 					if (isMovePossible(x + i, y)) {
-						result.add(tileBoard[y + i][x - i]);
+						result.add(tileBoard[y - i][x + i]);
 					}
 					if (isMovePossible(x - i, y)) {
 						result.add(tileBoard[y - i][x - i]);
@@ -117,7 +117,7 @@ public class Board {
 			for (int i = 1; i < range; i++) {
 				if (isMovePossible(x + i, y)) {
 					if (isMovePossible(x, y - i)) {
-						result.add(tileBoard[y + i][x - i]);
+						result.add(tileBoard[y - i][x + i]);
 					}
 					if (isMovePossible(x, y + i)) {
 						result.add(tileBoard[y + i][x + i]);
@@ -132,7 +132,7 @@ public class Board {
 						result.add(tileBoard[y + i][x + i]);
 					}
 					if (isMovePossible(x - i, y)) {
-						result.add(tileBoard[y - i][x + i]);
+						result.add(tileBoard[y + i][x - i]);
 					}
 				}
 			}
@@ -141,7 +141,7 @@ public class Board {
 			for (int i = 1; i <= range; i++) {
 				if (isMovePossible(x, y - i)) {
 					if (isMovePossible(x + i, y)) {
-						result.add(tileBoard[y + i][x - i]);
+						result.add(tileBoard[y - i][x + i]);
 					}
 					if (isMovePossible(x - i, y)) {
 						result.add(tileBoard[y - i][x - i]);
@@ -152,7 +152,7 @@ public class Board {
 						result.add(tileBoard[y + i][x + i]);
 					}
 					if (isMovePossible(x - i, y)) {
-						result.add(tileBoard[y - i][x + i]);
+						result.add(tileBoard[y + i][x - i]);
 					}
 				}
 			}
@@ -182,7 +182,6 @@ public class Board {
 	}
 
 	public ArrayList<Minion> getMinionList() {
-		// TODO Auto-generated method stub
 		return this.minionList;
 	}
 
@@ -197,7 +196,6 @@ public class Board {
 	}
 
 	public void update() {
-
 		for (int i = 0; i < BOARDSIZEX; i++) {
 			String result = "[";
 			for (int j = 0; j < BOARDSIZEY; j++) {

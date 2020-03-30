@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 import card.base.Attack;
 
-public class BlueAttackCard extends CmdCard implements Attack,OnGoing {
-	
+public class BlueAttackCard extends CmdCard implements Attack, OnGoing {
+
 	public BlueAttackCard() {
 		this.spriteValue = CardSprite.BLUE_ATTACK_CARD_1;
 	}
@@ -18,24 +18,24 @@ public class BlueAttackCard extends CmdCard implements Attack,OnGoing {
 	@Override
 	public ArrayList<Object> attack(int tier) {
 		ArrayList<Object> result = new ArrayList<Object>();
-		Mech mech = this.getProgrammedMech();
-		Direction dir = mech.getDirection();
-		ArrayList<Tile> tileList = GameController.getBoard().getAdjacentTile(mech.getSelfTile(), 10, dir);
-		for (int i = 0; i < tileList.size(); i++) {
-			if (tileList.get(i).getToken() instanceof Token) {
-				result.add((Object) tileList.get(i).getToken());
-			}
-			if (result.size() == tier) {
+		for (Tile tile : GameController.getBoard().getAdjacentTile(this.getProgrammedMech().getSelfTile(), 10,
+				this.getProgrammedMech().getDirection())) {
+			if (tile.getToken() instanceof Token) {
+				result.add((Object) tile.getToken());
 				break;
 			}
 		}
 		return result;
 	}
-	
+
 	@Override
 	public void execute(int tier) {
-		GameController.setSelectable(this.attack(tier));
-		GameController.setSelectTimes(this.attack(tier).size());
+		if (this.attack(tier).size() != 0) {
+			GameController.setSelectable(this.attack(tier));
+			GameController.setSelectTimes(tier);
+		} else {
+			GameController.setSelectTimes(0);
+		}
 	}
 
 	@Override

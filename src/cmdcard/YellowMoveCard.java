@@ -1,64 +1,41 @@
 package cmdcard;
 
 import java.util.ArrayList;
+import card.base.*;
+import logic.*;
+import tile.*;
 
-import card.base.CmdCard;
-import card.base.Move;
-import logic.CardSprite;
-import logic.Direction;
-import logic.GameController;
-import tile.Tile;
-import token.Mech;
+public class YellowMoveCard extends CmdCard implements Move, OnGoing {
 
-public class YellowMoveCard extends CmdCard implements Move {
-	private int spriteValue;
 	public YellowMoveCard() {
 		this.spriteValue = CardSprite.YELLOW_MOVE_CARD_1;
 	}
+
 	@Override
-	public ArrayList<Tile> move(int tier) {
-		int x = this.getProgrammedMech().getSelfTile().getLocationX();
-		int y = this.getProgrammedMech().getSelfTile().getLocationY();
-		Mech mech = (Mech) GameController.getBoard().getTile(x, y).getToken();
-		Direction dir = mech.getDirection();
-		ArrayList<Tile> tileList = new ArrayList<>();
-		ArrayList<Tile> tileList1 = new ArrayList<>();
-		ArrayList<Tile> tileList2 = new ArrayList<>();
-		switch(tier) {
-		case 1:
-			tileList = GameController.getBoard().getAdjacentTile(mech.getSelfTile(),2,dir);
-			break;
-		case 2:
-			tileList1 = GameController.getBoard().getAdjacentTile(mech.getSelfTile(),1,dir);
-			tileList2 = GameController.getBoard().getAdjacentTile(mech.getSelfTile(),2,dir);
-			for(Tile tile:tileList2) {
-				if(!tileList1.contains(tile))
-					tileList.add(tile);
-			}
-			break;
-		case 3:
-			tileList1 = GameController.getBoard().getAdjacentTile(mech.getSelfTile(),3,dir);
-			tileList2 = GameController.getBoard().getAdjacentTile(mech.getSelfTile(),6,dir);
-			for(Tile tile:tileList2) {
-				if(!tileList1.contains(tile))
-					tileList.add(tile);
-			}
-			break;
-		default:
-			break;
+	public ArrayList<Object> move(int tier) {
+		ArrayList<Object> resultList = new ArrayList<Object>();
+		for (Tile tile : GameController.getBoard().getAdjacentTile(this.getProgrammedMech().getSelfTile(), 1,
+				this.getProgrammedMech().getDirection())) {
+			resultList.add((Object) tile);
 		}
-		return tileList;
+		return resultList;
 	}
 
 	@Override
-	public void execute() {
+	public void execute(int tier) {
 		// TODO Auto-generated method stub
-		
+		GameController.setStepCount(0);
+		if(move(tier).size()!=0) {
+			GameController.setSelectable(move(tier));
+			GameController.setSelectTimes(tier * 2);
+		}else {
+			GameController.setSelectTimes(0);
+		}
 	}
 
 	@Override
 	public void setSpriteValue(int tier) {
-		switch(tier) {
+		switch (tier) {
 		case 1:
 			this.spriteValue = CardSprite.YELLOW_MOVE_CARD_1;
 			break;
@@ -70,6 +47,5 @@ public class YellowMoveCard extends CmdCard implements Move {
 			break;
 		}
 	}
-
 
 }
