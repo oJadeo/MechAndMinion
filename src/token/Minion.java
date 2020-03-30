@@ -9,7 +9,8 @@ public class Minion extends Token {
 		super(dir, selfTile);
 		GameController.getBoard().getMinionList().add(this);
 	}
-
+	
+	@Override
 	public void damaged() {
 		GameController.getBoard().getMinionList().remove(this);
 		this.getSelfTile().setToken(null);

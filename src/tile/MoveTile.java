@@ -3,7 +3,6 @@ package tile;
 import logic.Direction;
 import logic.GameController;
 import logic.Sprite;
-import token.Token;
 
 public class MoveTile extends Tile {
 	private Direction dir;
@@ -26,7 +25,7 @@ public class MoveTile extends Tile {
 		}
 	}
 
-	public void trigger(Token token) {
+	public void trigger() {
 		GameController.move(token, this.dir);
 	}
 }

@@ -1,8 +1,6 @@
 package tile;
 
 import logic.Sprite;
-import token.Token;
-
 import logic.Direction;
 
 public class SpinTile extends Tile {
@@ -23,7 +21,7 @@ public class SpinTile extends Tile {
 		}
 	}
 
-	public void trigger(Token token) {
+	public void trigger() {
 		switch (this.spinValue) {
 		case 90:
 			switch (token.getDirection()) {

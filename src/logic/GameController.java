@@ -9,7 +9,7 @@ import token.*;
 
 public class GameController {
 	private static Board board;
-	private static Mech redMech;
+	public static Mech redMech;
 	private static Mech blueMech;
 	private static Phase currentPhase;
 	private static int turnCount;
@@ -55,8 +55,6 @@ public class GameController {
 		for (int i = 0; i < 3; i++) {
 			creatSpawnTile();
 		}
-		Minion testMinion = new Minion(Direction.UP, board.getTile(0, 2));
-		Minion testMinion2 = new Minion(Direction.UP, board.getTile(1, 1));
 	}
 
 	public static void randomTile() {

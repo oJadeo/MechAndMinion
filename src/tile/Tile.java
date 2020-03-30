@@ -8,7 +8,7 @@ public class Tile {
 	public static final int DIMENSIONY = 48;
 	private int locationX;
 	private int locationY;
-	private Token token;
+	protected Token token;
 	private int spriteValue;
 
 	public Tile(int locationX, int locationY) {
@@ -55,6 +55,5 @@ public class Tile {
 	}
 
 	public void trigger() {
-
 	}
 }
