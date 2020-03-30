@@ -15,9 +15,8 @@ public class YellowRotateCard extends CmdCard implements Rotate, Attack, OnGoing
 	@Override
 	public ArrayList<Object> attack(int tier) {
 		ArrayList<Object> resultList = new ArrayList<>();
-		ArrayList<Tile> tileList = GameController.getBoard().getDiagonalTile(this.getProgrammedMech().getSelfTile(),
-				tier, Direction.ALL);
-		for (Tile tile : tileList) {
+		for (Tile tile : GameController.getBoard().getDiagonalTile(this.getProgrammedMech().getSelfTile(), tier,
+				Direction.ALL)) {
 			if (tile.getToken() instanceof Token && !tile.getToken().equals(this.getProgrammedMech())) {
 				resultList.add((Object) tile.getToken());
 			}
@@ -91,8 +90,8 @@ public class YellowRotateCard extends CmdCard implements Rotate, Attack, OnGoing
 
 	@Override
 	public void execute(int tier) {
-		// TODO Auto-generated method stub
-
+		GameController.setSelectable(rotate(tier));
+		GameController.setSelectTimes(1);
 	}
 
 	@Override

@@ -10,20 +10,25 @@ import token.*;
 public class GameController {
 	private static Board board;
 	private static Mech redMech;
-	private static int redMechProgram;
 	private static Mech blueMech;
-	private static int blueMechProgram;
 	private static Phase currentPhase;
 	private static int turnCount;
 	private static int score;
 	private static int damageCount;
+	private static boolean gameEnd;
+
+	// Drafted Card Variable
+	private static DraftedCard draftedCard;
+	private static int redMechProgram;
+	private static int blueMechProgram;
+
+	// ExecutintProgram variable
 	private static int programCount;
 	private static ArrayList<Object> selectable = new ArrayList<Object>();
 	private static int selectTimes;
 	private static CmdCard executingProgram;
-	private static DraftedCard draftedCard;
-	private static boolean gameEnd;
 	private static Direction movingDirection;
+	private static int stepCount;
 
 	public static void initializeGame() {
 		initializeBoard();
@@ -81,8 +86,8 @@ public class GameController {
 		for (int i = 0; i < 3; i++) {
 			creatSpawnTile();
 		}
-		Minion testMinion = new Minion(Direction.UP, board.getTile(0, 1));
-		Minion testMinion2 = new Minion(Direction.UP, board.getTile(0, 2));
+		Minion testMinion = new Minion(Direction.UP, board.getTile(0, 2));
+		Minion testMinion2 = new Minion(Direction.UP, board.getTile(1, 1));
 	}
 
 	public static void randomTile() {
@@ -243,13 +248,13 @@ public class GameController {
 
 	public static void setProgram(int no, int cmdSlot, int selectedCardSlot)
 			throws SelectEmptyCardException, IndexOutOfRangeException, SelectMechException {
-		if (selectedCardSlot < 0 && selectedCardSlot > 6) {
+		if (selectedCardSlot < 0 || selectedCardSlot > 6) {
 			throw new IndexOutOfRangeException("Can't put number out of slot(Card Slot)");
 		}
 		if (no != 0 && no != 1) {
 			throw new SelectMechException("Can't select unless 1 or 2 in Select Mech");
 		}
-		if (cmdSlot < 0 && cmdSlot > 6) {
+		if (cmdSlot < 0 || cmdSlot > 6) {
 			throw new IndexOutOfRangeException("Can't put number out of slot(CommandSlot)");
 		}
 		if (draftedCard.getDraftedCardList().get(selectedCardSlot) == null) {
@@ -310,7 +315,7 @@ public class GameController {
 	}
 
 	public static void select(int i) throws IndexOutOfRangeException {
-		if(selectable.size()==0) {
+		if (selectable.size() == 0) {
 			System.out.println("Bug nothing to select");
 		}
 		if (i >= selectable.size() || i < 0) {
@@ -321,6 +326,11 @@ public class GameController {
 				((Token) selectable.get(i)).damaged();
 				selectable.remove(i);
 				selectTimes -= 1;
+				if(((BlueAttackCard) executingProgram).attack(1).size()!=0){
+					setSelectable(((BlueAttackCard) executingProgram).attack(1));
+				}else {
+					selectTimes =0;
+				}
 			}
 		} else if (executingProgram instanceof BlueMoveCard) {
 			if (selectable.get(i) instanceof Tile) {
@@ -364,15 +374,15 @@ public class GameController {
 					newSelectableList.add((Object) e);
 				}
 				setSelectable(newSelectableList);
-				if(selectable.size()!=0) {
+				if (selectable.size() != 0) {
 					setSelectTimes(executingProgram.getCmdBox().getCmdCardList().size());
-				}else {
+				} else {
 					setSelectTimes(0);
 				}
-			}else if (selectable.get(i) instanceof Tile) {
+			} else if (selectable.get(i) instanceof Tile) {
 				move(executingProgram.getProgrammedMech(), movingDirection);
 				selectTimes -= 1;
-				if(selectTimes!=0) {
+				if (selectTimes != 0) {
 					ArrayList<Object> newSelectableList = new ArrayList<Object>();
 					for (Tile e : getBoard().getAdjacentTile(executingProgram.getProgrammedMech().getSelfTile(), 1,
 							movingDirection)) {
@@ -380,7 +390,7 @@ public class GameController {
 					}
 					setSelectable(newSelectableList);
 				}
-				if(selectable.size()==0) {
+				if (selectable.size() == 0) {
 					setSelectTimes(0);
 				}
 			}
@@ -394,33 +404,101 @@ public class GameController {
 				} else {
 					setSelectTimes(0);
 				}
-			}else if(selectable.get(i) instanceof Token) {
+			} else if (selectable.get(i) instanceof Token) {
+				((Token) selectable.get(i)).damaged();
+				selectable.remove(i);
+				selectTimes -= 1;
+			}
+		} else if (executingProgram instanceof RedAttackCard) {
+			if (selectable.get(i) instanceof Token) {
 				((Token) selectable.get(i)).damaged();
 				selectable.remove(i);
 				selectTimes -= 1;
 			}
 		} else if (executingProgram instanceof RedMoveCard) {
-			if(selectable.get(i) instanceof Tile) {
-				GameController.move(executingProgram.getProgrammedMech(), executingProgram.getProgrammedMech().getDirection());
+			if (selectable.get(i) instanceof Tile) {
+				GameController.move(executingProgram.getProgrammedMech(),
+						executingProgram.getProgrammedMech().getDirection());
 				setSelectable(((RedMoveCard) executingProgram).move(1));
 				selectTimes -= 1;
-				if(selectable.size() == 0 || selectTimes == 0) {
+				if (selectable.size() == 0 || selectTimes == 0) {
 					setSelectable(((RedMoveCard) executingProgram).attack(1));
 					setSelectTimes(selectable.size());
 				}
-			}else if(selectable.get(i) instanceof Token) {
+			} else if (selectable.get(i) instanceof Token) {
 				((Token) selectable.get(i)).damaged();
 				selectable.remove(i);
 				selectTimes -= 1;
 			}
-		}// next card type
+		} else if (executingProgram instanceof RedRotateCard) {
+			if (selectable.get(i) instanceof Direction) {
+				executingProgram.getProgrammedMech().setDirection((Direction) selectable.get(i));
+				setSelectable(((RedRotateCard) executingProgram)
+						.attack(executingProgram.getCmdBox().getCmdCardList().size()));
+				setSelectTimes(selectable.size());
+			} else if (selectable.get(i) instanceof Token) {
+				((Token) selectable.get(i)).damaged();
+				selectable.remove(i);
+				selectTimes -= 1;
+			}
+		} else if (executingProgram instanceof YellowAttackCard) {
+			if (selectable.get(i) instanceof Token) {
+				ArrayList<Object> newSelectable = new ArrayList<Object>();
+				for (Tile tile : getBoard().getDiagonalTile(((Token) selectable.get(i)).getSelfTile(), 1,
+						Direction.ALL)) {
+					if (tile.getToken() instanceof Token
+							&& !tile.getToken().equals(executingProgram.getProgrammedMech())) {
+						newSelectable.add((Object) tile.getToken());
+					}
+				}
+				((Token) selectable.get(i)).damaged();
+				selectable.remove(i);
+				if (newSelectable.size() != 0) {
+					setSelectable(newSelectable);
+					selectTimes -= 1;
+				} else {
+					selectTimes = 0;
+				}
+			}
+		} else if (executingProgram instanceof YellowMoveCard) {
+			if (selectable.get(i) instanceof Token) {
+				if(selectable.get(i).equals(executingProgram.getProgrammedMech().getSelfTile())) {
+					selectTimes = 0;
+				}else {
+					GameController.move(executingProgram.getProgrammedMech(), executingProgram.getProgrammedMech().getDirection());
+					ArrayList<Object> newSelectable = new ArrayList<Object>();
+					for(Tile tile :getBoard().getAdjacentTile(executingProgram.getProgrammedMech().getSelfTile(), 1, executingProgram.getProgrammedMech().getDirection())){
+						newSelectable.add((Object) tile);
+					}
+					if(newSelectable.size()!=0) {
+						if(stepCount>=executingProgram.getCmdBox().getCmdCardList().size()) {
+							newSelectable.add(executingProgram.getProgrammedMech().getSelfTile());
+						}
+						setSelectable(newSelectable);
+					}else {
+						selectTimes = 0;
+					}
+				}
+			}
+		} else if (executingProgram instanceof YellowRotateCard) {
+			if (selectable.get(i) instanceof Direction) {
+				executingProgram.getProgrammedMech().setDirection((Direction) selectable.get(i));
+				setSelectable(((YellowRotateCard) executingProgram)
+						.attack(executingProgram.getCmdBox().getCmdCardList().size()));
+				if (selectable.size() == 0) {
+					selectTimes = 0;
+				}
+			} else if (selectable.get(i) instanceof Token) {
+				((Token) selectable.get(i)).damaged();
+				selectable.remove(i);
+				selectTimes -= 1;
+			}
+		}
 
 		if (selectTimes == 0) {
 			programCount += 1;
 			execute(programCount);
-		} else {
-			update();
-		}
+		} 
 	}
 
 	public static void execute(int programCount) {
@@ -470,6 +548,9 @@ public class GameController {
 	public static void setExecutingProgram(CmdCard executingProgram) {
 		GameController.executingProgram = executingProgram;
 	}
-
+	
+	public static void setStepCount(int stepCount) {
+		GameController.stepCount = stepCount;
+	}
 
 }

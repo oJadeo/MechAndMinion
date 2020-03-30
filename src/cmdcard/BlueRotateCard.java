@@ -6,8 +6,8 @@ import logic.*;
 import tile.*;
 import token.*;
 
-public class BlueRotateCard extends CmdCard implements Rotate, Attack ,OnGoing {
-	
+public class BlueRotateCard extends CmdCard implements Rotate, Attack, OnGoing {
+
 	public BlueRotateCard() {
 		this.spriteValue = CardSprite.BLUE_ROTATE_CARD_1;
 	}
@@ -15,13 +15,9 @@ public class BlueRotateCard extends CmdCard implements Rotate, Attack ,OnGoing {
 	@Override
 	public ArrayList<Object> attack(int tier) {
 		ArrayList<Object> result = new ArrayList<Object>();
-		int x = this.getProgrammedMech().getSelfTile().getLocationX();
-		int y = this.getProgrammedMech().getSelfTile().getLocationY();
-		for (Tile tile : GameController.getBoard().getBorder(GameController.getBoard().getTile(x, y), 1)) {
-			if (tile.getToken() instanceof Token) {
-				if (!tile.getToken().equals(this.getProgrammedMech())) {
-					result.add((Object) tile.getToken());
-				}
+		for (Tile tile : GameController.getBoard().getBorder(this.getProgrammedMech().getSelfTile(), 1)) {
+			if (tile.getToken() instanceof Token && !tile.getToken().equals(this.getProgrammedMech())) {
+				result.add((Object) tile.getToken());
 			}
 		}
 		return result;

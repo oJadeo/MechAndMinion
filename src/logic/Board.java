@@ -182,7 +182,6 @@ public class Board {
 	}
 
 	public ArrayList<Minion> getMinionList() {
-		// TODO Auto-generated method stub
 		return this.minionList;
 	}
 
@@ -197,7 +196,6 @@ public class Board {
 	}
 
 	public void update() {
-
 		for (int i = 0; i < BOARDSIZEX; i++) {
 			String result = "[";
 			for (int j = 0; j < BOARDSIZEY; j++) {

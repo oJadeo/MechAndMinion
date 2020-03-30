@@ -29,14 +29,10 @@ public class BlueMoveCard extends CmdCard implements Attack, Move ,OnGoing {
 	@Override
 	public ArrayList<Object> attack(int tier) {
 		ArrayList<Object> result = new ArrayList<>();
-		Mech mech = this.getProgrammedMech();
-		Direction dir = mech.getDirection();
-		if (GameController.getBoard().getAdjacentTile(mech.getSelfTile(), 1, dir).size() == 0) {
-			return result;
-		}
-		Tile nextTile = GameController.getBoard().getAdjacentTile(mech.getSelfTile(), 1, dir).get(0);
-		if (nextTile.getToken() != null) {
-			result.add((Object) nextTile.getToken());
+		for(Tile tile:GameController.getBoard().getAdjacentTile(this.getProgrammedMech().getSelfTile(), 1, this.getProgrammedMech().getDirection())) {
+			if(tile.getToken()!=null) {
+				result.add((Object) tile.getToken());
+			}
 		}
 		return result;
 	}
