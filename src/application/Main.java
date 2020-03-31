@@ -42,7 +42,19 @@ public class Main {
 				}
 				break;
 			case MinionMove:
-				GameController.addDamgeCount();
+				int whatever = kb.nextInt();
+				GameController.minionMove();
+				GameController.nextPhase();
+				break;
+			case MinionAttack:
+				int whatever2 = kb.nextInt();
+				GameController.minionAttack();
+				GameController.nextPhase();
+				break;
+			case MinionSpawn:
+				int whatever3 = kb.nextInt();
+				GameController.minionSpawn();
+				GameController.nextPhase();
 				break;
 			default:
 				break;
