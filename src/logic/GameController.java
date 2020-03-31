@@ -75,6 +75,9 @@ public class GameController {
     public static ArrayList<Object> getSelectable(){
     	return selectable;
     }
+    public static int getSelectTimes() {
+    	return selectTimes;
+    }
 
 	public static void initializeBoard() {
 		board = new Board();
@@ -86,8 +89,6 @@ public class GameController {
 		for (int i = 0; i < 3; i++) {
 			creatSpawnTile();
 		}
-		Minion testMinion = new Minion(Direction.UP, board.getTile(0, 2));
-		Minion testMinion2 = new Minion(Direction.UP, board.getTile(1, 1));
 	}
 
 	public static void randomTile() {
@@ -461,12 +462,15 @@ public class GameController {
 				}
 			}
 		} else if (executingProgram instanceof YellowMoveCard) {
-			if (selectable.get(i) instanceof Token) {
+			if (selectable.get(i) instanceof Tile) {
 				if(selectable.get(i).equals(executingProgram.getProgrammedMech().getSelfTile())) {
 					selectTimes = 0;
 				}else {
 					GameController.move(executingProgram.getProgrammedMech(), executingProgram.getProgrammedMech().getDirection());
+					selectTimes -= 1;
+					stepCount += 1;
 					ArrayList<Object> newSelectable = new ArrayList<Object>();
+					
 					for(Tile tile :getBoard().getAdjacentTile(executingProgram.getProgrammedMech().getSelfTile(), 1, executingProgram.getProgrammedMech().getDirection())){
 						newSelectable.add((Object) tile);
 					}
