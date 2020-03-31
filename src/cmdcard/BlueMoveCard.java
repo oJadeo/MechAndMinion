@@ -40,7 +40,14 @@ public class BlueMoveCard extends CmdCard implements Attack, Move ,OnGoing {
 	@Override
 	public void execute(int tier) {
 		GameController.setSelectTimes(tier);
-		GameController.setSelectable(attack(tier));
+		if(attack(tier).size()!=0) {
+			GameController.setSelectable(attack(tier));
+		}else {
+			GameController.setSelectable(move(tier));
+			if(move(tier).size()==0) {
+				GameController.setSelectTimes(0);
+			}
+		}	
 	}
 
 	@Override

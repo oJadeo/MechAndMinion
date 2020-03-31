@@ -1,5 +1,7 @@
 package damagecard;
 
+import java.util.ArrayList;
+
 import card.base.CmdCard;
 import card.base.OnGoing;
 import logic.CardSprite;
@@ -19,7 +21,10 @@ public class ForwardMoveCard extends CmdCard implements OnGoing {
 	@Override
 	public void execute(int tier) {
 		// TODO Auto-generated method stub
-		GameController.move(this.getProgrammedMech(), dir);
+		ArrayList<Object> result = new ArrayList<Object>();
+		result.add((Object) dir);
+		GameController.setSelectable(result);
+		GameController.setSelectTimes(1);
 	}
 
 	@Override

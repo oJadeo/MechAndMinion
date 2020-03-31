@@ -1,8 +1,9 @@
 package logic;
 
 import java.util.ArrayList;
-import card.base.CmdCard;
+import card.base.*;
 import cmdcard.*;
+import damagecard.*;
 import exception.*;
 import tile.*;
 import token.*;
@@ -44,7 +45,7 @@ public class GameController {
 		programCount = 0;
 		gameEnd = false;
 	}
-	
+
 	public static void initializeTest() {
 		currentPhase = Phase.Program;
 		turnCount = 1;
@@ -56,25 +57,27 @@ public class GameController {
 		redMechProgram = 0;
 		blueMechProgram = 0;
 	}
+
 	public static void setDraftedCard(CmdCard cmdCard) {
 		draftedCard = new DraftedCard(cmdCard);
 	}
-	
+
 	public static void setRedMech(Mech redMech) {
 		GameController.redMech = redMech;
 	}
-	
-    public static void setBlueMech(Mech blueMech) {
+
+	public static void setBlueMech(Mech blueMech) {
 		GameController.blueMech = blueMech;
 	}
-    
-    public static Minion setMinion(int x,int y) {
-    	return new Minion(Direction.UP, board.getTile(x,y));
-    	
-    }
-    public static ArrayList<Object> getSelectable(){
-    	return selectable;
-    }
+
+	public static Minion setMinion(int x, int y) {
+		return new Minion(Direction.UP, board.getTile(x, y));
+
+	}
+
+	public static ArrayList<Object> getSelectable() {
+		return selectable;
+	}
 
 	public static void initializeBoard() {
 		board = new Board();
@@ -171,6 +174,30 @@ public class GameController {
 
 			}
 			break;
+		case MinionMove:
+			System.out.println("Score: " + score);
+			board.update();
+			draftedCard.update();
+			redMech.update();
+			blueMech.update();
+			System.out.println("Minion Moving"+board.getMinionList().get(0).getDirection());
+			break;
+		case MinionAttack:
+			System.out.println("Score: " + score);
+			board.update();
+			draftedCard.update();
+			redMech.update();
+			blueMech.update();
+			System.out.println("Minion Attacking");
+			break;
+		case MinionSpawn:
+			System.out.println("Score: " + score);
+			board.update();
+			draftedCard.update();
+			redMech.update();
+			blueMech.update();
+			System.out.println("Minion Spawning");
+			break;
 		default:
 			System.out.println("Score: " + score);
 			board.update();
@@ -193,57 +220,69 @@ public class GameController {
 			break;
 		case Execute:
 			programCount = 0;
+			if(board.getMinionList().size()!=0) {
 			currentPhase = Phase.MinionMove;
+			Direction moveDirection = null;
 			switch ((int) (Math.random() * 4)) {
 			case 0:
-				for (Minion e : getBoard().getMinionList()) {
-					move(e, Direction.UP);
-				}
+				moveDirection = Direction.UP;
 				break;
 			case 1:
-				for (Minion e : getBoard().getMinionList()) {
-					move(e, Direction.DOWN);
-				}
+				moveDirection = Direction.DOWN;
 				break;
 			case 2:
-				for (Minion e : getBoard().getMinionList()) {
-					move(e, Direction.LEFT);
-				}
+				moveDirection = Direction.LEFT;
 				break;
 			case 3:
-				for (Minion e : getBoard().getMinionList()) {
-					move(e, Direction.RIGHT);
-				}
+				moveDirection = Direction.RIGHT;
 				break;
 			default:
 				break;
 			}
+			for(Minion minion :getBoard().getMinionList()) {
+				minion.setDirection(moveDirection);
+			}
+			}else {
+				currentPhase = Phase.MinionSpawn;
+			}
 			break;
 		case MinionMove:
 			currentPhase = Phase.MinionAttack;
-			for (Minion minion : getBoard().getMinionList()) {
-				minion.attack();
-			}
-			nextPhase();
 			break;
 		case MinionAttack:
 			currentPhase = Phase.MinionSpawn;
-			for (SpawnTile spawnTile : getBoard().getSpawnTileList()) {
-				spawnTile.spawn();
-			}
-			nextPhase();
 			break;
 		case MinionSpawn:
 			currentPhase = Phase.Program;
-			update();
 			turnCount += 1;
 			if (turnCount % 3 == 0) {
 				creatSpawnTile();
+				System.out.println("SpawnTile is created");
 			}
+			break;
+		default:
 			break;
 		}
 	}
-
+	
+	public static void minionAttack() {
+		for (Minion minion : getBoard().getMinionList()) {
+			minion.attack();
+		}
+	}
+	
+	public static void minionSpawn() {
+		for (SpawnTile spawnTile : getBoard().getSpawnTileList()) {
+			spawnTile.spawn();
+		}
+	}
+	
+	public static void minionMove() {
+		for(Minion minion : getBoard().getMinionList()) {
+			GameController.move(minion, minion.getDirection());
+		}
+	}
+	
 	public static void setProgram(int no, int cmdSlot, int selectedCardSlot)
 			throws SelectEmptyCardException, IndexOutOfRangeException, SelectMechException {
 		if (selectedCardSlot < 0 || selectedCardSlot > 6) {
@@ -290,7 +329,7 @@ public class GameController {
 			if (selectedToken.getSelfTile() instanceof ExplosiveTile || selectedToken.getSelfTile() instanceof MoveTile
 					|| selectedToken.getSelfTile() instanceof SpinTile) {
 				selectedToken.getSelfTile().trigger();
-			} else if (selectedToken.getSelfTile() instanceof MoveTile) {
+			} else if (selectedToken.getSelfTile() instanceof SlipTile) {
 				move(selectedToken, dir);
 			}
 			return true;
@@ -306,7 +345,6 @@ public class GameController {
 	public static void setSelectTimes(int selectTimes) {
 		GameController.selectTimes = selectTimes;
 		if (selectTimes == 0) {
-			System.out.println("No target");
 			programCount += 1;
 			execute(programCount);
 		}
@@ -324,10 +362,10 @@ public class GameController {
 				((Token) selectable.get(i)).damaged();
 				selectable.remove(i);
 				selectTimes -= 1;
-				if(((BlueAttackCard) executingProgram).attack(1).size()!=0){
+				if (((BlueAttackCard) executingProgram).attack(1).size() != 0) {
 					setSelectable(((BlueAttackCard) executingProgram).attack(1));
-				}else {
-					selectTimes =0;
+				} else {
+					selectTimes = 0;
 				}
 			}
 		} else if (executingProgram instanceof BlueMoveCard) {
@@ -459,21 +497,25 @@ public class GameController {
 				}
 			}
 		} else if (executingProgram instanceof YellowMoveCard) {
-			if (selectable.get(i) instanceof Token) {
-				if(selectable.get(i).equals(executingProgram.getProgrammedMech().getSelfTile())) {
+			if (selectable.get(i) instanceof Tile) {
+				if (selectable.get(i).equals(executingProgram.getProgrammedMech().getSelfTile())) {
 					selectTimes = 0;
-				}else {
-					GameController.move(executingProgram.getProgrammedMech(), executingProgram.getProgrammedMech().getDirection());
+				} else {
+					GameController.move(executingProgram.getProgrammedMech(),
+							executingProgram.getProgrammedMech().getDirection());
+					selectTimes -= 1;
+					stepCount += 1;
 					ArrayList<Object> newSelectable = new ArrayList<Object>();
-					for(Tile tile :getBoard().getAdjacentTile(executingProgram.getProgrammedMech().getSelfTile(), 1, executingProgram.getProgrammedMech().getDirection())){
+					for (Tile tile : getBoard().getAdjacentTile(executingProgram.getProgrammedMech().getSelfTile(), 1,
+							executingProgram.getProgrammedMech().getDirection())) {
 						newSelectable.add((Object) tile);
 					}
-					if(newSelectable.size()!=0) {
-						if(stepCount>=executingProgram.getCmdBox().getCmdCardList().size()) {
+					if (newSelectable.size() != 0) {
+						if (stepCount >= executingProgram.getCmdBox().getCmdCardList().size()) {
 							newSelectable.add(executingProgram.getProgrammedMech().getSelfTile());
 						}
 						setSelectable(newSelectable);
-					}else {
+					} else {
 						selectTimes = 0;
 					}
 				}
@@ -491,17 +533,28 @@ public class GameController {
 				selectable.remove(i);
 				selectTimes -= 1;
 			}
+		} else if (executingProgram instanceof BackMoveCard || executingProgram instanceof ForwardMoveCard
+				|| executingProgram instanceof LeftMoveCard || executingProgram instanceof RightMoveCard) {
+			if (selectable.get(i) instanceof Direction) {
+				GameController.move(executingProgram.getProgrammedMech(), (Direction) selectable.get(i));
+				selectTimes -= 1;
+			}
+		} else if (executingProgram instanceof Rotate180Card || executingProgram instanceof Rotate270Card || executingProgram instanceof Rotate90Card) {
+			if (selectable.get(i) instanceof Direction) {
+				executingProgram.getProgrammedMech().setDirection((Direction) selectable.get(i));
+				selectTimes -= 1;
+			}
 		}
 
 		if (selectTimes == 0) {
 			programCount += 1;
 			execute(programCount);
-		} 
+		}
 	}
 
 	public static void execute(int programCount) {
 		if (programCount == 12) {
-			//nextPhase();
+			nextPhase();
 		} else {
 			if (programCount < 6) {
 				redMech.getCmdBoard().getCmdBox(programCount).execute();
@@ -546,7 +599,7 @@ public class GameController {
 	public static void setExecutingProgram(CmdCard executingProgram) {
 		GameController.executingProgram = executingProgram;
 	}
-	
+
 	public static void setStepCount(int stepCount) {
 		GameController.stepCount = stepCount;
 	}

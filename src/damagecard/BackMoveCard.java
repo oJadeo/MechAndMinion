@@ -1,15 +1,15 @@
 package damagecard;
 
-import card.base.CmdCard;
-import card.base.OnGoing;
-import logic.CardSprite;
-import logic.Direction;
-import logic.GameController;
+import java.util.ArrayList;
+
+import card.base.*;
+import logic.*;
 import token.Mech;
 
 public class BackMoveCard extends CmdCard implements OnGoing {
+	
 	Direction dir;
-
+	
 	public BackMoveCard(Mech programmedMech) {
 		dir = Direction.DOWN;
 		this.setSpriteValue(CardSprite.BACK_MOVE);
@@ -19,7 +19,10 @@ public class BackMoveCard extends CmdCard implements OnGoing {
 	@Override
 	public void execute(int tier) {
 		// TODO Auto-generated method stub
-		GameController.move(this.getProgrammedMech(), dir);
+		ArrayList<Object> result = new ArrayList<Object>();
+		result.add((Object) dir);
+		GameController.setSelectable(result);
+		GameController.setSelectTimes(1);
 	}
 
 	@Override
