@@ -3,13 +3,13 @@ package tile;
 import java.util.ArrayList;
 
 import logic.GameController;
-import logic.Sprite;
+import logic.TileSprite;
 import token.Minion;
 
 public class ExplosiveTile extends Tile {
 	public ExplosiveTile(int locationX, int locationY) {
 		super(locationX, locationY);
-		this.setSpriteValue(Sprite.EXPLOSIVE_TILE);
+		this.setSpriteValue(TileSprite.EXPLOSIVE_TILE);
 	}
 
 	public void trigger() {

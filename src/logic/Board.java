@@ -36,8 +36,6 @@ public class Board extends GridPane{
 		for (int i = 0; i < BOARDSIZEX; i++) {
 			for (int j = 0; j < BOARDSIZEY; j++) {
 				this.tileBoard[j][i] = new Tile(j, i);
-<<<<<<< HEAD
-=======
 			}
 		}
 		for(int i = 0 ; i < BOARDSIZEX; i++) {
@@ -47,7 +45,6 @@ public class Board extends GridPane{
 		}
 	}
 	public void drawGameBoard(GraphicsContext gc) {
-		
 		
 		int x = 0;
 		int y = 0;
@@ -60,7 +57,6 @@ public class Board extends GridPane{
 					DrawUtil.drawTile(gc,STARTPOSITIONX+x*48,STARTPOSITIONY+y*48,tile.getToken().getSpriteValue());
 				}
 				x+=1;
->>>>>>> b1adfa2fbd0a9a3d258f195bd4ff66b3fbd0f81c
 			}
 			y+=1;
 		}
