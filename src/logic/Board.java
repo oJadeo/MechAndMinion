@@ -1,10 +1,22 @@
 package logic;
 
 import java.util.ArrayList;
+
+import application.DrawUtil;
+
+import javafx.geometry.Pos;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import tile.*;
 import token.*;
 
-public class Board {
+public class Board extends GridPane{
 	public final int BOARDSIZEX = 10;
 	public final int BOARDSIZEY = 10;
 	public final int STARTPOSITIONX = 0;
@@ -14,10 +26,43 @@ public class Board {
 	private ArrayList<Minion> minionList = new ArrayList<>();
 
 	public Board() {
+		super();
+		this.setAlignment(Pos.CENTER);
+		this.setPrefWidth(480);
+		this.setPrefHeight(480);
+		this.setBorder(new Border(new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, 
+				CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+		
 		for (int i = 0; i < BOARDSIZEX; i++) {
 			for (int j = 0; j < BOARDSIZEY; j++) {
 				this.tileBoard[j][i] = new Tile(j, i);
+<<<<<<< HEAD
+=======
 			}
+		}
+		for(int i = 0 ; i < BOARDSIZEX; i++) {
+			for(int j = 0; j < BOARDSIZEY; j++) {
+				this.add(tileBoard[j][i], j, i);
+			}
+		}
+	}
+	public void drawGameBoard(GraphicsContext gc) {
+		
+		
+		int x = 0;
+		int y = 0;
+		
+		for(Tile[] row:tileBoard) {
+			x = 0;
+			for(Tile tile:row) {
+				DrawUtil.drawTile(gc,STARTPOSITIONX+x*48,STARTPOSITIONY+y*48,tile.getSpriteValue());
+				if(tile.getToken() != null) {
+					DrawUtil.drawTile(gc,STARTPOSITIONX+x*48,STARTPOSITIONY+y*48,tile.getToken().getSpriteValue());
+				}
+				x+=1;
+>>>>>>> b1adfa2fbd0a9a3d258f195bd4ff66b3fbd0f81c
+			}
+			y+=1;
 		}
 	}
 
