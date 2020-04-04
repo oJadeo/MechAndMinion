@@ -30,6 +30,8 @@ public class YellowMoveCard extends CmdCard implements Move, OnGoing {
 			GameController.setSelectTimes(tier * 2);
 		}else {
 			GameController.setSelectTimes(0);
+			GameController.setProgramCount(GameController.getProgramCount()+1);
+			GameController.execute(GameController.getProgramCount());
 		}
 	}
 

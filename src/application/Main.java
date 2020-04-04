@@ -60,6 +60,7 @@ public class Main {
 				break;
 			}
 		}
+		System.out.println("game end");
 	}
 
 }

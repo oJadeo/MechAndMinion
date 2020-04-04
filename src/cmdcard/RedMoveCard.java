@@ -71,6 +71,8 @@ public class RedMoveCard extends CmdCard implements Attack, Move, OnGoing {
 			GameController.setSelectTimes(tier);
 		} else {
 			GameController.setSelectTimes(0);
+			GameController.setProgramCount(GameController.getProgramCount()+1);
+			GameController.execute(GameController.getProgramCount());
 		}
 	}
 

@@ -14,7 +14,8 @@ public class SpawnTile extends Tile {
 	}
 
 	public void spawn() {
-		new Minion(Direction.UP, this);
+		if(this.getToken()==null) {
+			new Minion(Direction.UP, this);
+		}
 	}
-
 }

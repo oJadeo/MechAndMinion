@@ -182,7 +182,7 @@ public class GameController {
 			draftedCard.update();
 			redMech.update();
 			blueMech.update();
-			System.out.println("Minion Moving"+board.getMinionList().get(0).getDirection());
+			System.out.println("Minion Moving" + board.getMinionList().get(0).getDirection());
 			break;
 		case MinionAttack:
 			System.out.println("Score: " + score);
@@ -218,33 +218,33 @@ public class GameController {
 			redMechProgram = 0;
 			blueMechProgram = 0;
 			currentPhase = Phase.Execute;
+			programCount = 0;
 			execute(programCount);
 			break;
 		case Execute:
-			programCount = 0;
-			if(board.getMinionList().size()!=0) {
-			currentPhase = Phase.MinionMove;
-			Direction moveDirection = null;
-			switch ((int) (Math.random() * 4)) {
-			case 0:
-				moveDirection = Direction.UP;
-				break;
-			case 1:
-				moveDirection = Direction.DOWN;
-				break;
-			case 2:
-				moveDirection = Direction.LEFT;
-				break;
-			case 3:
-				moveDirection = Direction.RIGHT;
-				break;
-			default:
-				break;
-			}
-			for(Minion minion :getBoard().getMinionList()) {
-				minion.setDirection(moveDirection);
-			}
-			}else {
+			if (board.getMinionList().size() != 0) {
+				currentPhase = Phase.MinionMove;
+				Direction moveDirection = null;
+				switch ((int) (Math.random() * 4)) {
+				case 0:
+					moveDirection = Direction.UP;
+					break;
+				case 1:
+					moveDirection = Direction.DOWN;
+					break;
+				case 2:
+					moveDirection = Direction.LEFT;
+					break;
+				case 3:
+					moveDirection = Direction.RIGHT;
+					break;
+				default:
+					break;
+				}
+				for (Minion minion : getBoard().getMinionList()) {
+					minion.setDirection(moveDirection);
+				}
+			} else {
 				currentPhase = Phase.MinionSpawn;
 			}
 			break;
@@ -266,34 +266,32 @@ public class GameController {
 			break;
 		}
 	}
-	
+
 	public static void minionAttack() {
 		for (Minion minion : getBoard().getMinionList()) {
 			minion.attack();
 		}
 	}
-	
+
 	public static void minionSpawn() {
 		for (SpawnTile spawnTile : getBoard().getSpawnTileList()) {
 			spawnTile.spawn();
 		}
 	}
-	
+
 	public static void minionMove() {
-		for(Minion minion : getBoard().getMinionList()) {
+		for (Minion minion : getBoard().getMinionList()) {
 			GameController.move(minion, minion.getDirection());
 		}
 	}
-	
+
 	public static void setProgram(int no, int cmdSlot, int selectedCardSlot)
 			throws SelectEmptyCardException, IndexOutOfRangeException, SelectMechException {
-		if (selectedCardSlot < 0 || selectedCardSlot > 6) {
+		if (selectedCardSlot < 0 || selectedCardSlot > 5) {
 			throw new IndexOutOfRangeException("Can't put number out of slot(Card Slot)");
-		}
-		if (no != 0 && no != 1) {
+		} else if (no != 0 && no != 1) {
 			throw new SelectMechException("Can't select unless 1 or 2 in Select Mech");
-		}
-		if (cmdSlot < 0 || cmdSlot > 6) {
+		} else if (cmdSlot < 0 || cmdSlot > 5) {
 			throw new IndexOutOfRangeException("Can't put number out of slot(CommandSlot)");
 		}
 		if (draftedCard.getDraftedCardList().get(selectedCardSlot) == null) {
@@ -346,10 +344,6 @@ public class GameController {
 
 	public static void setSelectTimes(int selectTimes) {
 		GameController.selectTimes = selectTimes;
-		if (selectTimes == 0) {
-			programCount += 1;
-			execute(programCount);
-		}
 	}
 
 	public static void select(int i) throws IndexOutOfRangeException {
@@ -367,7 +361,7 @@ public class GameController {
 				if (((BlueAttackCard) executingProgram).attack(1).size() != 0) {
 					setSelectable(((BlueAttackCard) executingProgram).attack(1));
 				} else {
-					selectTimes = 0;
+					setSelectTimes(0);
 				}
 			}
 		} else if (executingProgram instanceof BlueMoveCard) {
@@ -376,6 +370,9 @@ public class GameController {
 				selectTimes -= 1;
 				if (selectTimes != 0) {
 					setSelectable(((BlueMoveCard) executingProgram).attack(1));
+					if (selectable.size() == 0) {
+						setSelectTimes(0);
+					}
 				}
 			} else if (selectable.get(i) instanceof Token) {
 				((Token) selectable.get(i)).damaged();
@@ -491,17 +488,13 @@ public class GameController {
 				}
 				((Token) selectable.get(i)).damaged();
 				selectable.remove(i);
-				if (newSelectable.size() != 0) {
-					setSelectable(newSelectable);
-					selectTimes -= 1;
-				} else {
-					selectTimes = 0;
-				}
+				setSelectable(newSelectable);
+				setSelectTimes(newSelectable.size());
 			}
 		} else if (executingProgram instanceof YellowMoveCard) {
 			if (selectable.get(i) instanceof Tile) {
 				if (selectable.get(i).equals(executingProgram.getProgrammedMech().getSelfTile())) {
-					selectTimes = 0;
+					setSelectTimes(0);
 				} else {
 					GameController.move(executingProgram.getProgrammedMech(),
 							executingProgram.getProgrammedMech().getDirection());
@@ -518,7 +511,7 @@ public class GameController {
 						}
 						setSelectable(newSelectable);
 					} else {
-						selectTimes = 0;
+						setSelectTimes(0);
 					}
 				}
 			}
@@ -528,7 +521,7 @@ public class GameController {
 				setSelectable(((YellowRotateCard) executingProgram)
 						.attack(executingProgram.getCmdBox().getCmdCardList().size()));
 				if (selectable.size() == 0) {
-					selectTimes = 0;
+					setSelectTimes(0);
 				}
 			} else if (selectable.get(i) instanceof Token) {
 				((Token) selectable.get(i)).damaged();
@@ -541,7 +534,8 @@ public class GameController {
 				GameController.move(executingProgram.getProgrammedMech(), (Direction) selectable.get(i));
 				selectTimes -= 1;
 			}
-		} else if (executingProgram instanceof Rotate180Card || executingProgram instanceof Rotate270Card || executingProgram instanceof Rotate90Card) {
+		} else if (executingProgram instanceof Rotate180Card || executingProgram instanceof Rotate270Card
+				|| executingProgram instanceof Rotate90Card) {
 			if (selectable.get(i) instanceof Direction) {
 				executingProgram.getProgrammedMech().setDirection((Direction) selectable.get(i));
 				selectTimes -= 1;
