@@ -1,66 +1,58 @@
 package application;
 
-import java.util.Scanner;
 
-import exception.IndexOutOfRangeException;
-import exception.SelectEmptyCardException;
-import exception.SelectMechException;
+
+import javafx.application.Application;
+
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import logic.GameController;
 
-public class Main {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Scanner kb = new Scanner(System.in);
+public class Main extends Application {
+
+	@Override
+	public void start(Stage primaryStage) {
 		GameController.initializeGame();
-		while (!GameController.getGameEnd()) {
-			GameController.update();
-			switch (GameController.getCurrentPhase()) {
-			case Program:
-				System.out.print("Select Card :");
-				int selectedCard = kb.nextInt();
-				System.out.print("Select Mech :");
-				int selectedMech = kb.nextInt();
-				System.out.print("Select Slot :");
-				int selectedSlot = kb.nextInt();
-				try {
-					GameController.setProgram(selectedMech - 1, selectedSlot - 1, selectedCard - 1);
-				} catch (SelectEmptyCardException se) {
-					System.out.println(se.message);
-				} catch (IndexOutOfRangeException io) {
-					System.out.println(io.message);
-				} catch (SelectMechException sm) {
-					System.out.println(sm.message);
-				}
-				break;
-			case Execute:
-				int selectedObjected = kb.nextInt();
-				try {
-					GameController.select(selectedObjected - 1);
-				} catch (IndexOutOfRangeException io) {
-					System.out.println(io.message);
-				}
-				break;
-			case MinionMove:
-				int whatever = kb.nextInt();
-				GameController.minionMove();
-				GameController.nextPhase();
-				break;
-			case MinionAttack:
-				int whatever2 = kb.nextInt();
-				GameController.minionAttack();
-				GameController.nextPhase();
-				break;
-			case MinionSpawn:
-				int whatever3 = kb.nextInt();
-				GameController.minionSpawn();
-				GameController.nextPhase();
-				break;
-			default:
-				break;
-			}
-		}
-		System.out.println("game end");
+		primaryStage.setTitle("ProgMeth is You");
+		primaryStage.setScene(playGame());
+		primaryStage.show();
+	}
+	public Scene playGame() {
+		VBox root = new VBox();
+		
+		HBox boardRoot = new HBox();
+		Canvas boardCanvas = new Canvas(480,480);
+		GraphicsContext boardGC = boardCanvas.getGraphicsContext2D();
+		GameController.getBoard().drawGameBoard(boardGC);
+		boardRoot.getChildren().add(boardCanvas);
+		
+		
+		boardRoot.getChildren().add(GameController.drawUpRight());
+		
+		
+		HBox cmdBoardRoot = new HBox();
+		Canvas cmdBoardCanvas = new Canvas(1380,200);
+		GraphicsContext cmdBoardGC = cmdBoardCanvas.getGraphicsContext2D();
+		GameController.drawRedCmdBoard(cmdBoardGC);
+		GameController.drawBlueCmdBoard(cmdBoardGC);
+		cmdBoardRoot.getChildren().add(cmdBoardCanvas);
+		
+
+		root.getChildren().add(boardRoot);
+		root.getChildren().add(cmdBoardRoot);
+		Scene scene = new Scene(root);
+		return scene;
 	}
 
+	public static void main(String[] args) {
+		launch(args);
+	}
 }
