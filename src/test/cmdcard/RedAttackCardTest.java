@@ -88,11 +88,18 @@ public class RedAttackCardTest extends GameTest {
 		assertEquals(1,((RedAttackCard)redMech.getCmdBoard().getCmdBox(0).getCmdCardList().get(0)).attack(1).size());
 		try {
 			GameController.select(0);
-			GameController.select(0);
 		} catch (IndexOutOfRangeException e) {
 			System.out.println(e.message);
 		}
-		GameController.update();
 		assertEquals(null,GameController.getBoard().getTile(5, 3).getToken());
+	}
+	@Test
+	public void testSpriteValue() {
+		rac.setSpriteValue(1);
+		assertEquals(CardSprite.RED_ATTACK_CARD_1,rac.getSpriteValue());
+		rac.setSpriteValue(2);
+		assertEquals(CardSprite.RED_ATTACK_CARD_2,rac.getSpriteValue());
+		rac.setSpriteValue(3);
+		assertEquals(CardSprite.RED_ATTACK_CARD_3,rac.getSpriteValue());
 	}
 }

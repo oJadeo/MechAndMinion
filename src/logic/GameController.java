@@ -69,15 +69,17 @@ public class GameController {
 	public static void setBlueMech(Mech blueMech) {
 		GameController.blueMech = blueMech;
 	}
-
-	public static Minion setMinion(int x, int y) {
-		return new Minion(Direction.UP, board.getTile(x, y));
-
-	}
-
-	public static ArrayList<Object> getSelectable() {
-		return selectable;
-	}
+    
+    public static Minion setMinion(int x,int y) {
+    	return new Minion(Direction.UP, board.getTile(x,y));
+    	
+    }
+    public static ArrayList<Object> getSelectable(){
+    	return selectable;
+    }
+    public static int getSelectTimes() {
+    	return selectTimes;
+    }
 
 	public static void initializeBoard() {
 		board = new Board();
