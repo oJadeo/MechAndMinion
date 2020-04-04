@@ -16,7 +16,7 @@ public class Board {
 	public Board() {
 		for (int i = 0; i < BOARDSIZEX; i++) {
 			for (int j = 0; j < BOARDSIZEY; j++) {
-				this.tileBoard[i][j] = new Tile(j, i);
+				this.tileBoard[j][i] = new Tile(j, i);
 			}
 		}
 	}

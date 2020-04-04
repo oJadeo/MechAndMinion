@@ -44,6 +44,7 @@ public class GameController {
 		damageCount = 0;
 		programCount = 0;
 		gameEnd = false;
+		new Minion(Direction.UP, board.getTile(4, 0));
 	}
 
 	public static void initializeTest() {
