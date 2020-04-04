@@ -1,16 +1,25 @@
 package logic;
 
 import java.util.ArrayList;
+
+import application.DrawUtil;
 import card.base.*;
 import cmdcard.*;
 import damagecard.*;
 import exception.*;
+import javafx.geometry.Pos;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import tile.*;
 import token.*;
 
 public class GameController {
 	private static Board board;
-	public static Mech redMech;
+	private static Mech redMech;
 	private static Mech blueMech;
 	private static Phase currentPhase;
 	private static int turnCount;
@@ -44,6 +53,34 @@ public class GameController {
 		damageCount = 0;
 		programCount = 0;
 		gameEnd = false;
+	}
+	public static void drawRedCmdBoard(GraphicsContext gc) {
+		for(int i=0;i<6;i++) {
+			CmdCard cmdCard = redMech.getCmdBoard().getCmdBox(i).getCmdCardList().get(redMech.getCmdBoard().getCmdBox(i).getCmdCardList().size()-1);
+			if (cmdCard != null) {
+				DrawUtil.drawCard(gc,redMech.getCmdBoard().STARTPOSITIONX+i*115,redMech.getCmdBoard().STARTPOSITIONY,cmdCard.getSpriteValue());
+			}else {
+				DrawUtil.drawCard(gc,blueMech.getCmdBoard().STARTPOSITIONX+i*115,blueMech.getCmdBoard().STARTPOSITIONY,CardSprite.SELECTED_CARD);
+			}
+		}
+	}
+	public static void drawBlueCmdBoard(GraphicsContext gc) {
+		for(int i=0;i<6;i++) {
+			CmdCard cmdCard = blueMech.getCmdBoard().getCmdBox(i).getCmdCardList().get(blueMech.getCmdBoard().getCmdBox(i).getCmdCardList().size()-1);
+			if (cmdCard != null) {
+				DrawUtil.drawCard(gc,blueMech.getCmdBoard().STARTPOSITIONX+i*115 + 690,blueMech.getCmdBoard().STARTPOSITIONY,cmdCard.getSpriteValue());
+			}else {
+				DrawUtil.drawCard(gc,blueMech.getCmdBoard().STARTPOSITIONX+i*115 + 690,blueMech.getCmdBoard().STARTPOSITIONY,CardSprite.SELECTED_CARD);
+			}
+		}
+	}
+	public static void drawDraftedCard(GraphicsContext gc) {
+		for(int i=0;i<6;i++) {
+			CmdCard cmdCard = draftedCard.getDraftedCardList().get(i);
+			if (cmdCard != null) {
+				DrawUtil.drawCard(gc,i*115 + 105,0,cmdCard.getSpriteValue());
+			}
+		}
 	}
 
 	public static void initializeTest() {
@@ -598,6 +635,66 @@ public class GameController {
 
 	public static void setStepCount(int stepCount) {
 		GameController.stepCount = stepCount;
+	}
+	
+	public static int getScore() {
+		return GameController.score;
+	}
+	public static int getHealth() {
+		return 10-GameController.damageCount;
+	}
+	public static void drawPhase(GraphicsContext gc) {
+		for(int i=0;i<5;i++) {
+			DrawUtil.drawPhase(gc, 150*i + 75,0 , i);
+		}
+	}
+	public static void drawDirection(GraphicsContext gc) {
+		for(int i=0;i<4;i++) {
+			DrawUtil.drawTile(gc, 60*i,0 , 14+i);
+		}
+	}
+	public static VBox drawUpRight() {
+		VBox upRight = new VBox();
+		upRight.setAlignment(Pos.CENTER);
+		
+		
+		Label score = new Label();
+		score.setFont(new Font(30));
+		score.textProperty().setValue("Score: " + GameController.getScore());
+		upRight.getChildren().add(score);
+		
+		
+		Label health = new Label();
+		health.setFont(new Font(30));
+		health.textProperty().setValue("Health: " + GameController.getHealth());
+		upRight.getChildren().add(health);
+		
+		
+		HBox phase = new HBox();
+		Canvas phaseCanvas = new Canvas(900,60);
+		GraphicsContext phaseGC = phaseCanvas.getGraphicsContext2D();
+		GameController.drawPhase(phaseGC);
+		phase.getChildren().add(phaseCanvas);
+		upRight.getChildren().add(phase);
+		
+		
+		HBox direction = new HBox();
+		Label textDir = new Label("Direction: ");
+		textDir.setFont(new Font(30));
+		direction.getChildren().add(textDir);
+		Canvas dirCanvas = new Canvas(750,60);
+		GraphicsContext dirGC = dirCanvas.getGraphicsContext2D();
+		GameController.drawDirection(dirGC);
+		direction.getChildren().add(dirCanvas);
+		upRight.getChildren().add(direction);
+		
+		HBox draftedCard = new HBox();
+		Canvas draftedCanvas = new Canvas(900,200);
+		GraphicsContext draftedGC = draftedCanvas.getGraphicsContext2D();
+		GameController.drawDraftedCard(draftedGC);
+		draftedCard.getChildren().add(draftedCanvas);
+		upRight.getChildren().add(draftedCard);
+		return upRight;
 	}
 
 }

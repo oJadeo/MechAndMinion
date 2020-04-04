@@ -6,12 +6,11 @@ import tile.Tile;
 public abstract class Token {
 	private Direction dir;
 	private Tile selftile;
-	private int spriteValue;
+	protected int spriteValue;
 
 	public Token(Direction dir, Tile selfTile) {
 		this.setDirection(dir);
 		this.setSelfTile(selfTile);
-		;
 		selfTile.setToken(this);
 	}
 

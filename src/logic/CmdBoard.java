@@ -18,8 +18,8 @@ import cmdcard.YellowRotateCard;
 
 public class CmdBoard {
 	private ArrayList<CmdBox> cmdBoxList;
-	private int startPositionX = 0;
-	private int startPositionY = 480;
+	public final int STARTPOSITIONX = 0;
+	public final int STARTPOSITIONY = 0;
 	private int no;
 	public final int OFFSETX = 100;
 	public final int OFFSETY = 120;
@@ -29,14 +29,7 @@ public class CmdBoard {
 		for (int i = 0; i < 6; i++) {
 			this.cmdBoxList.add(new CmdBox());
 		}
-		this.setStartPostionX(1000 * no);
 		this.no = no;
-	}
-
-	private void setStartPostionX(int startPositionX) {
-		// TODO Auto-generated method stub
-		this.startPositionX = startPositionX;
-
 	}
 
 	public CmdBox getCmdBox(int slot) {

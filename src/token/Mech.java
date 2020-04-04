@@ -10,10 +10,45 @@ public class Mech extends Token {
 
 	public Mech(Direction dir, Tile selfTile, int no) {
 		super(dir, selfTile);
-		if (no == 0) {
-			this.setSpriteValue(Sprite.MECH1);
-		} else {
-			this.setSpriteValue(Sprite.MECH2);
+		switch (no) {
+		case 0:
+			switch (dir) {
+			case UP:
+				this.spriteValue = Sprite.MECH1_UP;
+				break;
+			case RIGHT:
+				this.spriteValue = Sprite.MECH1_RIGHT;
+				break;
+			case DOWN:
+				this.spriteValue = Sprite.MECH1_DOWN;
+				break;
+			case LEFT:
+				this.spriteValue = Sprite.MECH1_LEFT;
+				break;
+			default:
+				break;
+			}
+			break;
+		case 1:
+			switch (dir) {
+			case UP:
+				this.spriteValue = Sprite.MECH2_UP;
+				break;
+			case RIGHT:
+				this.spriteValue = Sprite.MECH2_RIGHT;
+				break;
+			case DOWN:
+				this.spriteValue = Sprite.MECH2_DOWN;
+				break;
+			case LEFT:
+				this.spriteValue = Sprite.MECH2_LEFT;
+				break;
+			default:
+				break;
+			}
+			break;
+		default:
+			break;
 		}
 		this.no = no;
 		this.cmdBoard = new CmdBoard(no);
