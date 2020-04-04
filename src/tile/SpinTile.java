@@ -1,6 +1,6 @@
 package tile;
 
-import logic.Sprite;
+import logic.TileSprite;
 import logic.Direction;
 
 public class SpinTile extends Tile {
@@ -11,13 +11,13 @@ public class SpinTile extends Tile {
 		double random = Math.random();
 		if (random <= 1.0 / 3.0) {
 			this.spinValue = 90;
-			this.setSpriteValue(Sprite.SPIN_TILE_90);
+			this.setSpriteValue(TileSprite.SPIN_TILE_90);
 		} else if (random <= 2.0 / 3.0) {
 			this.spinValue = 180;
-			this.setSpriteValue(Sprite.SPIN_TILE_180);
+			this.setSpriteValue(TileSprite.SPIN_TILE_180);
 		} else {
 			this.spinValue = 270;
-			this.setSpriteValue(Sprite.SPIN_TILE_270);
+			this.setSpriteValue(TileSprite.SPIN_TILE_270);
 		}
 	}
 

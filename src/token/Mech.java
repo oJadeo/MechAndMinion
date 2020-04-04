@@ -14,16 +14,16 @@ public class Mech extends Token {
 		case 0:
 			switch (dir) {
 			case UP:
-				this.spriteValue = Sprite.MECH1_UP;
+				this.spriteValue = TileSprite.MECH1_UP;
 				break;
 			case RIGHT:
-				this.spriteValue = Sprite.MECH1_RIGHT;
+				this.spriteValue = TileSprite.MECH1_RIGHT;
 				break;
 			case DOWN:
-				this.spriteValue = Sprite.MECH1_DOWN;
+				this.spriteValue = TileSprite.MECH1_DOWN;
 				break;
 			case LEFT:
-				this.spriteValue = Sprite.MECH1_LEFT;
+				this.spriteValue = TileSprite.MECH1_LEFT;
 				break;
 			default:
 				break;
@@ -32,16 +32,16 @@ public class Mech extends Token {
 		case 1:
 			switch (dir) {
 			case UP:
-				this.spriteValue = Sprite.MECH2_UP;
+				this.spriteValue = TileSprite.MECH2_UP;
 				break;
 			case RIGHT:
-				this.spriteValue = Sprite.MECH2_RIGHT;
+				this.spriteValue = TileSprite.MECH2_RIGHT;
 				break;
 			case DOWN:
-				this.spriteValue = Sprite.MECH2_DOWN;
+				this.spriteValue = TileSprite.MECH2_DOWN;
 				break;
 			case LEFT:
-				this.spriteValue = Sprite.MECH2_LEFT;
+				this.spriteValue = TileSprite.MECH2_LEFT;
 				break;
 			default:
 				break;

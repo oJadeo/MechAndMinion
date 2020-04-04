@@ -46,7 +46,6 @@ public class Board extends GridPane{
 	}
 	public void drawGameBoard(GraphicsContext gc) {
 		
-		
 		int x = 0;
 		int y = 0;
 		

@@ -1,6 +1,6 @@
 package logic;
 
-public class Sprite {
+public class TileSprite {
 	public static final int MINION = 0;
 	public static final int MECH1_UP = 1;
 	public static final int MECH1_RIGHT = 2;
@@ -22,4 +22,6 @@ public class Sprite {
 	public static final int SLIP_TILE = 18;
 	public static final int SPAWN_TILE = 19;
 	public static final int SELECTED_TILE = 20;
+	public static final int REMAIN_HEALTH = 21;
+	public static final int LOSE_HEALTH = 22;
 }
