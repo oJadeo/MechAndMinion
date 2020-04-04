@@ -46,6 +46,8 @@ public class BlueMoveCard extends CmdCard implements Attack, Move ,OnGoing {
 			GameController.setSelectable(move(tier));
 			if(move(tier).size()==0) {
 				GameController.setSelectTimes(0);
+				GameController.setProgramCount(GameController.getProgramCount()+1);
+				GameController.execute(GameController.getProgramCount());
 			}
 		}	
 	}

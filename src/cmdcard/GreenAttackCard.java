@@ -36,6 +36,8 @@ public class GreenAttackCard extends CmdCard implements Attack,OnGoing{
 			GameController.setSelectable(attack(tier));
 		}else {
 			GameController.setSelectTimes(0);
+			GameController.setProgramCount(GameController.getProgramCount()+1);
+			GameController.execute(GameController.getProgramCount());
 		}
 	}
 
