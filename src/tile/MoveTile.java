@@ -2,7 +2,7 @@ package tile;
 
 import logic.Direction;
 import logic.GameController;
-import logic.Sprite;
+import logic.TileSprite;
 
 public class MoveTile extends Tile {
 	private Direction dir;
@@ -12,16 +12,16 @@ public class MoveTile extends Tile {
 		double random = Math.random();
 		if (random < 0.25) {
 			dir = Direction.UP;
-			this.setSpriteValue(Sprite.MOVE_TILE_UP);
+			this.setSpriteValue(TileSprite.MOVE_TILE_UP);
 		} else if (random < 0.5) {
 			dir = Direction.RIGHT;
-			this.setSpriteValue(Sprite.MOVE_TILE_RIGHT);
+			this.setSpriteValue(TileSprite.MOVE_TILE_RIGHT);
 		} else if (random < 0.75) {
 			dir = Direction.DOWN;
-			this.setSpriteValue(Sprite.MOVE_TILE_DOWN);
+			this.setSpriteValue(TileSprite.MOVE_TILE_DOWN);
 		} else {
 			dir = Direction.LEFT;
-			this.setSpriteValue(Sprite.MOVE_TILE_LEFT);
+			this.setSpriteValue(TileSprite.MOVE_TILE_LEFT);
 		}
 	}
 

@@ -7,12 +7,22 @@ import card.base.*;
 import cmdcard.*;
 import damagecard.*;
 import exception.*;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import tile.*;
 import token.*;
@@ -40,6 +50,7 @@ public class GameController {
 	private static Direction movingDirection;
 	private static int stepCount;
 
+	// Main Game Logic
 	public static void initializeGame() {
 		initializeBoard();
 		draftedCard = new DraftedCard();
@@ -53,70 +64,8 @@ public class GameController {
 		damageCount = 0;
 		programCount = 0;
 		gameEnd = false;
+		new Minion(Direction.UP, board.getTile(4, 0));
 	}
-	public static void drawRedCmdBoard(GraphicsContext gc) {
-		for(int i=0;i<6;i++) {
-			CmdCard cmdCard = redMech.getCmdBoard().getCmdBox(i).getCmdCardList().get(redMech.getCmdBoard().getCmdBox(i).getCmdCardList().size()-1);
-			if (cmdCard != null) {
-				DrawUtil.drawCard(gc,redMech.getCmdBoard().STARTPOSITIONX+i*115,redMech.getCmdBoard().STARTPOSITIONY,cmdCard.getSpriteValue());
-			}else {
-				DrawUtil.drawCard(gc,blueMech.getCmdBoard().STARTPOSITIONX+i*115,blueMech.getCmdBoard().STARTPOSITIONY,CardSprite.SELECTED_CARD);
-			}
-		}
-	}
-	public static void drawBlueCmdBoard(GraphicsContext gc) {
-		for(int i=0;i<6;i++) {
-			CmdCard cmdCard = blueMech.getCmdBoard().getCmdBox(i).getCmdCardList().get(blueMech.getCmdBoard().getCmdBox(i).getCmdCardList().size()-1);
-			if (cmdCard != null) {
-				DrawUtil.drawCard(gc,blueMech.getCmdBoard().STARTPOSITIONX+i*115 + 690,blueMech.getCmdBoard().STARTPOSITIONY,cmdCard.getSpriteValue());
-			}else {
-				DrawUtil.drawCard(gc,blueMech.getCmdBoard().STARTPOSITIONX+i*115 + 690,blueMech.getCmdBoard().STARTPOSITIONY,CardSprite.SELECTED_CARD);
-			}
-		}
-	}
-	public static void drawDraftedCard(GraphicsContext gc) {
-		for(int i=0;i<6;i++) {
-			CmdCard cmdCard = draftedCard.getDraftedCardList().get(i);
-			if (cmdCard != null) {
-				DrawUtil.drawCard(gc,i*115 + 105,0,cmdCard.getSpriteValue());
-			}
-		}
-	}
-
-	public static void initializeTest() {
-		currentPhase = Phase.Program;
-		turnCount = 1;
-		score = 0;
-		damageCount = 0;
-		programCount = 0;
-		gameEnd = false;
-		board = new Board();
-		redMechProgram = 0;
-		blueMechProgram = 0;
-	}
-
-	public static void setDraftedCard(CmdCard cmdCard) {
-		draftedCard = new DraftedCard(cmdCard);
-	}
-
-	public static void setRedMech(Mech redMech) {
-		GameController.redMech = redMech;
-	}
-
-	public static void setBlueMech(Mech blueMech) {
-		GameController.blueMech = blueMech;
-	}
-    
-    public static Minion setMinion(int x,int y) {
-    	return new Minion(Direction.UP, board.getTile(x,y));
-    	
-    }
-    public static ArrayList<Object> getSelectable(){
-    	return selectable;
-    }
-    public static int getSelectTimes() {
-    	return selectTimes;
-    }
 
 	public static void initializeBoard() {
 		board = new Board();
@@ -167,85 +116,6 @@ public class GameController {
 		} while (board.isSpecial(randomX, randomY));
 
 		board.setTile(randomX, randomY, new SpawnTile(randomX, randomY));
-	}
-
-	public static void update() {
-		switch (currentPhase) {
-		case Program:
-			System.out.println("Score: " + score);
-			board.update();
-			draftedCard.update();
-			redMech.update();
-			blueMech.update();
-			break;
-		case Execute:
-			System.out.println("Score: " + score);
-			board.update();
-			redMech.update();
-			blueMech.update();
-			System.out.println("Executing Program No." + (programCount + 1));
-			System.out.println("times = " + selectTimes);
-			String result = "selectable = [";
-			for (Object e : selectable) {
-				if (e instanceof Tile) {
-					result += " [" + ((Tile) e).getLocationX() + "," + ((Tile) e).getLocationY() + "] ";
-				}
-				if (e instanceof Token) {
-					result += " [" + ((Token) e).getSelfTile().getLocationX() + ","
-							+ ((Token) e).getSelfTile().getLocationY() + "] ";
-				}
-				if (e instanceof Direction) {
-					result += " [" + e + "] ";
-				}
-			}
-			result += "]";
-			System.out.println(result);
-			if (selectable.size() != 0) {
-				if (selectable.get(0) instanceof Tile) {
-					System.out.println("Select Target Tile");
-				}
-				if (selectable.get(0) instanceof Direction) {
-					System.out.println("Select Target Direction");
-				}
-				if (selectable.get(0) instanceof Token) {
-					System.out.println("Select Target Token");
-				}
-
-			}
-			break;
-		case MinionMove:
-			System.out.println("Score: " + score);
-			board.update();
-			draftedCard.update();
-			redMech.update();
-			blueMech.update();
-			System.out.println("Minion Moving" + board.getMinionList().get(0).getDirection());
-			break;
-		case MinionAttack:
-			System.out.println("Score: " + score);
-			board.update();
-			draftedCard.update();
-			redMech.update();
-			blueMech.update();
-			System.out.println("Minion Attacking");
-			break;
-		case MinionSpawn:
-			System.out.println("Score: " + score);
-			board.update();
-			draftedCard.update();
-			redMech.update();
-			blueMech.update();
-			System.out.println("Minion Spawning");
-			break;
-		default:
-			System.out.println("Score: " + score);
-			board.update();
-			draftedCard.update();
-			redMech.update();
-			blueMech.update();
-			break;
-		}
-
 	}
 
 	public static void nextPhase() {
@@ -373,14 +243,6 @@ public class GameController {
 		}
 		;
 		return false;
-	}
-
-	public static void setSelectable(ArrayList<Object> selectable) {
-		GameController.selectable = selectable;
-	}
-
-	public static void setSelectTimes(int selectTimes) {
-		GameController.selectTimes = selectTimes;
 	}
 
 	public static void select(int i) throws IndexOutOfRangeException {
@@ -605,6 +467,57 @@ public class GameController {
 		}
 	}
 
+	public static void addScore() {
+		score += 1;
+	}
+
+	// For testing
+	public static void initializeTest() {
+		currentPhase = Phase.Program;
+		turnCount = 1;
+		score = 0;
+		damageCount = 0;
+		programCount = 0;
+		gameEnd = false;
+		board = new Board();
+		redMechProgram = 0;
+		blueMechProgram = 0;
+	}
+
+	public static void setDraftedCard(CmdCard cmdCard) {
+		draftedCard = new DraftedCard(cmdCard);
+	}
+
+	public static void setRedMech(Mech redMech) {
+		GameController.redMech = redMech;
+	}
+
+	public static void setBlueMech(Mech blueMech) {
+		GameController.blueMech = blueMech;
+	}
+
+	public static Minion setMinion(int x, int y) {
+		return new Minion(Direction.UP, board.getTile(x, y));
+
+	}
+
+	// getter setter
+	public static ArrayList<Object> getSelectable() {
+		return selectable;
+	}
+
+	public static int getSelectTimes() {
+		return selectTimes;
+	}
+
+	public static void setSelectable(ArrayList<Object> selectable) {
+		GameController.selectable = selectable;
+	}
+
+	public static void setSelectTimes(int selectTimes) {
+		GameController.selectTimes = selectTimes;
+	}
+
 	public static Board getBoard() {
 		return board;
 	}
@@ -625,10 +538,6 @@ public class GameController {
 		GameController.programCount = programCount;
 	}
 
-	public static void addScore() {
-		score += 1;
-	}
-
 	public static void setExecutingProgram(CmdCard executingProgram) {
 		GameController.executingProgram = executingProgram;
 	}
@@ -636,65 +545,142 @@ public class GameController {
 	public static void setStepCount(int stepCount) {
 		GameController.stepCount = stepCount;
 	}
-	
+
 	public static int getScore() {
 		return GameController.score;
 	}
+
 	public static int getHealth() {
-		return 10-GameController.damageCount;
+		return 10 - GameController.damageCount;
 	}
+
+	// for Update Screen with JavaFX
 	public static void drawPhase(GraphicsContext gc) {
-		for(int i=0;i<5;i++) {
-			DrawUtil.drawPhase(gc, 150*i + 75,0 , i);
+		switch (currentPhase) {
+		case Program:
+			DrawUtil.drawPhase(gc, 75, 0, 8);
+			break;
+		case Execute:
+			DrawUtil.drawPhase(gc, 225, 0, 8);
+			break;
+		case MinionMove:
+			DrawUtil.drawPhase(gc, 375, 0, 8);
+			break;
+		case MinionAttack:
+			DrawUtil.drawPhase(gc, 525, 0, 8);
+			break;
+		case MinionSpawn:
+			DrawUtil.drawPhase(gc, 675, 0, 8);
+			break;
+		default:
+			break;
+		}
+		for (int i = 0; i < 5; i++) {
+			DrawUtil.drawPhase(gc, 150 * i + 75, 0, i);
 		}
 	}
+
 	public static void drawDirection(GraphicsContext gc) {
-		for(int i=0;i<4;i++) {
-			DrawUtil.drawTile(gc, 60*i,0 , 14+i);
+		DrawUtil.drawPhase(gc, 250, 0, 7);
+		for (int i = 0; i < 4; i++) {
+			DrawUtil.drawTile(gc, (48 * i) + 400, 0, 14 + i);
 		}
 	}
+
+	public static void drawScore(GraphicsContext gc) {
+		DrawUtil.drawPhase(gc, 105, 0, 5);
+		int point = score;
+		for (int i = 0; i < 3; i++) {
+			DrawUtil.drawTile(gc, 210 + 24 * (3 - i), 0, 23 + (point % 10));
+			point = point / 10;
+		}
+	}
+
+	public static void drawHealth(GraphicsContext gc) {
+		DrawUtil.drawPhase(gc, 100, 0, 6);
+		for (int i = 0; i < damageCount; i++) {
+			DrawUtil.drawTile(gc, 250 + 48 * i, 0, TileSprite.LOSE_HEALTH);
+		}
+		for (int i = 0; i < getHealth(); i++) {
+			DrawUtil.drawTile(gc, 250 + 48 * (i + damageCount), 0, TileSprite.REMAIN_HEALTH);
+		}
+	}
+
 	public static VBox drawUpRight() {
 		VBox upRight = new VBox();
 		upRight.setAlignment(Pos.CENTER);
-		
-		
-		Label score = new Label();
-		score.setFont(new Font(30));
-		score.textProperty().setValue("Score: " + GameController.getScore());
+		upRight.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+
+		HBox score = new HBox();
+		Canvas scoreCanvas = new Canvas(900, 60);
+		GraphicsContext scoreGC = scoreCanvas.getGraphicsContext2D();
+		GameController.drawScore(scoreGC);
+		score.getChildren().add(scoreCanvas);
 		upRight.getChildren().add(score);
-		
-		
-		Label health = new Label();
-		health.setFont(new Font(30));
-		health.textProperty().setValue("Health: " + GameController.getHealth());
+
+		HBox health = new HBox();
+		Canvas healthCanvas = new Canvas(900, 60);
+		GraphicsContext healthGC = healthCanvas.getGraphicsContext2D();
+		GameController.drawHealth(healthGC);
+		health.getChildren().add(healthCanvas);
 		upRight.getChildren().add(health);
-		
-		
+
 		HBox phase = new HBox();
-		Canvas phaseCanvas = new Canvas(900,60);
+		Canvas phaseCanvas = new Canvas(900, 60);
 		GraphicsContext phaseGC = phaseCanvas.getGraphicsContext2D();
 		GameController.drawPhase(phaseGC);
 		phase.getChildren().add(phaseCanvas);
 		upRight.getChildren().add(phase);
-		
-		
+
 		HBox direction = new HBox();
-		Label textDir = new Label("Direction: ");
-		textDir.setFont(new Font(30));
-		direction.getChildren().add(textDir);
-		Canvas dirCanvas = new Canvas(750,60);
+		Canvas dirCanvas = new Canvas(750, 60);
 		GraphicsContext dirGC = dirCanvas.getGraphicsContext2D();
 		GameController.drawDirection(dirGC);
 		direction.getChildren().add(dirCanvas);
 		upRight.getChildren().add(direction);
-		
+
 		HBox draftedCard = new HBox();
-		Canvas draftedCanvas = new Canvas(900,200);
+
+		Canvas draftedCanvas = new Canvas(900, 200);
 		GraphicsContext draftedGC = draftedCanvas.getGraphicsContext2D();
 		GameController.drawDraftedCard(draftedGC);
 		draftedCard.getChildren().add(draftedCanvas);
 		upRight.getChildren().add(draftedCard);
 		return upRight;
+	}
+
+	public static void drawRedCmdBoard(GraphicsContext gc) {
+		for (int i = 0; i < 6; i++) {
+			CmdCard cmdCard = redMech.getCmdBoard().getCmdBox(i).getCmdCardList()
+					.get(redMech.getCmdBoard().getCmdBox(i).getCmdCardList().size() - 1);
+			if (cmdCard != null) {
+				DrawUtil.drawCard(gc, i * 115, 4, cmdCard.getSpriteValue());
+			} else {
+				DrawUtil.drawCard(gc, i * 115, 4, CardSprite.SELECTED_CARD);
+			}
+		}
+	}
+
+	public static void drawBlueCmdBoard(GraphicsContext gc) {
+		for (int i = 0; i < 6; i++) {
+			CmdCard cmdCard = blueMech.getCmdBoard().getCmdBox(i).getCmdCardList()
+					.get(blueMech.getCmdBoard().getCmdBox(i).getCmdCardList().size() - 1);
+			if (cmdCard != null) {
+				DrawUtil.drawCard(gc, i * 115, 4, cmdCard.getSpriteValue());
+			} else {
+				DrawUtil.drawCard(gc, i * 115, 4, CardSprite.SELECTED_CARD);
+			}
+		}
+	}
+
+	public static void drawDraftedCard(GraphicsContext gc) {
+		for (int i = 0; i < 6; i++) {
+			CmdCard cmdCard = draftedCard.getDraftedCardList().get(i);
+			if (cmdCard != null) {
+				DrawUtil.drawCard(gc, i * 115 + 105, 0, cmdCard.getSpriteValue());
+				DrawUtil.drawCard(gc, i * 115 + 105, 0, CardSprite.SELECTED_CARD);
+			}
+		}
 	}
 
 }

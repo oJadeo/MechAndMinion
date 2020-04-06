@@ -116,7 +116,6 @@ public class YellowRotateCardTest extends GameTest {
 		} catch (IndexOutOfRangeException e) {
 			System.out.println(e.message);
 		}
-		GameController.update();
 		assertEquals(null,GameController.getBoard().getTile(7, 7).getToken());
 		assertEquals(null,GameController.getBoard().getTile(3, 3).getToken());
 	}

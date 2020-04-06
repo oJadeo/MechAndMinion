@@ -3,7 +3,7 @@ package tile;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import logic.Sprite;
+import logic.TileSprite;
 import token.Token;
 
 public class Tile extends Pane{
@@ -19,7 +19,7 @@ public class Tile extends Pane{
 		this.locationX = locationX;
 		this.locationY = locationY;
 		this.setToken(null);
-		this.spriteValue = Sprite.NORMAL_TILE;
+		this.spriteValue = TileSprite.NORMAL_TILE;
 		this.setPrefSize(48, 48);
 		this.setMinWidth(48);
 		this.setMinHeight(48);
