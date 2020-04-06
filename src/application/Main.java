@@ -171,6 +171,7 @@ public class Main extends Application {
 				window.setScene(firstScene);
 			}
 		});
+		
 		root.add(back,0,0,2,1);
 		Scene scene = new Scene(root,1380,680);
 		return scene;
