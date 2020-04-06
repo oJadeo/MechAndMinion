@@ -1,29 +1,10 @@
 package logic;
 
 import java.util.ArrayList;
-
-import application.DrawUtil;
 import card.base.*;
 import cmdcard.*;
 import damagecard.*;
 import exception.*;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import tile.*;
 import token.*;
 
@@ -36,6 +17,9 @@ public class GameController {
 	private static int score;
 	private static int damageCount;
 	private static boolean gameEnd;
+	private static CmdCard selectedCard;
+	private static CmdBox selectedSlot;
+	private static Mech selectedMech;
 
 	// Drafted Card Variable
 	private static DraftedCard draftedCard;
@@ -126,6 +110,9 @@ public class GameController {
 			blueMechProgram = 0;
 			currentPhase = Phase.Execute;
 			programCount = 0;
+			selectedCard = null;
+			selectedSlot = null;
+			selectedMech = null;
 			execute(programCount);
 			break;
 		case Execute:
@@ -192,35 +179,24 @@ public class GameController {
 		}
 	}
 
-	public static void setProgram(int no, int cmdSlot, int selectedCardSlot)
-			throws SelectEmptyCardException, IndexOutOfRangeException, SelectMechException {
-		if (selectedCardSlot < 0 || selectedCardSlot > 5) {
-			throw new IndexOutOfRangeException("Can't put number out of slot(Card Slot)");
-		} else if (no != 0 && no != 1) {
-			throw new SelectMechException("Can't select unless 1 or 2 in Select Mech");
-		} else if (cmdSlot < 0 || cmdSlot > 5) {
-			throw new IndexOutOfRangeException("Can't put number out of slot(CommandSlot)");
-		}
-		if (draftedCard.getDraftedCardList().get(selectedCardSlot) == null) {
-			throw new SelectEmptyCardException("Can't select empty card");
-		}
-		if (no == 0 && redMechProgram < 2) {
-			draftedCard.getDraftedCardList().get(selectedCardSlot).setProgrammedMech(redMech);
-			redMech.getCmdBoard().getCmdBox(cmdSlot).addCmdCard(draftedCard.getDraftedCardList().get(selectedCardSlot));
-			draftedCard.getDraftedCardList().set(selectedCardSlot, null);
+	public static void setProgram(Mech selectedMech, CmdBox selectedSlot, CmdCard selectedCard){
+		if (selectedMech.equals(redMech) && redMechProgram < 2) {
+			selectedCard.setProgrammedMech(selectedMech);
+			selectedSlot.addCmdCard(selectedCard);
+			draftedCard.remove(selectedCard);
 			redMechProgram += 1;
-		} else if (no == 1 && blueMechProgram < 2) {
-			draftedCard.getDraftedCardList().get(selectedCardSlot).setProgrammedMech(blueMech);
-			blueMech.getCmdBoard().getCmdBox(cmdSlot)
-					.addCmdCard(draftedCard.getDraftedCardList().get(selectedCardSlot));
-			draftedCard.getDraftedCardList().set(selectedCardSlot, null);
+		} else if (selectedMech.equals(blueMech) && blueMechProgram < 2) {
+			selectedCard.setProgrammedMech(selectedMech);
+			selectedSlot.addCmdCard(selectedCard);
+			draftedCard.remove(selectedCard);
 			blueMechProgram += 1;
-		} else {
-			System.out.println("error");
 		}
 		if (redMechProgram + blueMechProgram == 4) {
 			nextPhase();
 		}
+		GameController.selectedMech = null;
+		GameController.selectedSlot = null;
+		GameController.selectedCard = null;
 	}
 
 	public static boolean move(Token selectedToken, Direction dir) {
@@ -554,133 +530,42 @@ public class GameController {
 		return 10 - GameController.damageCount;
 	}
 
-	// for Update Screen with JavaFX
-	public static void drawPhase(GraphicsContext gc) {
-		switch (currentPhase) {
-		case Program:
-			DrawUtil.drawPhase(gc, 75, 0, 8);
-			break;
-		case Execute:
-			DrawUtil.drawPhase(gc, 225, 0, 8);
-			break;
-		case MinionMove:
-			DrawUtil.drawPhase(gc, 375, 0, 8);
-			break;
-		case MinionAttack:
-			DrawUtil.drawPhase(gc, 525, 0, 8);
-			break;
-		case MinionSpawn:
-			DrawUtil.drawPhase(gc, 675, 0, 8);
-			break;
-		default:
-			break;
-		}
-		for (int i = 0; i < 5; i++) {
-			DrawUtil.drawPhase(gc, 150 * i + 75, 0, i);
+	public static void setSelectedCard(CmdCard selectedCard) {
+		GameController.selectedCard = selectedCard;
+		if (selectedMech != null && selectedSlot != null) {
+			setProgram(selectedMech, selectedSlot, selectedCard);
 		}
 	}
 
-	public static void drawDirection(GraphicsContext gc) {
-		DrawUtil.drawPhase(gc, 250, 0, 7);
-		for (int i = 0; i < 4; i++) {
-			DrawUtil.drawTile(gc, (48 * i) + 400, 0, 14 + i);
+	public static void setSelectedMech(Mech selectedMech) {
+		GameController.selectedMech = selectedMech;
+		if (selectedCard != null && selectedSlot != null) {
+			// setProgram(selectedMech, selectedSlot, selectedCard);
 		}
 	}
 
-	public static void drawScore(GraphicsContext gc) {
-		DrawUtil.drawPhase(gc, 105, 0, 5);
-		int point = score;
-		for (int i = 0; i < 3; i++) {
-			DrawUtil.drawTile(gc, 210 + 24 * (3 - i), 0, 23 + (point % 10));
-			point = point / 10;
+	public static void setSelectedSlot(CmdBox selectedSlot) {
+		GameController.selectedSlot = selectedSlot;
+		if (selectedMech != null && selectedCard != null) {
+			// setProgram(selectedMech, selectedSlot, selectedCard);
 		}
 	}
-
-	public static void drawHealth(GraphicsContext gc) {
-		DrawUtil.drawPhase(gc, 100, 0, 6);
-		for (int i = 0; i < damageCount; i++) {
-			DrawUtil.drawTile(gc, 250 + 48 * i, 0, TileSprite.LOSE_HEALTH);
-		}
-		for (int i = 0; i < getHealth(); i++) {
-			DrawUtil.drawTile(gc, 250 + 48 * (i + damageCount), 0, TileSprite.REMAIN_HEALTH);
-		}
+	
+	public static Mech getBlueMech() {
+		return blueMech;
 	}
-
-	public static VBox drawUpRight() {
-		VBox upRight = new VBox();
-		upRight.setAlignment(Pos.CENTER);
-		upRight.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
-
-		HBox score = new HBox();
-		Canvas scoreCanvas = new Canvas(900, 60);
-		GraphicsContext scoreGC = scoreCanvas.getGraphicsContext2D();
-		GameController.drawScore(scoreGC);
-		score.getChildren().add(scoreCanvas);
-		upRight.getChildren().add(score);
-
-		HBox health = new HBox();
-		Canvas healthCanvas = new Canvas(900, 60);
-		GraphicsContext healthGC = healthCanvas.getGraphicsContext2D();
-		GameController.drawHealth(healthGC);
-		health.getChildren().add(healthCanvas);
-		upRight.getChildren().add(health);
-
-		HBox phase = new HBox();
-		Canvas phaseCanvas = new Canvas(900, 60);
-		GraphicsContext phaseGC = phaseCanvas.getGraphicsContext2D();
-		GameController.drawPhase(phaseGC);
-		phase.getChildren().add(phaseCanvas);
-		upRight.getChildren().add(phase);
-
-		HBox direction = new HBox();
-		Canvas dirCanvas = new Canvas(750, 60);
-		GraphicsContext dirGC = dirCanvas.getGraphicsContext2D();
-		GameController.drawDirection(dirGC);
-		direction.getChildren().add(dirCanvas);
-		upRight.getChildren().add(direction);
-
-		HBox draftedCard = new HBox();
-
-		Canvas draftedCanvas = new Canvas(900, 200);
-		GraphicsContext draftedGC = draftedCanvas.getGraphicsContext2D();
-		GameController.drawDraftedCard(draftedGC);
-		draftedCard.getChildren().add(draftedCanvas);
-		upRight.getChildren().add(draftedCard);
-		return upRight;
+	public static Mech getRedMech() {
+		return redMech;
 	}
-
-	public static void drawRedCmdBoard(GraphicsContext gc) {
-		for (int i = 0; i < 6; i++) {
-			CmdCard cmdCard = redMech.getCmdBoard().getCmdBox(i).getCmdCardList()
-					.get(redMech.getCmdBoard().getCmdBox(i).getCmdCardList().size() - 1);
-			if (cmdCard != null) {
-				DrawUtil.drawCard(gc, i * 115, 4, cmdCard.getSpriteValue());
-			} else {
-				DrawUtil.drawCard(gc, i * 115, 4, CardSprite.SELECTED_CARD);
-			}
-		}
+	public static DraftedCard getDraftedCard() {
+		return draftedCard;
 	}
-
-	public static void drawBlueCmdBoard(GraphicsContext gc) {
-		for (int i = 0; i < 6; i++) {
-			CmdCard cmdCard = blueMech.getCmdBoard().getCmdBox(i).getCmdCardList()
-					.get(blueMech.getCmdBoard().getCmdBox(i).getCmdCardList().size() - 1);
-			if (cmdCard != null) {
-				DrawUtil.drawCard(gc, i * 115, 4, cmdCard.getSpriteValue());
-			} else {
-				DrawUtil.drawCard(gc, i * 115, 4, CardSprite.SELECTED_CARD);
-			}
-		}
+	public static int getDamageCount() {
+		return damageCount;
 	}
-
-	public static void drawDraftedCard(GraphicsContext gc) {
-		for (int i = 0; i < 6; i++) {
-			CmdCard cmdCard = draftedCard.getDraftedCardList().get(i);
-			if (cmdCard != null) {
-				DrawUtil.drawCard(gc, i * 115 + 105, 0, cmdCard.getSpriteValue());
-				DrawUtil.drawCard(gc, i * 115 + 105, 0, CardSprite.SELECTED_CARD);
-			}
-		}
+	public static CmdCard getSelectedCard() {
+		return selectedCard;
 	}
-
 }
+
+	// for Update Screen with JavaFX

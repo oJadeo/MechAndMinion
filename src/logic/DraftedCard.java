@@ -18,6 +18,7 @@ public class DraftedCard {
 			this.draftedCardList.add(randomCard());
 		}
 	}
+	//for test
 	public DraftedCard(CmdCard cmdCard) {
 		this.draftedCardList = new ArrayList<CmdCard>();
 		for (int i = 0; i < 6; i++) {
@@ -116,5 +117,12 @@ public class DraftedCard {
 
 	public ArrayList<CmdCard> getDraftedCardList() {
 		return draftedCardList;
+	}
+	public void remove(CmdCard cmdCard) {
+		for(int i = 0;i<this.getDraftedCardList().size();i++) {
+			if(cmdCard.equals(this.getDraftedCardList().get(i))) {
+				this.getDraftedCardList().set(i,null);
+			}
+		}
 	}
 }
