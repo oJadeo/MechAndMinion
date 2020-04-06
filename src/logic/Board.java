@@ -19,8 +19,6 @@ import token.*;
 public class Board extends GridPane{
 	public final int BOARDSIZEX = 10;
 	public final int BOARDSIZEY = 10;
-	public final int STARTPOSITIONX = 0;
-	public final int STARTPOSITIONY = 0;
 	private Tile[][] tileBoard = new Tile[BOARDSIZEX][BOARDSIZEY];
 	private ArrayList<SpawnTile> spawnTileList = new ArrayList<>();
 	private ArrayList<Minion> minionList = new ArrayList<>();
@@ -52,9 +50,9 @@ public class Board extends GridPane{
 		for(Tile[] row:tileBoard) {
 			x = 0;
 			for(Tile tile:row) {
-				DrawUtil.drawTile(gc,STARTPOSITIONX+x*48,STARTPOSITIONY+y*48,tile.getSpriteValue());
+				DrawUtil.drawTile(gc,x*48,y*48,tile.getSpriteValue());
 				if(tile.getToken() != null) {
-					DrawUtil.drawTile(gc,STARTPOSITIONX+x*48,STARTPOSITIONY+y*48,tile.getToken().getSpriteValue());
+					DrawUtil.drawTile(gc,x*48,y*48,tile.getToken().getSpriteValue());
 				}
 				x+=1;
 			}
