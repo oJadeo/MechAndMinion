@@ -9,6 +9,7 @@ public class YellowMoveCard extends CmdCard implements Move, OnGoing {
 
 	public YellowMoveCard() {
 		this.spriteValue = CardSprite.YELLOW_MOVE_CARD_1;
+		this.setCardType("Yellow");
 	}
 
 	@Override

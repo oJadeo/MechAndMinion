@@ -5,6 +5,8 @@ import card.base.*;
 import cmdcard.*;
 import damagecard.*;
 import exception.*;
+import gui.DirectionPane;
+import gui.PhasePane;
 import tile.*;
 import token.*;
 
@@ -17,9 +19,11 @@ public class GameController {
 	private static int score;
 	private static int damageCount;
 	private static boolean gameEnd;
-	private static CmdCard selectedCard;
-	private static CmdBox selectedSlot;
+	private static int selectedCard;
+	private static CmdBox selectedCmdBox;
 	private static Mech selectedMech;
+	private static PhasePane phasePane;
+	private static DirectionPane directionPane;
 
 	// Drafted Card Variable
 	private static DraftedCard draftedCard;
@@ -38,6 +42,7 @@ public class GameController {
 	public static void initializeGame() {
 		initializeBoard();
 		draftedCard = new DraftedCard();
+		selectedCard = 6;
 		redMech = new Mech(Direction.DOWN, board.getTile(0, 0), 0);
 		redMechProgram = 0;
 		blueMech = new Mech(Direction.UP, board.getTile(9, 9), 1);
@@ -48,7 +53,9 @@ public class GameController {
 		damageCount = 0;
 		programCount = 0;
 		gameEnd = false;
-		new Minion(Direction.UP, board.getTile(4, 0));
+		phasePane = new PhasePane();
+		directionPane = new DirectionPane();
+		board.drawGameBoard();
 	}
 
 	public static void initializeBoard() {
@@ -106,12 +113,13 @@ public class GameController {
 		switch (currentPhase) {
 		case Program:
 			draftedCard.reDeal();
+			draftedCard.setDisable(true);
 			redMechProgram = 0;
 			blueMechProgram = 0;
 			currentPhase = Phase.Execute;
 			programCount = 0;
-			selectedCard = null;
-			selectedSlot = null;
+			selectedCard = 6;
+			selectedCmdBox = null;
 			selectedMech = null;
 			execute(programCount);
 			break;
@@ -150,15 +158,20 @@ public class GameController {
 			break;
 		case MinionSpawn:
 			currentPhase = Phase.Program;
+			draftedCard.setDisable(false);
 			turnCount += 1;
 			if (turnCount % 3 == 0) {
 				creatSpawnTile();
 				System.out.println("SpawnTile is created");
 			}
+			selectedCard = 6;
+			selectedCmdBox = null;
+			selectedMech = null;
 			break;
 		default:
 			break;
 		}
+		phasePane.drawPhase();
 	}
 
 	public static void minionAttack() {
@@ -179,24 +192,29 @@ public class GameController {
 		}
 	}
 
-	public static void setProgram(Mech selectedMech, CmdBox selectedSlot, CmdCard selectedCard){
+	public static void setProgram(Mech selectedMech, CmdBox selectedCmdBox, int selectedDraftedCard) {
+		CmdCard selectedCard = draftedCard.getDraftedCardList().get(selectedDraftedCard);
 		if (selectedMech.equals(redMech) && redMechProgram < 2) {
 			selectedCard.setProgrammedMech(selectedMech);
-			selectedSlot.addCmdCard(selectedCard);
-			draftedCard.remove(selectedCard);
+			selectedCmdBox.addCmdCard(selectedCard);
+			draftedCard.remove(selectedDraftedCard);
 			redMechProgram += 1;
 		} else if (selectedMech.equals(blueMech) && blueMechProgram < 2) {
 			selectedCard.setProgrammedMech(selectedMech);
-			selectedSlot.addCmdCard(selectedCard);
-			draftedCard.remove(selectedCard);
+			selectedCmdBox.addCmdCard(selectedCard);
+			draftedCard.remove(selectedDraftedCard);
 			blueMechProgram += 1;
+
 		}
+		redMech.getCmdBoard().draw();
+		blueMech.getCmdBoard().draw();
+		GameController.selectedMech = null;
+		GameController.selectedCmdBox = null;
+		GameController.selectedCard = 6;
+		draftedCard.setSelectedDraftedCard(false);
 		if (redMechProgram + blueMechProgram == 4) {
 			nextPhase();
 		}
-		GameController.selectedMech = null;
-		GameController.selectedSlot = null;
-		GameController.selectedCard = null;
 	}
 
 	public static boolean move(Token selectedToken, Direction dir) {
@@ -221,13 +239,7 @@ public class GameController {
 		return false;
 	}
 
-	public static void select(int i) throws IndexOutOfRangeException {
-		if (selectable.size() == 0) {
-			System.out.println("Bug nothing to select");
-		}
-		if (i >= selectable.size() || i < 0) {
-			throw new IndexOutOfRangeException("No target No." + (i + 1));
-		}
+	public static void select(Object selectedObject) {
 		if (executingProgram instanceof BlueAttackCard) {
 			if (selectable.get(i) instanceof Token) {
 				((Token) selectable.get(i)).damaged();
@@ -416,7 +428,9 @@ public class GameController {
 				selectTimes -= 1;
 			}
 		}
-
+		
+		board.drawGameBoard();
+		directionPane.drawDirection();
 		if (selectTimes == 0) {
 			programCount += 1;
 			execute(programCount);
@@ -424,6 +438,8 @@ public class GameController {
 	}
 
 	public static void execute(int programCount) {
+		redMech.getCmdBoard().setDisableSlot(true);
+		blueMech.getCmdBoard().setDisableSlot(true);
 		if (programCount == 12) {
 			nextPhase();
 		} else {
@@ -432,7 +448,6 @@ public class GameController {
 			} else {
 				blueMech.getCmdBoard().getCmdBox(programCount - 6).execute();
 			}
-			programCount++;
 		}
 	}
 
@@ -488,6 +503,25 @@ public class GameController {
 
 	public static void setSelectable(ArrayList<Object> selectable) {
 		GameController.selectable = selectable;
+		if (selectable.size() != 0) {
+			if (selectable.get(0) instanceof Tile) {
+				for (Object tile : selectable) {
+					((Tile) tile).setSelectable(true);
+					((Tile) tile).draw();
+				}
+			}
+			if(selectable.get(0) instanceof Token) {
+				for (Object token : selectable) {
+					((Token) token).getSelfTile().setSelectable(true);
+					((Token) token).getSelfTile().draw();
+				}
+			}
+			if(selectable.get(0) instanceof Direction) {
+				for (Object dir : selectable) {
+					directionPane.drawSelectableDirection((Direction) dir);
+				}
+			}
+		}
 	}
 
 	public static void setSelectTimes(int selectTimes) {
@@ -530,42 +564,52 @@ public class GameController {
 		return 10 - GameController.damageCount;
 	}
 
-	public static void setSelectedCard(CmdCard selectedCard) {
-		GameController.selectedCard = selectedCard;
-		if (selectedMech != null && selectedSlot != null) {
-			setProgram(selectedMech, selectedSlot, selectedCard);
+	public static void setSelectedCard(int selectedCard) {
+		if (draftedCard.getDraftedCardList().get(selectedCard) != null) {
+			GameController.selectedCard = selectedCard;
+			if (selectedMech != null && selectedCmdBox != null) {
+				setProgram(selectedMech, selectedCmdBox, selectedCard);
+			} else {
+				draftedCard.setSelectedDraftedCard(true);
+			}
 		}
 	}
 
-	public static void setSelectedMech(Mech selectedMech) {
+	public static void setSelectedSlot(Mech selectedMech, CmdBox selectedCmdBox) {
 		GameController.selectedMech = selectedMech;
-		if (selectedCard != null && selectedSlot != null) {
-			// setProgram(selectedMech, selectedSlot, selectedCard);
+		GameController.selectedCmdBox = selectedCmdBox;
+		if (selectedCard != 6) {
+			setProgram(selectedMech, selectedCmdBox, selectedCard);
+		} else {
+			redMech.getCmdBoard().setSelectedCmdBox(selectedCmdBox);
+			blueMech.getCmdBoard().setSelectedCmdBox(selectedCmdBox);
 		}
 	}
 
-	public static void setSelectedSlot(CmdBox selectedSlot) {
-		GameController.selectedSlot = selectedSlot;
-		if (selectedMech != null && selectedCard != null) {
-			// setProgram(selectedMech, selectedSlot, selectedCard);
-		}
-	}
-	
 	public static Mech getBlueMech() {
 		return blueMech;
 	}
+
 	public static Mech getRedMech() {
 		return redMech;
 	}
+
 	public static DraftedCard getDraftedCard() {
 		return draftedCard;
 	}
+
 	public static int getDamageCount() {
 		return damageCount;
 	}
-	public static CmdCard getSelectedCard() {
+
+	public static int getSelectedCard() {
 		return selectedCard;
 	}
-}
 
-	// for Update Screen with JavaFX
+	public static PhasePane getPhasePane() {
+		return phasePane;
+	}
+	public static DirectionPane getDirectionPane() {
+		return directionPane;
+	}
+}

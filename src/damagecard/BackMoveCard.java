@@ -14,6 +14,7 @@ public class BackMoveCard extends CmdCard implements OnGoing {
 		dir = Direction.DOWN;
 		this.setSpriteValue(CardSprite.BACK_MOVE);
 		this.setProgrammedMech(programmedMech);
+		this.setCardType("Damage");
 	}
 
 	@Override

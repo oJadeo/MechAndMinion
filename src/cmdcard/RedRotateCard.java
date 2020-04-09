@@ -10,7 +10,7 @@ public class RedRotateCard extends CmdCard implements Rotate, Attack, OnGoing {
 
 	public RedRotateCard() {
 		this.spriteValue = CardSprite.RED_ROTATE_CARD_1;
-
+		this.setCardType("Red");
 	}
 
 	@Override

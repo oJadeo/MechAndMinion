@@ -16,6 +16,7 @@ public class ForwardMoveCard extends CmdCard implements OnGoing {
 		dir = Direction.UP;
 		this.setSpriteValue(CardSprite.FORWARD_MOVE);
 		this.setProgrammedMech(programmedMech);
+		this.setCardType("Damage");
 	}
 
 	@Override

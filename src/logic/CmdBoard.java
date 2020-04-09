@@ -2,34 +2,46 @@ package logic;
 
 import java.util.ArrayList;
 
-import card.base.CmdCard;
-import cmdcard.BlueAttackCard;
-import cmdcard.BlueMoveCard;
-import cmdcard.BlueRotateCard;
-import cmdcard.GreenAttackCard;
-import cmdcard.GreenMoveCard;
-import cmdcard.GreenRotateCard;
-import cmdcard.RedAttackCard;
-import cmdcard.RedMoveCard;
-import cmdcard.RedRotateCard;
-import cmdcard.YellowAttackCard;
-import cmdcard.YellowMoveCard;
-import cmdcard.YellowRotateCard;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 
-public class CmdBoard {
-	private ArrayList<CmdBox> cmdBoxList;
-	public final int STARTPOSITIONX = 0;
-	public final int STARTPOSITIONY = 0;
-	private int no;
-	public final int OFFSETX = 100;
-	public final int OFFSETY = 120;
+public class CmdBoard extends HBox {
+	private ArrayList<CmdBox> cmdBoxList = new ArrayList<CmdBox>();
 
 	public CmdBoard(int no) {
-		this.cmdBoxList = new ArrayList<CmdBox>();
+		super();
+		this.setPrefSize(690, 200);
+		this.setAlignment(Pos.CENTER);
 		for (int i = 0; i < 6; i++) {
-			this.cmdBoxList.add(new CmdBox());
+			cmdBoxList.add(new CmdBox(no));
+			this.getChildren().add(cmdBoxList.get(i));
 		}
-		this.no = no;
+		if (no == 0) {
+			this.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+		} else {
+			this.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+		}
+	}
+
+	public void setSelectedCmdBox(CmdBox SelectedCmdBox) {
+		for (CmdBox cmdBox : cmdBoxList) {
+			if (cmdBox.equals(SelectedCmdBox)) {
+				cmdBox.setGraphic(cmdBox.getCanvas(true));
+			} else {
+				cmdBox.setGraphic(cmdBox.getCanvas(false));
+			}
+		}
+	}
+
+	public void setDisableSlot(boolean disable) {
+		for(CmdBox cmdBox:cmdBoxList) {
+			cmdBox.setDisable(disable);
+		}
 	}
 
 	public CmdBox getCmdBox(int slot) {
@@ -40,39 +52,9 @@ public class CmdBoard {
 		this.cmdBoxList.set(slot, cmdBox);
 	}
 
-	public void update() {
-		String result = (no + 1) + " Mech : [";
+	public void draw() {
 		for (CmdBox cmdBox : cmdBoxList) {
-			CmdCard card = cmdBox.getCmdCardList().get(cmdBox.getCmdCardList().size() - 1);
-			if (card instanceof BlueAttackCard) {
-				result += " BA ";
-			} else if (card instanceof BlueMoveCard) {
-				result += " BM ";
-			} else if (card instanceof BlueRotateCard) {
-				result += " BR ";
-			} else if (card instanceof RedAttackCard) {
-				result += " RA ";
-			} else if (card instanceof RedRotateCard) {
-				result += " RR ";
-			} else if (card instanceof RedMoveCard) {
-				result += " RM ";
-			} else if (card instanceof GreenAttackCard) {
-				result += " GA ";
-			} else if (card instanceof GreenMoveCard) {
-				result += " GM ";
-			} else if (card instanceof GreenRotateCard) {
-				result += " GR ";
-			} else if (card instanceof YellowAttackCard) {
-				result += " YA ";
-			} else if (card instanceof YellowMoveCard) {
-				result += " YM ";
-			} else if (card instanceof YellowRotateCard) {
-				result += " YR ";
-			} else if (card == null) {
-				result += " [] ";
-			}
+			cmdBox.setGraphic(cmdBox.getCanvas(true));
 		}
-		result += "]";
-		System.out.println(result);
 	}
 }

@@ -13,6 +13,7 @@ public class RedMoveCard extends CmdCard implements Attack, Move, OnGoing {
 
 	public RedMoveCard() {
 		this.spriteValue = CardSprite.RED_MOVE_CARD_1;
+		this.setCardType("Red");
 	}
 
 	public ArrayList<Object> move(int tier) {

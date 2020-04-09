@@ -109,10 +109,6 @@ public class Mech extends Token {
 		this.cmdBoard = cmdBoard;
 	}
 
-	public void update() {
-		this.cmdBoard.update();
-	}
-
 	public int getNo() {
 		return no;
 	}

@@ -10,6 +10,7 @@ public class Rotate90Card extends CmdCard implements OnGoing {
 	public Rotate90Card(Mech programmedMech) {
 		this.setSpriteValue(CardSprite.TURN_RIGHT);
 		this.setProgrammedMech(programmedMech);
+		this.setCardType("Damage");
 	}
 
 	@Override

@@ -4,7 +4,7 @@ import logic.*;
 import token.Mech;
 
 public abstract class CmdCard {
-	private CardType cardType;
+	private String cardType;
 	private Mech programmedMech;
 	protected int spriteValue;
 	private CmdBox cmdBox;
@@ -12,13 +12,13 @@ public abstract class CmdCard {
 	public CmdCard() {
 	}
 
-	public void setCardType(CardType cardType) {
+	public void setCardType(String cardType) {
 		this.cardType = cardType;
 	}
 
 	public abstract void setSpriteValue(int tier);
 
-	public CardType getCardType() {
+	public String getCardType() {
 		return this.cardType;
 	}
 

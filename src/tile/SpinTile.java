@@ -3,7 +3,7 @@ package tile;
 import logic.TileSprite;
 import logic.Direction;
 
-public class SpinTile extends Tile {
+public class SpinTile extends Tile{
 	private int spinValue;
 
 	public SpinTile(int locationX, int locationY) {
