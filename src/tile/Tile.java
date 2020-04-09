@@ -17,6 +17,7 @@ public class Tile extends Pane{
 	protected Token token;
 	private int spriteValue;
 	private boolean selectable;
+	private boolean selectToken;
 	private Canvas tileCanvas;
 
 	public Tile(int locationX, int locationY) {
@@ -35,7 +36,13 @@ public class Tile extends Pane{
 			public void handle(Event arg0) {
 				// TODO Auto-generated method stub
 				if(selectable) {
-					GameController.select(this);
+					if(selectToken) {
+						GameController.select(token);
+					}else {
+						GameController.select(GameController.getBoard().getTile(locationX, locationY));
+					}
+					selectable = false;
+					selectToken = false;
 				}
 			}
 			
@@ -86,6 +93,9 @@ public class Tile extends Pane{
 	}
 	public void setSelectable(boolean selectable) {
 		this.selectable = selectable;
+	}
+	public void setSelectToken(boolean selectToken) {
+		this.selectToken = selectToken;
 	}
 	public void trigger() {
 	}

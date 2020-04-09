@@ -25,4 +25,5 @@ public class Minion extends Token {
 		}
 	}
 
+
 }
