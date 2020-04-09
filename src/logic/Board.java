@@ -1,11 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
-
-import application.DrawUtil;
-
 import javafx.geometry.Pos;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -19,7 +15,7 @@ import token.*;
 public class Board extends GridPane{
 	public final int BOARDSIZEX = 10;
 	public final int BOARDSIZEY = 10;
-	private Tile[][] tileBoard = new Tile[BOARDSIZEX][BOARDSIZEY];
+	private ArrayList<ArrayList<Tile>> tileBoard = new ArrayList<ArrayList<Tile>>();
 	private ArrayList<SpawnTile> spawnTileList = new ArrayList<>();
 	private ArrayList<Minion> minionList = new ArrayList<>();
 
@@ -32,40 +28,29 @@ public class Board extends GridPane{
 				CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 		
 		for (int i = 0; i < BOARDSIZEX; i++) {
+			ArrayList<Tile> tileRow = new ArrayList<Tile>();
 			for (int j = 0; j < BOARDSIZEY; j++) {
-				this.tileBoard[j][i] = new Tile(j, i);
+				tileRow.add(new Tile(j, i)) ;
+				this.add(tileRow.get(j), j, i);
 			}
-		}
-		for(int i = 0 ; i < BOARDSIZEX; i++) {
-			for(int j = 0; j < BOARDSIZEY; j++) {
-				this.add(tileBoard[j][i], j, i);
-			}
+			tileBoard.add(tileRow);
 		}
 	}
-	public void drawGameBoard(GraphicsContext gc) {
-		
-		int x = 0;
-		int y = 0;
-		
-		for(Tile[] row:tileBoard) {
-			x = 0;
-			for(Tile tile:row) {
-				DrawUtil.drawTile(gc,x*48,y*48,tile.getSpriteValue());
-				if(tile.getToken() != null) {
-					DrawUtil.drawTile(gc,x*48,y*48,tile.getToken().getSpriteValue());
-				}
-				x+=1;
+	public void drawGameBoard() {
+		for (int i = 0; i < BOARDSIZEX; i++) {
+			for (int j = 0; j < BOARDSIZEY; j++) {
+				this.tileBoard.get(j).get(i).draw();	
 			}
-			y+=1;
 		}
 	}
 
 	public Tile getTile(int x, int y) {
-		return this.tileBoard[y][x];
+		return this.tileBoard.get(y).get(x);
 	}
 
 	public void setTile(int x, int y, Tile newTile) {
-		this.tileBoard[y][x] = newTile;
+		this.tileBoard.get(y).set(x,  newTile);
+		this.add(newTile, x, y);
 	}
 
 	public ArrayList<Tile> getAdjacentTile(Tile tile, int range, Direction dir) {
@@ -76,44 +61,44 @@ public class Board extends GridPane{
 		case LEFT:
 			for (int i = 1; i <= range; i++) {
 				if (isMovePossible(x - i, y)) {
-					result.add(tileBoard[y][x - i]);
+					result.add(tileBoard.get(y).get(x-i));
 				}
 			}
 			break;
 		case UP:
 			for (int i = 1; i <= range; i++) {
 				if (isMovePossible(x, y - i)) {
-					result.add(tileBoard[y - i][x]);
+					result.add(tileBoard.get(y-i).get(x));
 				}
 			}
 			break;
 		case RIGHT:
 			for (int i = 1; i <= range; i++) {
 				if (isMovePossible(x + i, y)) {
-					result.add(tileBoard[y][x + i]);
+					result.add(this.tileBoard.get(y).get(x+i));
 				}
 			}
 			break;
 		case DOWN:
 			for (int i = 1; i <= range; i++) {
 				if (isMovePossible(x, y + i)) {
-					result.add(tileBoard[y + i][x]);
+					result.add(this.tileBoard.get(y+i).get(x));
 				}
 			}
 			break;
 		case ALL:
 			for (int i = 1; i <= range; i++) {
 				if (isMovePossible(x - i, y)) {
-					result.add(tileBoard[y][x - i]);
+					result.add(this.tileBoard.get(y).get(x-i));
 				}
 				if (isMovePossible(x, y - i)) {
-					result.add(tileBoard[y - i][x]);
+					result.add(this.tileBoard.get(y-i).get(x));
 				}
 				if (isMovePossible(x + i, y)) {
-					result.add(tileBoard[y][x + i]);
+					result.add(this.tileBoard.get(y).get(x+i));
 				}
 				if (isMovePossible(x, y + i)) {
-					result.add(tileBoard[y + i][x]);
+					result.add(this.tileBoard.get(y+i).get(x));
 				}
 			}
 			break;
@@ -131,56 +116,56 @@ public class Board extends GridPane{
 		case LEFT:
 			for (int i = 1; i <= range; i++) {
 				if (isMovePossible(x - i, y - i)) {
-					result.add(tileBoard[y - i][x - i]);
+					result.add(this.tileBoard.get(y-i).get(x-i));
 				}
 				if (isMovePossible(x - i, y + i)) {
-					result.add(tileBoard[y + i][x - i]);
+					result.add(this.tileBoard.get(y+i).get(x-i));
 				}
 			}
 			break;
 		case UP:
 			for (int i = 1; i <= range; i++) {
 				if (isMovePossible(x + i, y - i)) {
-					result.add(tileBoard[y - i][x + i]);
+					result.add(this.tileBoard.get(y-i).get(x+i));
 				}
 				if (isMovePossible(x - i, y - i)) {
-					result.add(tileBoard[y - i][x - i]);
+					result.add(this.tileBoard.get(y-i).get(x-i));
 				}
 			}
 			break;
 		case RIGHT:
 			for (int i = 1; i <= range; i++) {
 				if (isMovePossible(x + i, y - i)) {
-					result.add(tileBoard[y - i][x + i]);
+					result.add(this.tileBoard.get(y-i).get(x+i));
 				}
 				if (isMovePossible(x + i, y + i)) {
-					result.add(tileBoard[y + i][x + i]);
+					result.add(this.tileBoard.get(y+i).get(x+i));
 				}
 			}
 			break;
 		case DOWN:
 			for (int i = 1; i <= range; i++) {
 				if (isMovePossible(x + i, y + i)) {
-					result.add(tileBoard[y + i][x + i]);
+					result.add(this.tileBoard.get(y+i).get(x+i));
 				}
 				if (isMovePossible(x - i, y + i)) {
-					result.add(tileBoard[y + i][x - i]);
+					result.add(this.tileBoard.get(y+i).get(x-i));
 				}
 			}
 			break;
 		case ALL:
 			for (int i = 1; i <= range; i++) {
 				if (isMovePossible(x + i, y - i)) {
-					result.add(tileBoard[y - i][x + i]);
+					result.add(this.tileBoard.get(y-i).get(x+i));
 				}
 				if (isMovePossible(x - i, y - i)) {
-					result.add(tileBoard[y - i][x - i]);
+					result.add(this.tileBoard.get(y-i).get(x-i));
 				}
 				if (isMovePossible(x + i, y + i)) {
-					result.add(tileBoard[y + i][x + i]);
+					result.add(this.tileBoard.get(y+i).get(x+i));
 				}
 				if (isMovePossible(x - i, y + i)) {
-					result.add(tileBoard[y + i][x - i]);
+					result.add(this.tileBoard.get(y+i).get(x-i));
 				}
 			}
 			break;
@@ -197,7 +182,7 @@ public class Board extends GridPane{
 		for (int i = x - range; i <= x + range; i++) {
 			for (int j = y - range; j <= y + range; j++) {
 				if (this.isMovePossible(i, j)) {
-					result.add(tileBoard[j][i]);
+					result.add(this.tileBoard.get(j).get(i));
 				}
 			}
 		}
@@ -217,76 +202,8 @@ public class Board extends GridPane{
 	}
 
 	public boolean isSpecial(int x, int y) {
-		return (this.tileBoard[y][x] instanceof ExplosiveTile) || (this.tileBoard[y][x] instanceof MoveTile)
-				|| (this.tileBoard[y][x] instanceof SlipTile) || (this.tileBoard[y][x] instanceof SpinTile)
-				|| (this.tileBoard[y][x] instanceof SpawnTile) || (x == 0 && y == 0) || (x == 9 && y == 9);
-	}
-
-	public void update() {
-		for (int i = 0; i < BOARDSIZEX; i++) {
-			String result = "[";
-			for (int j = 0; j < BOARDSIZEY; j++) {
-				if (tileBoard[i][j].getToken() == null) {
-					if (tileBoard[i][j] instanceof ExplosiveTile) {
-						result += " E ";
-					} else if (tileBoard[i][j] instanceof MoveTile) {
-						result += " M ";
-					} else if (tileBoard[i][j] instanceof SpinTile) {
-						result += " S ";
-					} else if (tileBoard[i][j] instanceof SlipTile) {
-						result += " L ";
-					} else if (tileBoard[i][j] instanceof SpawnTile) {
-						result += " # ";
-					} else {
-						result += " 0 ";
-					}
-				}
-				if (tileBoard[i][j].getToken() instanceof Mech) {
-					if (((Mech) tileBoard[i][j].getToken()).getNo() == 0) {
-						switch (tileBoard[i][j].getToken().getDirection()) {
-						case UP:
-							result += " ^ ";
-							break;
-						case DOWN:
-							result += " v ";
-							break;
-						case LEFT:
-							result += " < ";
-							break;
-						case RIGHT:
-							result += " > ";
-							break;
-						default:
-							break;
-						}
-					}
-					if (((Mech) tileBoard[i][j].getToken()).getNo() == 1) {
-						switch (tileBoard[i][j].getToken().getDirection()) {
-						case UP:
-							result += " ^^";
-							break;
-						case DOWN:
-							result += " vv";
-							break;
-						case LEFT:
-							result += " <<";
-							break;
-						case RIGHT:
-							result += " >>";
-							break;
-						default:
-							break;
-						}
-
-					}
-				}
-				if (tileBoard[i][j].getToken() instanceof Minion) {
-					result += " * ";
-				}
-
-			}
-			result += "]";
-			System.out.println(result);
-		}
+		return (this.tileBoard.get(y).get(x) instanceof ExplosiveTile) || (this.tileBoard.get(y).get(x) instanceof MoveTile)
+				|| (this.tileBoard.get(y).get(x) instanceof SlipTile) || (this.tileBoard.get(y).get(x) instanceof SpinTile)
+				|| (this.tileBoard.get(y).get(x) instanceof SpawnTile) || (x == 0 && y == 0) || (x == 9 && y == 9);
 	}
 }

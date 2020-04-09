@@ -13,6 +13,7 @@ public class BlueMoveCard extends CmdCard implements Attack, Move ,OnGoing {
 	
 	public BlueMoveCard() {
 		this.spriteValue = CardSprite.BLUE_MOVE_CARD_1;
+		this.setCardType("Blue");
 	}
 
 	@Override

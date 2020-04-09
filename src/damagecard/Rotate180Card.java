@@ -13,6 +13,7 @@ public class Rotate180Card extends CmdCard implements OnGoing {
 	public Rotate180Card(Mech programmedMech) {
 		this.setSpriteValue(CardSprite.TURN_AROUND);
 		this.setProgrammedMech(programmedMech);
+		this.setCardType("Damage");
 	}
 
 	@Override

@@ -10,6 +10,7 @@ public class YellowAttackCard extends CmdCard implements Attack, OnGoing {
 
 	public YellowAttackCard() {
 		this.spriteValue = CardSprite.YELLOW_ATTACK_CARD_1;
+		this.setCardType("Yellow");
 	}
 
 	@Override

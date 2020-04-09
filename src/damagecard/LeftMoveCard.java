@@ -16,6 +16,7 @@ public class LeftMoveCard extends CmdCard implements OnGoing {
 		dir = Direction.LEFT;
 		this.setSpriteValue(CardSprite.LEFT_MOVE);
 		this.setProgrammedMech(programmedMech);
+		this.setCardType("Damage");
 	}
 
 	@Override

@@ -8,4 +8,5 @@ public class SlipTile extends Tile {
 		super(locationX, locationY);
 		this.setSpriteValue(TileSprite.SLIP_TILE);
 	}
+
 }
