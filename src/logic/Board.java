@@ -206,4 +206,12 @@ public class Board extends GridPane{
 				|| (this.tileBoard.get(y).get(x) instanceof SlipTile) || (this.tileBoard.get(y).get(x) instanceof SpinTile)
 				|| (this.tileBoard.get(y).get(x) instanceof SpawnTile) || (x == 0 && y == 0) || (x == 9 && y == 9);
 	}
+	public void clearSelectable() {
+		for (int i = 0; i < BOARDSIZEX; i++) {
+			for (int j = 0; j < BOARDSIZEY; j++) {
+				this.tileBoard.get(j).get(i).setSelectable(false);
+				this.tileBoard.get(j).get(i).setSelectToken(false);
+			}
+		}
+	}
 }

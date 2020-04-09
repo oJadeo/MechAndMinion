@@ -241,9 +241,9 @@ public class GameController {
 
 	public static void select(Object selectedObject) {
 		if (executingProgram instanceof BlueAttackCard) {
-			if (selectable.get(i) instanceof Token) {
-				((Token) selectable.get(i)).damaged();
-				selectable.remove(i);
+			if (selectedObject instanceof Token) {
+				((Token) selectedObject).damaged();
+				selectable.remove(selectedObject);
 				selectTimes -= 1;
 				if (((BlueAttackCard) executingProgram).attack(1).size() != 0) {
 					setSelectable(((BlueAttackCard) executingProgram).attack(1));
@@ -252,7 +252,7 @@ public class GameController {
 				}
 			}
 		} else if (executingProgram instanceof BlueMoveCard) {
-			if (selectable.get(i) instanceof Tile) {
+			if (selectedObject instanceof Tile) {
 				move(executingProgram.getProgrammedMech(), executingProgram.getProgrammedMech().getDirection());
 				selectTimes -= 1;
 				if (selectTimes != 0) {
@@ -261,14 +261,14 @@ public class GameController {
 						setSelectTimes(0);
 					}
 				}
-			} else if (selectable.get(i) instanceof Token) {
-				((Token) selectable.get(i)).damaged();
-				selectable.remove(i);
+			} else if (selectedObject instanceof Token) {
+				((Token) selectedObject).damaged();
+				selectable.remove(selectedObject);
 				setSelectable(((BlueMoveCard) executingProgram).move(1));
 			}
 		} else if (executingProgram instanceof BlueRotateCard) {
-			if (selectable.get(i) instanceof Direction) {
-				executingProgram.getProgrammedMech().setDirection((Direction) selectable.get(i));
+			if (selectedObject instanceof Direction) {
+				executingProgram.getProgrammedMech().setDirection((Direction) selectedObject);
 				setSelectable(((BlueRotateCard) executingProgram)
 						.attack(executingProgram.getCmdBox().getCmdCardList().size()));
 				if (selectable.size() > executingProgram.getCmdBox().getCmdCardList().size()) {
@@ -276,20 +276,20 @@ public class GameController {
 				} else {
 					setSelectTimes(selectable.size());
 				}
-			} else if (selectable.get(i) instanceof Token) {
-				((Token) selectable.get(i)).damaged();
-				selectable.remove(i);
+			} else if (selectedObject instanceof Token) {
+				((Token) selectedObject).damaged();
+				selectable.remove(selectedObject);
 				selectTimes -= 1;
 			}
 		} else if (executingProgram instanceof GreenAttackCard) {
-			if (selectable.get(i) instanceof Token) {
-				((Token) selectable.get(i)).damaged();
-				selectable.remove(i);
+			if (selectedObject instanceof Token) {
+				((Token) selectedObject).damaged();
+				selectable.remove(selectedObject);
 				selectTimes -= 1;
 			}
 		} else if (executingProgram instanceof GreenMoveCard) {
-			if (selectable.get(i) instanceof Direction) {
-				movingDirection = ((Direction) selectable.get(i));
+			if (selectedObject instanceof Direction) {
+				movingDirection = ((Direction) selectedObject);
 				ArrayList<Object> newSelectableList = new ArrayList<Object>();
 				for (Tile e : getBoard().getAdjacentTile(executingProgram.getProgrammedMech().getSelfTile(), 1,
 						movingDirection)) {
@@ -301,7 +301,7 @@ public class GameController {
 				} else {
 					setSelectTimes(0);
 				}
-			} else if (selectable.get(i) instanceof Tile) {
+			} else if (selectedObject instanceof Tile) {
 				move(executingProgram.getProgrammedMech(), movingDirection);
 				selectTimes -= 1;
 				if (selectTimes != 0) {
@@ -317,8 +317,8 @@ public class GameController {
 				}
 			}
 		} else if (executingProgram instanceof GreenRotateCard) {
-			if (selectable.get(i) instanceof Direction) {
-				executingProgram.getProgrammedMech().setDirection((Direction) selectable.get(i));
+			if (selectedObject instanceof Direction) {
+				executingProgram.getProgrammedMech().setDirection((Direction) selectedObject);
 				setSelectable(((GreenRotateCard) executingProgram)
 						.attack(executingProgram.getCmdBox().getCmdCardList().size()));
 				if (selectable.size() != 0) {
@@ -326,19 +326,19 @@ public class GameController {
 				} else {
 					setSelectTimes(0);
 				}
-			} else if (selectable.get(i) instanceof Token) {
-				((Token) selectable.get(i)).damaged();
-				selectable.remove(i);
+			} else if (selectedObject instanceof Token) {
+				((Token) selectedObject).damaged();
+				selectable.remove(selectedObject);
 				selectTimes -= 1;
 			}
 		} else if (executingProgram instanceof RedAttackCard) {
-			if (selectable.get(i) instanceof Token) {
-				((Token) selectable.get(i)).damaged();
-				selectable.remove(i);
+			if (selectedObject instanceof Token) {
+				((Token) selectedObject).damaged();
+				selectable.remove(selectedObject);
 				selectTimes -= 1;
 			}
 		} else if (executingProgram instanceof RedMoveCard) {
-			if (selectable.get(i) instanceof Tile) {
+			if (selectedObject instanceof Tile) {
 				GameController.move(executingProgram.getProgrammedMech(),
 						executingProgram.getProgrammedMech().getDirection());
 				setSelectable(((RedMoveCard) executingProgram).move(1));
@@ -347,40 +347,39 @@ public class GameController {
 					setSelectable(((RedMoveCard) executingProgram).attack(1));
 					setSelectTimes(selectable.size());
 				}
-			} else if (selectable.get(i) instanceof Token) {
-				((Token) selectable.get(i)).damaged();
-				selectable.remove(i);
+			} else if (selectedObject instanceof Token) {
+				((Token) selectedObject).damaged();
+				selectable.remove(selectedObject);
 				selectTimes -= 1;
 			}
 		} else if (executingProgram instanceof RedRotateCard) {
-			if (selectable.get(i) instanceof Direction) {
-				executingProgram.getProgrammedMech().setDirection((Direction) selectable.get(i));
+			if (selectedObject instanceof Direction) {
+				executingProgram.getProgrammedMech().setDirection((Direction) selectedObject);
 				setSelectable(((RedRotateCard) executingProgram)
 						.attack(executingProgram.getCmdBox().getCmdCardList().size()));
 				setSelectTimes(selectable.size());
-			} else if (selectable.get(i) instanceof Token) {
-				((Token) selectable.get(i)).damaged();
-				selectable.remove(i);
+			} else if (selectedObject instanceof Token) {
+				((Token) selectedObject).damaged();
+				selectable.remove(selectedObject);
 				selectTimes -= 1;
 			}
 		} else if (executingProgram instanceof YellowAttackCard) {
-			if (selectable.get(i) instanceof Token) {
+			if (selectedObject instanceof Token) {
 				ArrayList<Object> newSelectable = new ArrayList<Object>();
-				for (Tile tile : getBoard().getDiagonalTile(((Token) selectable.get(i)).getSelfTile(), 1,
-						Direction.ALL)) {
+				for (Tile tile : getBoard().getDiagonalTile(((Token) selectedObject).getSelfTile(), 1, Direction.ALL)) {
 					if (tile.getToken() instanceof Token
 							&& !tile.getToken().equals(executingProgram.getProgrammedMech())) {
 						newSelectable.add((Object) tile.getToken());
 					}
 				}
-				((Token) selectable.get(i)).damaged();
-				selectable.remove(i);
+				((Token) selectedObject).damaged();
+				selectable.remove(selectedObject);
 				setSelectable(newSelectable);
 				setSelectTimes(newSelectable.size());
 			}
 		} else if (executingProgram instanceof YellowMoveCard) {
-			if (selectable.get(i) instanceof Tile) {
-				if (selectable.get(i).equals(executingProgram.getProgrammedMech().getSelfTile())) {
+			if (selectedObject instanceof Tile) {
+				if (selectedObject.equals(executingProgram.getProgrammedMech().getSelfTile())) {
 					setSelectTimes(0);
 				} else {
 					GameController.move(executingProgram.getProgrammedMech(),
@@ -403,38 +402,45 @@ public class GameController {
 				}
 			}
 		} else if (executingProgram instanceof YellowRotateCard) {
-			if (selectable.get(i) instanceof Direction) {
-				executingProgram.getProgrammedMech().setDirection((Direction) selectable.get(i));
+			if (selectedObject instanceof Direction) {
+				executingProgram.getProgrammedMech().setDirection((Direction) selectedObject);
 				setSelectable(((YellowRotateCard) executingProgram)
 						.attack(executingProgram.getCmdBox().getCmdCardList().size()));
 				if (selectable.size() == 0) {
 					setSelectTimes(0);
 				}
-			} else if (selectable.get(i) instanceof Token) {
-				((Token) selectable.get(i)).damaged();
-				selectable.remove(i);
+			} else if (selectedObject instanceof Token) {
+				((Token) selectedObject).damaged();
+				selectable.remove(selectedObject);
 				selectTimes -= 1;
 			}
 		} else if (executingProgram instanceof BackMoveCard || executingProgram instanceof ForwardMoveCard
 				|| executingProgram instanceof LeftMoveCard || executingProgram instanceof RightMoveCard) {
-			if (selectable.get(i) instanceof Direction) {
-				GameController.move(executingProgram.getProgrammedMech(), (Direction) selectable.get(i));
+			if (selectedObject instanceof Direction) {
+				GameController.move(executingProgram.getProgrammedMech(), (Direction) selectedObject);
 				selectTimes -= 1;
 			}
 		} else if (executingProgram instanceof Rotate180Card || executingProgram instanceof Rotate270Card
 				|| executingProgram instanceof Rotate90Card) {
-			if (selectable.get(i) instanceof Direction) {
-				executingProgram.getProgrammedMech().setDirection((Direction) selectable.get(i));
+			if (selectedObject instanceof Direction) {
+				executingProgram.getProgrammedMech().setDirection((Direction) selectedObject);
 				selectTimes -= 1;
 			}
 		}
-		
-		board.drawGameBoard();
-		directionPane.drawDirection();
+		if (selectedObject instanceof Tile) {
+			((Tile) selectedObject).setSelectable(false);
+		}
+		if (selectedObject instanceof Token) {
+			((Token) selectedObject).getSelfTile().setSelectable(false);
+			((Token) selectedObject).getSelfTile().setSelectToken(false);
+		}
 		if (selectTimes == 0) {
+			board.clearSelectable();
 			programCount += 1;
 			execute(programCount);
 		}
+		board.drawGameBoard();
+		directionPane.drawDirection();
 	}
 
 	public static void execute(int programCount) {
@@ -510,13 +516,14 @@ public class GameController {
 					((Tile) tile).draw();
 				}
 			}
-			if(selectable.get(0) instanceof Token) {
+			if (selectable.get(0) instanceof Token) {
 				for (Object token : selectable) {
 					((Token) token).getSelfTile().setSelectable(true);
+					((Token) token).getSelfTile().setSelectToken(true);
 					((Token) token).getSelfTile().draw();
 				}
 			}
-			if(selectable.get(0) instanceof Direction) {
+			if (selectable.get(0) instanceof Direction) {
 				for (Object dir : selectable) {
 					directionPane.drawSelectableDirection((Direction) dir);
 				}
@@ -609,6 +616,7 @@ public class GameController {
 	public static PhasePane getPhasePane() {
 		return phasePane;
 	}
+
 	public static DirectionPane getDirectionPane() {
 		return directionPane;
 	}

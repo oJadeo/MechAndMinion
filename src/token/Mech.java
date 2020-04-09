@@ -112,4 +112,49 @@ public class Mech extends Token {
 	public int getNo() {
 		return no;
 	}
+	
+	public void setDirection(Direction dir) {
+		super.setDirection(dir);
+		switch (no) {
+		case 0:
+			switch (dir) {
+			case UP:
+				this.spriteValue = TileSprite.MECH1_UP;
+				break;
+			case RIGHT:
+				this.spriteValue = TileSprite.MECH1_RIGHT;
+				break;
+			case DOWN:
+				this.spriteValue = TileSprite.MECH1_DOWN;
+				break;
+			case LEFT:
+				this.spriteValue = TileSprite.MECH1_LEFT;
+				break;
+			default:
+				break;
+			}
+			break;
+		case 1:
+			switch (dir) {
+			case UP:
+				this.spriteValue = TileSprite.MECH2_UP;
+				break;
+			case RIGHT:
+				this.spriteValue = TileSprite.MECH2_RIGHT;
+				break;
+			case DOWN:
+				this.spriteValue = TileSprite.MECH2_DOWN;
+				break;
+			case LEFT:
+				this.spriteValue = TileSprite.MECH2_LEFT;
+				break;
+			default:
+				break;
+			}
+			break;
+		default:
+			break;
+		}
+		getSelfTile().draw();
+	}
 }
