@@ -81,7 +81,6 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				ColorAdjust colorAdjust = new ColorAdjust(0,0,0.3,0);
 			    imageViewStart.setEffect(colorAdjust);
 			}
@@ -90,7 +89,6 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				ColorAdjust colorAdjust = new ColorAdjust(0,0,0,0);
 			    imageViewStart.setEffect(colorAdjust);
 			}
@@ -107,7 +105,6 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				ColorAdjust colorAdjust = new ColorAdjust(0,0,0.3,0);
 			    imageViewTutorial.setEffect(colorAdjust);
 			}
@@ -116,7 +113,6 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				ColorAdjust colorAdjust = new ColorAdjust(0,0,0,0);
 			    imageViewTutorial.setEffect(colorAdjust);
 			}
@@ -133,7 +129,6 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				ColorAdjust colorAdjust = new ColorAdjust(0,0,0.3,0);
 			    imageViewExit.setEffect(colorAdjust);
 			}
@@ -142,7 +137,6 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				ColorAdjust colorAdjust = new ColorAdjust(0,0,0,0);
 			    imageViewExit.setEffect(colorAdjust);
 			}
@@ -152,6 +146,7 @@ public class Main extends Application {
 		window = primaryStage;
 		primaryStage.setTitle("Mech and Minion");
 		primaryStage.setScene(firstScene);
+		primaryStage.setResizable(false);
 		primaryStage.show();
 
 	}
@@ -185,7 +180,6 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				ColorAdjust colorAdjust = new ColorAdjust(0,0,0.3,0);
 			    imageViewBack.setEffect(colorAdjust);
 			}
@@ -194,7 +188,6 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				ColorAdjust colorAdjust = new ColorAdjust(0,0,0,0);
 			    imageViewBack.setEffect(colorAdjust);
 			}
@@ -224,7 +217,10 @@ public class Main extends Application {
 			public void handle(MouseEvent arg0) {
 				if(pageTuorial < maxPage) {
 					if(pageTuorial == maxPage-1) {
-						imageViewArrowRight.setImage(null);
+						imageViewArrowRight.setVisible(false);
+					}
+					if(pageTuorial != minPage+1) {
+						imageViewArrowLeft.setVisible(true);
 					}
 					if(pageTuorial == minPage) {
 						imageViewArrowLeft.setImage(new Image("ArrowLeft.png"));
@@ -240,7 +236,6 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				ColorAdjust colorAdjust = new ColorAdjust(0,0,0.3,0);
 			    imageViewArrowRight.setEffect(colorAdjust);
 			}
@@ -249,7 +244,6 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				ColorAdjust colorAdjust = new ColorAdjust(0,0,0,0);
 				imageViewArrowRight.setEffect(colorAdjust);
 			}
@@ -259,7 +253,10 @@ public class Main extends Application {
 			public void handle(MouseEvent arg0) {
 				if(pageTuorial > minPage) {
 					if(pageTuorial == minPage+1) {
-						imageViewArrowLeft.setImage(null);
+						imageViewArrowLeft.setVisible(false);
+					}
+					if(pageTuorial != maxPage-1) {
+						imageViewArrowRight.setVisible(true);
 					}
 					if(pageTuorial == maxPage) {
 						imageViewArrowRight.setImage(new Image("ArrowRight.png"));
@@ -276,7 +273,6 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				ColorAdjust colorAdjust = new ColorAdjust(0,0,0.3,0);
 				imageViewArrowLeft.setEffect(colorAdjust);
 			}
@@ -285,14 +281,11 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				ColorAdjust colorAdjust = new ColorAdjust(0,0,0,0);
 				imageViewArrowLeft.setEffect(colorAdjust);
 			}
 		});
 		
-		
-
 		
 		root.getChildren().add(upRoot);
 		root.getChildren().add(midRoot);

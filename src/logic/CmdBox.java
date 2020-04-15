@@ -4,10 +4,17 @@ import java.util.ArrayList;
 
 import application.DrawUtil;
 import card.base.*;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
+import token.Mech;
 
 public class CmdBox extends Button {
 
@@ -15,7 +22,37 @@ public class CmdBox extends Button {
 	private Canvas cmdCanvas;
 	int no = 0;
 
-	public CmdBox(int no) {
+	// for drafted Card
+	public CmdBox(int a) {
+		cmdCanvas = new Canvas(115, 192);
+		this.cmdCardList = new ArrayList<CmdCard>();
+		this.cmdCardList.add(null);
+
+		this.setPadding(new Insets(0));
+		this.setPrefSize(115, 192);
+		this.setGraphic(getCanvas(true));
+		this.setOnMouseClicked((e) -> {
+			GameController.setSelectedCard(a);
+		});
+
+		this.setOnDragDetected(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				System.out.println("On drag");
+				Dragboard db = ((Button) event.getSource()).startDragAndDrop(TransferMode.MOVE);
+				ClipboardContent content = new ClipboardContent();
+				content.putString(Integer.toString(a));
+				db.setContent(content);
+				GameController.setSelectedCard(a);
+				event.consume();
+			};
+		});
+
+	}
+
+	// for Mech
+	public CmdBox(Mech programmedMech) {
 		super();
 
 		cmdCanvas = new Canvas(115, 192);
@@ -25,20 +62,69 @@ public class CmdBox extends Button {
 		this.setPadding(new Insets(0));
 		this.setPrefSize(115, 192);
 		this.setGraphic(getCanvas(true));
-		if (no == 0) {
-			this.setOnMouseClicked((e) -> {
-				if (GameController.getCurrentPhase() == Phase.Program) {
-					GameController.setSelectedSlot(GameController.getRedMech(), this);
-				}
-			});
-		} else {
-			this.setOnMouseClicked((e) -> {
-				if (GameController.getCurrentPhase() == Phase.Program) {
-					GameController.setSelectedSlot(GameController.getBlueMech(), this);
-				}
-			});
-		}
+		CmdBox thisCmdBox = this;
+		this.setOnMouseClicked((e) -> {
+			if (GameController.getCurrentPhase() == Phase.Program) {
+				GameController.setSelectedSlot(programmedMech, thisCmdBox);
+			}
+		});
+		this.setOnDragEntered(new EventHandler<DragEvent>() {
 
+			@Override
+			public void handle(DragEvent event) {
+				GameController.getRedMech().getCmdBoard().setSelectedCmdBox(null);
+				GameController.getBlueMech().getCmdBoard().setSelectedCmdBox(null);
+				Dragboard db = event.getDragboard();
+				GraphicsContext cmdGC = thisCmdBox.cmdCanvas.getGraphicsContext2D();
+				cmdGC.clearRect(0, 0, 115, 192);
+				int upgraded = 0;
+				if (thisCmdBox.cmdCardList.get(0) != null
+						&& thisCmdBox.cmdCardList.get(0).getCardType().equals(GameController.getDraftedCard()
+								.getDraftedCardList().get(Integer.parseInt(db.getString())).getCardType())) {
+					switch (thisCmdBox.cmdCardList.size()) {
+					case 1:
+						if (thisCmdBox.cmdCardList.get(0) == null) {
+							upgraded = 0;
+						} else {
+							upgraded = 1;
+						}
+						break;
+					case 2:
+					case 3:
+						upgraded = 2;
+					default:
+						break;
+					}
+				}
+				DrawUtil.drawCard(cmdGC,0,0,GameController.getDraftedCard().getDraftedCardList()
+						.get(Integer.parseInt(db.getString())).getSpriteValue() + upgraded);
+				DrawUtil.drawCard(cmdGC, 0, 0,CardSprite.SELECTED_CARD);
+				thisCmdBox.setGraphic(thisCmdBox.cmdCanvas);
+				event.consume();
+			}
+		});
+		this.setOnDragOver(new EventHandler<DragEvent>() {
+
+			@Override
+			public void handle(DragEvent event) {
+				event.acceptTransferModes(TransferMode.MOVE);
+				event.consume();
+			}
+		});
+		this.setOnDragDropped(new EventHandler<DragEvent>() {
+			@Override
+			public void handle(DragEvent event) {
+				System.out.println("Drop");
+				Dragboard db = event.getDragboard();
+				boolean success = false;
+				if (db.hasString()) {
+					GameController.setSelectedSlot(programmedMech, thisCmdBox);
+					success = true;
+				}
+				event.setDropCompleted(success);
+				event.consume();
+			}
+		});
 	}
 
 	public void addCmdCard(CmdCard selectedCard) {
@@ -81,11 +167,10 @@ public class CmdBox extends Button {
 		GraphicsContext cmdGC = this.cmdCanvas.getGraphicsContext2D();
 		cmdGC.clearRect(0, 0, 115, 192);
 		if (this.cmdCardList.get(this.cmdCardList.size() - 1) != null) {
-			cmdGC.drawImage(DrawUtil.drawCard(this.cmdCardList.get(this.cmdCardList.size() - 1).getSpriteValue()), 0,
-					0);
+			DrawUtil.drawCard(cmdGC,0,0,this.cmdCardList.get(this.cmdCardList.size() - 1).getSpriteValue());
 		}
 		if (selected) {
-			cmdGC.drawImage(DrawUtil.drawCard(CardSprite.SELECTED_CARD), 0, 0);
+			DrawUtil.drawCard(cmdGC,0,0,CardSprite.SELECTED_CARD);
 		}
 		return cmdCanvas;
 	}
@@ -109,5 +194,13 @@ public class CmdBox extends Button {
 
 	public ArrayList<CmdCard> getCmdCardList() {
 		return this.cmdCardList;
+	}
+
+	public Canvas getCmdCanvas() {
+		return cmdCanvas;
+	}
+
+	public void setCmdCanvas(Canvas cmdCanvas) {
+		this.cmdCanvas = cmdCanvas;
 	}
 }

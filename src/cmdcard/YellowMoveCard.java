@@ -24,7 +24,6 @@ public class YellowMoveCard extends CmdCard implements Move, OnGoing {
 
 	@Override
 	public void execute(int tier) {
-		// TODO Auto-generated method stub
 		GameController.setStepCount(0);
 		if(move(tier).size()!=0) {
 			GameController.setSelectable(move(tier));

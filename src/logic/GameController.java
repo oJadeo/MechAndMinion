@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import card.base.*;
 import cmdcard.*;
 import damagecard.*;
-import exception.*;
+import exception.SelectMechException;
 import gui.DirectionPane;
 import gui.PhasePane;
 import tile.*;
@@ -18,17 +18,15 @@ public class GameController {
 	private static int turnCount;
 	private static int score;
 	private static int damageCount;
-	private static boolean gameEnd;
 	private static int selectedCard;
 	private static CmdBox selectedCmdBox;
 	private static Mech selectedMech;
 	private static PhasePane phasePane;
 	private static DirectionPane directionPane;
+	private static int spawnNo;
 
 	// Drafted Card Variable
 	private static DraftedCard draftedCard;
-	private static int redMechProgram;
-	private static int blueMechProgram;
 
 	// ExecutintProgram variable
 	private static int programCount;
@@ -44,15 +42,12 @@ public class GameController {
 		draftedCard = new DraftedCard();
 		selectedCard = 6;
 		redMech = new Mech(Direction.DOWN, board.getTile(0, 0), 0);
-		redMechProgram = 0;
 		blueMech = new Mech(Direction.UP, board.getTile(9, 9), 1);
-		blueMechProgram = 0;
 		currentPhase = Phase.Program;
 		turnCount = 1;
 		score = 0;
 		damageCount = 0;
 		programCount = 0;
-		gameEnd = false;
 		phasePane = new PhasePane();
 		directionPane = new DirectionPane();
 		board.drawGameBoard();
@@ -113,9 +108,9 @@ public class GameController {
 		switch (currentPhase) {
 		case Program:
 			draftedCard.reDeal();
-			draftedCard.setDisable(true);
-			redMechProgram = 0;
-			blueMechProgram = 0;
+			draftedCard.setDisableButton(true);
+			redMech.setProgramedCount(0);
+			blueMech.setProgramedCount(0);
 			currentPhase = Phase.Execute;
 			programCount = 0;
 			selectedCard = 6;
@@ -124,41 +119,46 @@ public class GameController {
 			execute(programCount);
 			break;
 		case Execute:
+			redMech.getCmdBoard().setDisableSlot(true);
+			blueMech.getCmdBoard().setDisableSlot(true);
 			if (board.getMinionList().size() != 0) {
 				currentPhase = Phase.MinionMove;
-				Direction moveDirection = null;
 				switch ((int) (Math.random() * 4)) {
 				case 0:
-					moveDirection = Direction.UP;
+					directionPane.drawSelectableDirection(Direction.UP);
 					break;
 				case 1:
-					moveDirection = Direction.DOWN;
+					directionPane.drawSelectableDirection(Direction.DOWN);
 					break;
 				case 2:
-					moveDirection = Direction.LEFT;
+					directionPane.drawSelectableDirection(Direction.LEFT);
 					break;
 				case 3:
-					moveDirection = Direction.RIGHT;
+					directionPane.drawSelectableDirection(Direction.RIGHT);
 					break;
 				default:
 					break;
 				}
-				for (Minion minion : getBoard().getMinionList()) {
-					minion.setDirection(moveDirection);
-				}
 			} else {
 				currentPhase = Phase.MinionSpawn;
+				minionSpawn();
 			}
 			break;
 		case MinionMove:
 			currentPhase = Phase.MinionAttack;
+			minionAttack();
 			break;
 		case MinionAttack:
 			currentPhase = Phase.MinionSpawn;
+			minionSpawn();
 			break;
 		case MinionSpawn:
 			currentPhase = Phase.Program;
-			draftedCard.setDisable(false);
+			draftedCard.setDisableButton(false);
+			redMech.getCmdBoard().setDisableSlot(false);
+			redMech.getCmdBoard().draw();
+			blueMech.getCmdBoard().setDisableSlot(false);
+			blueMech.getCmdBoard().draw();
 			turnCount += 1;
 			if (turnCount % 3 == 0) {
 				creatSpawnTile();
@@ -175,44 +175,59 @@ public class GameController {
 	}
 
 	public static void minionAttack() {
+		ArrayList<Token> damagedMechList = new ArrayList<Token>();
 		for (Minion minion : getBoard().getMinionList()) {
-			minion.attack();
+			damagedMechList.addAll(minion.attack());
 		}
+		if (damagedMechList.size() == 0) {
+			nextPhase();
+		} else {
+			for (Token damagedMech : damagedMechList) {
+				damagedMech.getSelfTile().setSelectable(true);
+				damagedMech.getSelfTile().setSelectToken(true);
+			}
+		}
+		board.drawGameBoard();
 	}
 
 	public static void minionSpawn() {
+		selectTimes = 0;
 		for (SpawnTile spawnTile : getBoard().getSpawnTileList()) {
-			spawnTile.spawn();
+			if (spawnTile.getToken() == null) {
+				spawnTile.setSelectable(true);
+				selectTimes += 1;
+			}
+		}
+		if (selectTimes == 0) {
+			nextPhase();
 		}
 	}
 
-	public static void minionMove() {
+	public static void minionMove(Direction dir) {
 		for (Minion minion : getBoard().getMinionList()) {
-			GameController.move(minion, minion.getDirection());
+			move(minion, dir);
 		}
+		board.drawGameBoard();
+		nextPhase();
 	}
 
-	public static void setProgram(Mech selectedMech, CmdBox selectedCmdBox, int selectedDraftedCard) {
+	public static void setProgram(Mech selectedMech, CmdBox selectedCmdBox, int selectedDraftedCard)
+			throws SelectMechException {
 		CmdCard selectedCard = draftedCard.getDraftedCardList().get(selectedDraftedCard);
-		if (selectedMech.equals(redMech) && redMechProgram < 2) {
-			selectedCard.setProgrammedMech(selectedMech);
-			selectedCmdBox.addCmdCard(selectedCard);
-			draftedCard.remove(selectedDraftedCard);
-			redMechProgram += 1;
-		} else if (selectedMech.equals(blueMech) && blueMechProgram < 2) {
-			selectedCard.setProgrammedMech(selectedMech);
-			selectedCmdBox.addCmdCard(selectedCard);
-			draftedCard.remove(selectedDraftedCard);
-			blueMechProgram += 1;
-
+		if (selectedMech.getProgramedCount() == 2) {
+			throw new SelectMechException(selectedMech);
 		}
+		selectedCard.setProgrammedMech(selectedMech);
+		selectedCmdBox.addCmdCard(selectedCard);
+		draftedCard.remove(selectedDraftedCard);
+		selectedMech.setProgramedCount(selectedMech.getProgramedCount() + 1);
 		redMech.getCmdBoard().draw();
 		blueMech.getCmdBoard().draw();
 		GameController.selectedMech = null;
 		GameController.selectedCmdBox = null;
 		GameController.selectedCard = 6;
 		draftedCard.setSelectedDraftedCard(false);
-		if (redMechProgram + blueMechProgram == 4) {
+		if (redMech.getProgramedCount() + blueMech.getProgramedCount() == 4) {
 			nextPhase();
 		}
 	}
@@ -240,6 +255,13 @@ public class GameController {
 	}
 
 	public static void select(Object selectedObject) {
+		if (selectedObject instanceof Tile) {
+			((Tile) selectedObject).setSelectable(false);
+		}
+		if (selectedObject instanceof Token) {
+			((Token) selectedObject).getSelfTile().setSelectable(false);
+			((Token) selectedObject).getSelfTile().setSelectToken(false);
+		}
 		if (executingProgram instanceof BlueAttackCard) {
 			if (selectedObject instanceof Token) {
 				((Token) selectedObject).damaged();
@@ -258,7 +280,7 @@ public class GameController {
 				if (selectTimes != 0) {
 					setSelectable(((BlueMoveCard) executingProgram).attack(1));
 					if (selectable.size() == 0) {
-						setSelectTimes(0);
+						setSelectable(((BlueMoveCard) executingProgram).move(1));
 					}
 				}
 			} else if (selectedObject instanceof Token) {
@@ -427,20 +449,12 @@ public class GameController {
 				selectTimes -= 1;
 			}
 		}
-		if (selectedObject instanceof Tile) {
-			((Tile) selectedObject).setSelectable(false);
-		}
-		if (selectedObject instanceof Token) {
-			((Token) selectedObject).getSelfTile().setSelectable(false);
-			((Token) selectedObject).getSelfTile().setSelectToken(false);
-		}
 		if (selectTimes == 0) {
 			board.clearSelectable();
 			programCount += 1;
 			execute(programCount);
 		}
 		board.drawGameBoard();
-		directionPane.drawDirection();
 	}
 
 	public static void execute(int programCount) {
@@ -460,7 +474,7 @@ public class GameController {
 	public static void addDamgeCount() {
 		damageCount += 1;
 		if (damageCount == 10) {
-			gameEnd = true;
+			// TODO Make game End Scene
 		}
 	}
 
@@ -475,10 +489,7 @@ public class GameController {
 		score = 0;
 		damageCount = 0;
 		programCount = 0;
-		gameEnd = false;
 		board = new Board();
-		redMechProgram = 0;
-		blueMechProgram = 0;
 	}
 
 	public static void setDraftedCard(CmdCard cmdCard) {
@@ -508,11 +519,30 @@ public class GameController {
 	}
 
 	public static void setSelectable(ArrayList<Object> selectable) {
+		// disable old selectables
+		for (Object oldSelctable : GameController.selectable) {
+			if (oldSelctable instanceof Tile) {
+				((Tile) oldSelctable).setSelectable(false);
+				((Tile) oldSelctable).setSelectToken(false);
+				((Tile) oldSelctable).draw();
+			}
+			if (oldSelctable instanceof Token) {
+				((Token) oldSelctable).getSelfTile().setSelectable(false);
+				((Token) oldSelctable).getSelfTile().setSelectToken(false);
+				((Token) oldSelctable).getSelfTile().draw();
+			}
+			if (oldSelctable instanceof Direction) {
+				directionPane.drawDirection();
+			}
+		}
+
+		// enable new selectable
 		GameController.selectable = selectable;
 		if (selectable.size() != 0) {
 			if (selectable.get(0) instanceof Tile) {
 				for (Object tile : selectable) {
 					((Tile) tile).setSelectable(true);
+					((Tile) tile).setSelectToken(false);
 					((Tile) tile).draw();
 				}
 			}
@@ -537,10 +567,6 @@ public class GameController {
 
 	public static Board getBoard() {
 		return board;
-	}
-
-	public static boolean getGameEnd() {
-		return gameEnd;
 	}
 
 	public static Phase getCurrentPhase() {
@@ -575,7 +601,12 @@ public class GameController {
 		if (draftedCard.getDraftedCardList().get(selectedCard) != null) {
 			GameController.selectedCard = selectedCard;
 			if (selectedMech != null && selectedCmdBox != null) {
-				setProgram(selectedMech, selectedCmdBox, selectedCard);
+				try {
+					setProgram(selectedMech, selectedCmdBox, selectedCard);
+				} catch (SelectMechException e) {
+					// TODO Auto-generated catch block
+					//Creat new pop up
+				}
 			} else {
 				draftedCard.setSelectedDraftedCard(true);
 			}
@@ -586,7 +617,12 @@ public class GameController {
 		GameController.selectedMech = selectedMech;
 		GameController.selectedCmdBox = selectedCmdBox;
 		if (selectedCard != 6) {
-			setProgram(selectedMech, selectedCmdBox, selectedCard);
+			try {
+				setProgram(selectedMech, selectedCmdBox, selectedCard);
+			} catch (SelectMechException e) {
+				// TODO Auto-generated catch block
+				//Creat new pop up
+			}
 		} else {
 			redMech.getCmdBoard().setSelectedCmdBox(selectedCmdBox);
 			blueMech.getCmdBoard().setSelectedCmdBox(selectedCmdBox);
@@ -619,5 +655,13 @@ public class GameController {
 
 	public static DirectionPane getDirectionPane() {
 		return directionPane;
+	}
+
+	public static void setSpawnNo(int spawnNo) {
+		GameController.spawnNo = spawnNo;
+	}
+
+	public static int getSpawnNo() {
+		return spawnNo;
 	}
 }

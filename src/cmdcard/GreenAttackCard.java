@@ -15,7 +15,6 @@ public class GreenAttackCard extends CmdCard implements Attack,OnGoing{
 
 	@Override
 	public ArrayList<Object> attack(int tier) {
-		// TODO Auto-generated method stub
 		ArrayList<Object> result = new ArrayList<Object>();
 		int x = this.getProgrammedMech().getSelfTile().getLocationX();
 		int y = this.getProgrammedMech().getSelfTile().getLocationY();

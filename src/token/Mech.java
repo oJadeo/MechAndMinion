@@ -2,16 +2,28 @@ package token;
 
 import logic.*;
 import damagecard.*;
+import javafx.geometry.Insets;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import tile.Tile;
 
 public class Mech extends Token {
 	private CmdBoard cmdBoard;
+	private int programedCount;
+	private int attackedTimes;
 	private int no;
 
 	public Mech(Direction dir, Tile selfTile, int no) {
 		super(dir, selfTile);
+		this.cmdBoard = new CmdBoard(this);
+		this.no = no;
+		this.programedCount = 0;
+		this.attackedTimes = 0;
 		switch (no) {
 		case 0:
+			cmdBoard.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
 			switch (dir) {
 			case UP:
 				this.spriteValue = TileSprite.MECH1_UP;
@@ -30,6 +42,7 @@ public class Mech extends Token {
 			}
 			break;
 		case 1:
+			cmdBoard.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 			switch (dir) {
 			case UP:
 				this.spriteValue = TileSprite.MECH2_UP;
@@ -50,12 +63,12 @@ public class Mech extends Token {
 		default:
 			break;
 		}
-		this.no = no;
-		this.cmdBoard = new CmdBoard(no);
 	}
 
 	@Override
 	public void damaged() {
+		//Make it show
+		attackedTimes -= 1;
 		int slot = (int) (Math.random() * 6);
 		switch ((int) (Math.random() * 11)) {
 		case 0:
@@ -108,10 +121,6 @@ public class Mech extends Token {
 	public void setCmdBoard(CmdBoard cmdBoard) {
 		this.cmdBoard = cmdBoard;
 	}
-
-	public int getNo() {
-		return no;
-	}
 	
 	public void setDirection(Direction dir) {
 		super.setDirection(dir);
@@ -156,5 +165,17 @@ public class Mech extends Token {
 			break;
 		}
 		getSelfTile().draw();
+	}
+	public void setProgramedCount(int programedCount) {
+		this.programedCount = programedCount;
+	}
+	public int getProgramedCount() {
+		return programedCount;
+	}
+	public void setAttackedTimes(int attackedTimes) {
+		this.attackedTimes = attackedTimes;
+	}
+	public int getAttackedTimes() {
+		return attackedTimes;
 	}
 }

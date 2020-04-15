@@ -1,5 +1,7 @@
 package token;
 
+import java.util.ArrayList;
+
 import logic.Direction;
 import logic.GameController;
 import tile.Tile;
@@ -17,12 +19,15 @@ public class Minion extends Token {
 		GameController.addScore();
 	}
 
-	public void attack() {
+	public ArrayList<Token> attack() {
+		ArrayList<Token> resultList = new ArrayList<Token>();
 		for (Tile e : GameController.getBoard().getBorder(getSelfTile(), 1)) {
 			if (e.getToken() instanceof Mech) {
-				e.getToken().damaged();
+				resultList.add(e.getToken());
+				((Mech) e.getToken()).setAttackedTimes(((Mech) e.getToken()).getAttackedTimes()+1);
 			}
 		}
+		return resultList;
 	}
 
 

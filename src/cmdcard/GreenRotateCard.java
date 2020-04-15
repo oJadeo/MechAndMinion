@@ -79,7 +79,6 @@ public class GreenRotateCard extends CmdCard implements Attack, Rotate, OnGoing 
 	
 	@Override
 	public void execute(int tier) {
-		// TODO Auto-generated method stub
 		GameController.setSelectable(rotate(tier));
 		GameController.setSelectTimes(1);
 	}
@@ -100,7 +99,6 @@ public class GreenRotateCard extends CmdCard implements Attack, Rotate, OnGoing 
 
 	@Override
 	public ArrayList<Object> attack(int tier) {
-		// TODO Auto-generated method stub
 		ArrayList<Object> resultList = new ArrayList<Object>();
 		for(Tile e:GameController.getBoard().getAdjacentTile(this.getProgrammedMech().getSelfTile(), tier, Direction.ALL)) {
 			if(e.getToken() instanceof Token) {

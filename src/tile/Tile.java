@@ -7,17 +7,19 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import logic.GameController;
+import logic.Phase;
 import logic.TileSprite;
+import token.Mech;
 import token.Token;
 
-public class Tile extends Pane{
+public class Tile extends Pane {
 
 	private int locationX;
 	private int locationY;
 	protected Token token;
 	private int spriteValue;
-	private boolean selectable;
-	private boolean selectToken;
+	protected boolean selectable;
+	protected boolean selectToken;
 	private Canvas tileCanvas;
 
 	public Tile(int locationX, int locationY) {
@@ -28,38 +30,50 @@ public class Tile extends Pane{
 		this.setToken(null);
 		this.spriteValue = TileSprite.NORMAL_TILE;
 		this.setPrefSize(48, 48);
-		this.tileCanvas = new Canvas(48,48);
+		this.tileCanvas = new Canvas(48, 48);
 		this.getChildren().add(tileCanvas);
 		this.setOnMouseClicked(new EventHandler<Event>() {
 
 			@Override
-			public void handle(Event arg0) {
+			public void handle(Event event) {
 				// TODO Auto-generated method stub
-				if(selectable) {
-					if(selectToken) {
-						GameController.select(token);
-					}else {
-						GameController.select(GameController.getBoard().getTile(locationX, locationY));
+				if (GameController.getCurrentPhase() == Phase.Execute) {
+					if (selectable) {
+						if (selectToken) {
+							GameController.select(token);
+						} else {
+							GameController.select(GameController.getBoard().getTile(locationX, locationY));
+						}
 					}
-					selectable = false;
-					selectToken = false;
+				} else if (GameController.getCurrentPhase() == Phase.MinionAttack) {
+					if(selectable && selectToken) {
+						((Mech) token).damaged();
+						if(((Mech) token).getAttackedTimes() == 0) {
+							token.getSelfTile().setSelectable(false);
+							token.getSelfTile().setSelectToken(false);
+						}
+						if(GameController.getBlueMech().getAttackedTimes() == 0 &&
+								GameController.getRedMech().getAttackedTimes() == 0) {
+							GameController.nextPhase();
+						}
+						GameController.getBoard().drawGameBoard();
+					}
 				}
 			}
-			
 		});
 	}
-	
+
 	public void draw() {
 		GraphicsContext tileGC = tileCanvas.getGraphicsContext2D();
 		DrawUtil.drawTile(tileGC, 0, 0, this.getSpriteValue());
-		if(this.token != null) {
+		if (this.token != null) {
 			DrawUtil.drawTile(tileGC, 0, 0, this.token.getSpriteValue());
 		}
-		if(selectable) {
-			DrawUtil.drawTile(tileGC, 0, 0,TileSprite.SELECTED_TILE);
+		if (selectable) {
+			DrawUtil.drawTile(tileGC, 0, 0, TileSprite.SELECTED_TILE);
 		}
 	}
-	
+
 	public void setLocationX(int locationX) {
 		this.locationX = locationX;
 	}
@@ -91,12 +105,15 @@ public class Tile extends Pane{
 	public void setSpriteValue(int spriteValue) {
 		this.spriteValue = spriteValue;
 	}
+
 	public void setSelectable(boolean selectable) {
 		this.selectable = selectable;
 	}
+
 	public void setSelectToken(boolean selectToken) {
 		this.selectToken = selectToken;
 	}
+
 	public void trigger() {
 	}
 }

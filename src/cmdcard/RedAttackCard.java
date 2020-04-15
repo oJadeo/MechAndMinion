@@ -85,7 +85,6 @@ public class RedAttackCard extends CmdCard implements Attack, OnGoing {
 
 	@Override
 	public void execute(int tier) {
-		// TODO Auto-generated method stub
 		GameController.setSelectable(attack(tier));
 		GameController.setSelectTimes(attack(tier).size());
 		if(attack(tier).size()==0) {
