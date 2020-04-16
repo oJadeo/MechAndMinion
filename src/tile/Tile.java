@@ -37,26 +37,28 @@ public class Tile extends Pane {
 			@Override
 			public void handle(Event event) {
 				// TODO Auto-generated method stub
-				if (GameController.getCurrentPhase() == Phase.Execute) {
-					if (selectable) {
+				if (selectable) {
+					if (GameController.getCurrentPhase() == Phase.Execute) {
+
 						if (selectToken) {
 							GameController.select(token);
 						} else {
 							GameController.select(GameController.getBoard().getTile(locationX, locationY));
 						}
-					}
-				} else if (GameController.getCurrentPhase() == Phase.MinionAttack) {
-					if(selectable && selectToken) {
-						((Mech) token).damaged();
-						if(((Mech) token).getAttackedTimes() == 0) {
-							token.getSelfTile().setSelectable(false);
-							token.getSelfTile().setSelectToken(false);
+
+					} else if (GameController.getCurrentPhase() == Phase.MinionAttack) {
+						if (selectable && selectToken) {
+							((Mech) token).damaged();
+							if (((Mech) token).getAttackedTimes() == 0) {
+								token.getSelfTile().setSelectable(false);
+								token.getSelfTile().setSelectToken(false);
+							}
+							if (GameController.getBlueMech().getAttackedTimes() == 0
+									&& GameController.getRedMech().getAttackedTimes() == 0) {
+								GameController.nextPhase();
+							}
+							GameController.getBoard().drawGameBoard();
 						}
-						if(GameController.getBlueMech().getAttackedTimes() == 0 &&
-								GameController.getRedMech().getAttackedTimes() == 0) {
-							GameController.nextPhase();
-						}
-						GameController.getBoard().drawGameBoard();
 					}
 				}
 			}
