@@ -212,7 +212,8 @@ public class Main extends Application {
 		lowRoot.setSpacing(20);
 		lowRoot.setAlignment(Pos.CENTER);
 		VBox arrowLeft = new VBox();
-		ImageView imageViewArrowLeft = new ImageView();
+		ImageView imageViewArrowLeft = new ImageView(new Image("ArrowLeft.png"));
+		imageViewArrowLeft.setVisible(false);
 		arrowLeft.getChildren().add(imageViewArrowLeft);
 		lowRoot.getChildren().add(arrowLeft);
 		VBox arrowRight = new VBox();
@@ -224,10 +225,10 @@ public class Main extends Application {
 			public void handle(MouseEvent arg0) {
 				if(pageTuorial < maxPage) {
 					if(pageTuorial == maxPage-1) {
-						imageViewArrowRight.setImage(null);
+						imageViewArrowRight.setVisible(false);
 					}
 					if(pageTuorial == minPage) {
-						imageViewArrowLeft.setImage(new Image("ArrowLeft.png"));
+						imageViewArrowLeft.setVisible(true);
 					}
 					pageTuorial += 1;
 					tu = new ImageView(new Image("Page" + pageTuorial + ".png"));
@@ -259,10 +260,10 @@ public class Main extends Application {
 			public void handle(MouseEvent arg0) {
 				if(pageTuorial > minPage) {
 					if(pageTuorial == minPage+1) {
-						imageViewArrowLeft.setImage(null);
+						imageViewArrowLeft.setVisible(false);
 					}
 					if(pageTuorial == maxPage) {
-						imageViewArrowRight.setImage(new Image("ArrowRight.png"));
+						imageViewArrowRight.setVisible(true);
 					}
 					pageTuorial -= 1;
 					tu = new ImageView(new Image("Page" + pageTuorial + ".png"));
