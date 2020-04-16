@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import logic.Direction;
 import logic.GameController;
+import logic.Phase;
 import logic.TileSprite;
 
 public class DirectionPane extends HBox {
@@ -39,8 +40,12 @@ public class DirectionPane extends HBox {
 
 					@Override
 					public void handle(ActionEvent arg0) {
-						// TODO Auto-generated method stub
-						GameController.select(Direction.UP);
+						GameController.getDirectionPane().drawDirection();
+						if (GameController.getCurrentPhase() == Phase.Execute) {
+							GameController.select(Direction.UP);
+						} else {
+							GameController.minionMove(Direction.UP);
+						}
 					}
 				});
 				break;
@@ -49,8 +54,12 @@ public class DirectionPane extends HBox {
 
 					@Override
 					public void handle(ActionEvent arg0) {
-						// TODO Auto-generated method stub
-						GameController.select(Direction.DOWN);
+						GameController.getDirectionPane().drawDirection();
+						if (GameController.getCurrentPhase() == Phase.Execute) {
+							GameController.select(Direction.DOWN);
+						} else {
+							GameController.minionMove(Direction.DOWN);
+						}
 					}
 				});
 				break;
@@ -59,8 +68,12 @@ public class DirectionPane extends HBox {
 
 					@Override
 					public void handle(ActionEvent arg0) {
-						// TODO Auto-generated method stub
-						GameController.select(Direction.RIGHT);
+						GameController.getDirectionPane().drawDirection();
+						if (GameController.getCurrentPhase() == Phase.Execute) {
+							GameController.select(Direction.RIGHT);
+						} else {
+							GameController.minionMove(Direction.RIGHT);
+						}
 					}
 				});
 				break;
@@ -69,8 +82,12 @@ public class DirectionPane extends HBox {
 
 					@Override
 					public void handle(ActionEvent arg0) {
-						// TODO Auto-generated method stub
-						GameController.select(Direction.LEFT);
+						GameController.getDirectionPane().drawDirection();
+						if (GameController.getCurrentPhase() == Phase.Execute) {
+							GameController.select(Direction.LEFT);
+						} else {
+							GameController.minionMove(Direction.LEFT);
+						}
 					}
 				});
 				break;
@@ -84,16 +101,17 @@ public class DirectionPane extends HBox {
 
 	public void drawDirection() {
 		for (int i = 0; i < 4; i++) {
-			directionCanvas.set(i,new Canvas(48, 48));
+			directionCanvas.set(i, new Canvas(48, 48));
 			GraphicsContext directionGC = directionCanvas.get(i).getGraphicsContext2D();
 			DrawUtil.drawTile(directionGC, 0, 0, 14 + i);
 			directionButton.get(i).setGraphic(directionCanvas.get(i));
 			directionButton.get(i).setDisable(true);
 		}
 	}
+
 	public void drawSelectableDirection(Direction dir) {
 		int selectedButton = 0;
-		switch(dir) {
+		switch (dir) {
 		case UP:
 			selectedButton = 0;
 			break;
@@ -111,6 +129,6 @@ public class DirectionPane extends HBox {
 		}
 		directionButton.get(selectedButton).setDisable(false);
 		GraphicsContext directionGC = directionCanvas.get(selectedButton).getGraphicsContext2D();
-		DrawUtil.drawTile(directionGC, 0, 0,TileSprite.SELECTED_TILE);
+		DrawUtil.drawTile(directionGC, 0, 0, TileSprite.SELECTED_TILE);
 	}
 }

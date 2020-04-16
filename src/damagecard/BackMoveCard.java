@@ -19,7 +19,6 @@ public class BackMoveCard extends CmdCard implements OnGoing {
 
 	@Override
 	public void execute(int tier) {
-		// TODO Auto-generated method stub
 		ArrayList<Object> result = new ArrayList<Object>();
 		result.add((Object) dir);
 		GameController.setSelectable(result);
@@ -28,7 +27,6 @@ public class BackMoveCard extends CmdCard implements OnGoing {
 
 	@Override
 	public void setSpriteValue(int spriteValue) {
-		// TODO Auto-generated method stub
 		this.spriteValue = spriteValue;
 	}
 }

@@ -19,8 +19,9 @@ public class DrawUtil {
 		WritableImage img = new WritableImage(TileSprite.getPixelReader(),index*48,0,48,48);
 		gc.drawImage(img, x, y);
 	}
-	public static Image drawCard(int index) {
-		return new WritableImage(CardSprite.getPixelReader(),index*115,0,115,192);
+	public static void drawCard(GraphicsContext gc,int x,int y,int index) {
+		WritableImage img = new WritableImage(CardSprite.getPixelReader(),index*115,0,115,192);
+		gc.drawImage(img, x, y);
 	}
 	public static void drawPhase(GraphicsContext gc,int x,int y,int index) {
 		WritableImage img = new WritableImage(PhaseSprite.getPixelReader(),index*150,0,150,60);

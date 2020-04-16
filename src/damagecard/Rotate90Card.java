@@ -15,7 +15,6 @@ public class Rotate90Card extends CmdCard implements OnGoing {
 
 	@Override
 	public void execute(int tier) {
-		// TODO Auto-generated method stub
 		switch (this.getProgrammedMech().getDirection()) {
 		case UP:
 			this.getProgrammedMech().setDirection(Direction.RIGHT);
@@ -38,7 +37,6 @@ public class Rotate90Card extends CmdCard implements OnGoing {
 
 	@Override
 	public void setSpriteValue(int spriteValue) {
-		// TODO Auto-generated method stub
 		this.spriteValue = spriteValue;
 	}
 

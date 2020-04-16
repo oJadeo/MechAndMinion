@@ -92,7 +92,6 @@ public class RedRotateCard extends CmdCard implements Rotate, Attack, OnGoing {
 
 	@Override
 	public void execute(int tier) {
-		// TODO Auto-generated method stub
 		GameController.setSelectable(rotate(tier));
 		GameController.setSelectTimes(1);
 

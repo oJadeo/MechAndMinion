@@ -15,7 +15,6 @@ public class YellowAttackCard extends CmdCard implements Attack, OnGoing {
 
 	@Override
 	public ArrayList<Object> attack(int tier) {
-		// TODO Auto-generated method
 		ArrayList<Object> resultList = new ArrayList<Object>();
 		for (Tile tile : GameController.getBoard().getDiagonalTile(this.getProgrammedMech().getSelfTile(), 1,
 				Direction.ALL)) {
@@ -28,7 +27,6 @@ public class YellowAttackCard extends CmdCard implements Attack, OnGoing {
 
 	@Override
 	public void execute(int tier) {
-		// TODO Auto-generated method stub
 		if(attack(tier).size()!=0) {
 			GameController.setSelectable(attack(tier));
 			GameController.setSelectTimes(tier*2);

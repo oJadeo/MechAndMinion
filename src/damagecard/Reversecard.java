@@ -6,14 +6,12 @@ import token.*;
 
 public class Reversecard extends CmdCard implements Instant {
 	public Reversecard(Mech programmedMech) {
-		// TODO Auto-generated constructor stub
 		this.setProgrammedMech(programmedMech);
 		this.setSpriteValue(CardSprite.DAMAGE_REVERSE);
 	}
 
 	@Override
 	public void trigger() {
-		// TODO Auto-generated method stub
 		CmdBox temp = this.getProgrammedMech().getCmdBoard().getCmdBox(0);
 		this.getProgrammedMech().getCmdBoard().setCmdBox(0, this.getProgrammedMech().getCmdBoard().getCmdBox(5));
 		this.getProgrammedMech().getCmdBoard().setCmdBox(5, temp);
@@ -29,7 +27,6 @@ public class Reversecard extends CmdCard implements Instant {
 
 	@Override
 	public void setSpriteValue(int spriteValue) {
-		// TODO Auto-generated method stub
 		this.spriteValue = spriteValue;
 	}
 

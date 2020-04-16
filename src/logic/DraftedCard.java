@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import application.DrawUtil;
 import cmdcard.*;
-import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -13,14 +12,12 @@ import card.base.CmdCard;
 
 public class DraftedCard extends HBox {
 	private ArrayList<CmdCard> draftedCardList;
-	private ArrayList<Button> draftedButton;
-	private ArrayList<Canvas> draftedCanvas;
+	private ArrayList<CmdBox> draftedBox;
 
 	public DraftedCard() {
 		super();
 		this.draftedCardList = new ArrayList<CmdCard>();
-		this.draftedButton = new ArrayList<Button>();
-		this.draftedCanvas = new ArrayList<Canvas>();
+		this.draftedBox = new ArrayList<CmdBox>();
 		for (int i = 0; i < 6; i++) {
 			this.draftedCardList.add(randomCard());
 		}
@@ -29,57 +26,50 @@ public class DraftedCard extends HBox {
 		this.getChildren().add(emptyCanvas);
 		for (int i = 0; i < 6; i++) {
 			CmdCard cmdCard = this.draftedCardList.get(i);
-			draftedButton.add(new Button());
-			draftedButton.get(i).setPadding(new Insets(0));
-			draftedButton.get(i).setPrefSize(115, 192);
-			draftedCanvas.add(new Canvas(115, 192));
-			GraphicsContext selectedCardGC = draftedCanvas.get(i).getGraphicsContext2D();
+			draftedBox.add(new CmdBox(i));
+			GraphicsContext selectedCardGC = draftedBox.get(i).getCmdCanvas().getGraphicsContext2D();
 			if (cmdCard != null) {
-				selectedCardGC.drawImage(DrawUtil.drawCard(cmdCard.getSpriteValue()), 0, 0);
-				selectedCardGC.drawImage(DrawUtil.drawCard(CardSprite.SELECTED_CARD), 0, 0);
-				draftedButton.get(i).setGraphic(draftedCanvas.get(i));
+				DrawUtil.drawCard(selectedCardGC,0,0,cmdCard.getSpriteValue());
+				DrawUtil.drawCard(selectedCardGC,0,0,CardSprite.SELECTED_CARD);
+				draftedBox.get(i).setGraphic(draftedBox.get(i).getCmdCanvas());
 			}
-			int a = i;
-			draftedButton.get(i).setOnMouseClicked((e) -> {
-				GameController.setSelectedCard(a);
-			});
 		}
-		this.getChildren().addAll(draftedButton);
+		this.getChildren().addAll(draftedBox);
 	}
 
 	public void setSelectedDraftedCard(boolean selectCard) {
 		if (selectCard) {
 			for (int i = 0; i < 6; i++) {
 				CmdCard cmdCard = GameController.getDraftedCard().getDraftedCardList().get(i);
-				GraphicsContext selectedCardGC = draftedCanvas.get(i).getGraphicsContext2D();
+				GraphicsContext selectedCardGC = draftedBox.get(i).getCmdCanvas().getGraphicsContext2D();
 				if (cmdCard != null) {
 					if (i == GameController.getSelectedCard()) {
-						selectedCardGC.drawImage(DrawUtil.drawCard(cmdCard.getSpriteValue()), 0, 0);
-						selectedCardGC.drawImage(DrawUtil.drawCard(CardSprite.SELECTED_CARD), 0, 0);
-						draftedButton.get(i).setGraphic(draftedCanvas.get(i));
+						DrawUtil.drawCard(selectedCardGC,0,0,cmdCard.getSpriteValue());
+						DrawUtil.drawCard(selectedCardGC,0,0,CardSprite.SELECTED_CARD);
+						draftedBox.get(i).setGraphic(draftedBox.get(i).getCmdCanvas());
 					} else {
-						selectedCardGC.drawImage(DrawUtil.drawCard(cmdCard.getSpriteValue()), 0, 0);
-						draftedButton.get(i).setGraphic(draftedCanvas.get(i));
+						DrawUtil.drawCard(selectedCardGC,0,0,cmdCard.getSpriteValue());
+						draftedBox.get(i).setGraphic(draftedBox.get(i).getCmdCanvas());
 					}
 				} else {
-					draftedCanvas.set(i, new Canvas(115, 192));
-					draftedButton.get(i).setGraphic(draftedCanvas.get(i));
-					draftedButton.get(i).setDisable(true);
+					draftedBox.get(i).setCmdCanvas(new Canvas(115, 192));
+					draftedBox.get(i).setGraphic(draftedBox.get(i).getCmdCanvas());
+					draftedBox.get(i).setDisable(true);
 				}
 			}
 		} else {
 			for (int i = 0; i < 6; i++) {
 				CmdCard cmdCard = GameController.getDraftedCard().getDraftedCardList().get(i);
-				GraphicsContext cmdCardGC = draftedCanvas.get(i).getGraphicsContext2D();
+				GraphicsContext cmdCardGC = draftedBox.get(i).getCmdCanvas().getGraphicsContext2D();
 				if (cmdCard != null) {
-					cmdCardGC.drawImage(DrawUtil.drawCard(cmdCard.getSpriteValue()), 0, 0);
-					cmdCardGC.drawImage(DrawUtil.drawCard(CardSprite.SELECTED_CARD), 0, 0);
-					draftedButton.get(i).setGraphic(draftedCanvas.get(i));
+					DrawUtil.drawCard(cmdCardGC,0,0,cmdCard.getSpriteValue());
+					DrawUtil.drawCard(cmdCardGC,0,0,CardSprite.SELECTED_CARD);
+					draftedBox.get(i).setGraphic(draftedBox.get(i).getCmdCanvas());
 				} else {
-					draftedCanvas.set(i, new Canvas(115, 192));
-					cmdCardGC = draftedCanvas.get(i).getGraphicsContext2D();
-					draftedButton.get(i).setGraphic(draftedCanvas.get(i));
-					draftedButton.get(i).setDisable(true);
+					draftedBox.get(i).setCmdCanvas(new Canvas(115, 192));
+					cmdCardGC = draftedBox.get(i).getCmdCanvas().getGraphicsContext2D();
+					draftedBox.get(i).setGraphic(draftedBox.get(i).getCmdCanvas());
+					draftedBox.get(i).setDisable(true);
 				}
 			}
 		}
@@ -157,8 +147,8 @@ public class DraftedCard extends HBox {
 	}
 
 	public void setDisableButton(boolean disable) {
-		for (Button button : draftedButton) {
-			button.setDisable(disable);
+		for (Button box : draftedBox) {
+			box.setDisable(disable);
 		}
 	}
 }
