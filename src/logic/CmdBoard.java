@@ -1,7 +1,8 @@
 package logic;
 
 import java.util.ArrayList;
-import javafx.geometry.Pos;
+
+import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import token.Mech;
 
@@ -9,9 +10,9 @@ public class CmdBoard extends HBox {
 	private ArrayList<CmdBox> cmdBoxList = new ArrayList<CmdBox>();
 
 	public CmdBoard(Mech programmedMech) {
-		super();
-		this.setPrefSize(690, 200);
-		this.setAlignment(Pos.CENTER);
+		super(20);
+		this.setPadding(new Insets(20));
+		this.setPrefSize(1420, 280);
 		for (int i = 0; i < 6; i++) {
 			cmdBoxList.add(new CmdBox(programmedMech));
 		}
