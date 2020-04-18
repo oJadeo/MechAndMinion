@@ -7,6 +7,8 @@ import damagecard.*;
 import exception.SelectMechException;
 import gui.DirectionPane;
 import gui.PhasePane;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import tile.*;
 import token.*;
 
@@ -606,6 +608,11 @@ public class GameController {
 				} catch (SelectMechException e) {
 					// TODO Auto-generated catch block
 					//Creat new pop up
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Alert");
+					alert.setHeaderText(null);
+					alert.setContentText("You must put card in slot");
+					alert.showAndWait();
 				}
 			} else {
 				draftedCard.setSelectedDraftedCard(true);
@@ -622,6 +629,11 @@ public class GameController {
 			} catch (SelectMechException e) {
 				// TODO Auto-generated catch block
 				//Creat new pop up
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Alert");
+				alert.setHeaderText(null);
+				alert.setContentText("You can put a maximum of 2 cards");
+				alert.showAndWait();
 			}
 		} else {
 			redMech.getCmdBoard().setSelectedCmdBox(selectedCmdBox);

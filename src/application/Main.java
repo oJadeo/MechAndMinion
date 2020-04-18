@@ -42,28 +42,28 @@ public class Main extends Application {
 
 		VBox menu = new VBox();
 		menu.setSpacing(20);
-		BackgroundImage myImage= new BackgroundImage(new Image("Wallpaper.jpg",1380,680,false,true),
+		BackgroundImage myImage= new BackgroundImage(new Image(ClassLoader.getSystemResource("Wallpaper.jpg").toString(),1380,680,false,true),
 		        BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
 		          BackgroundSize.DEFAULT);
 		menu.setBackground(new Background(myImage));
 		menu.setAlignment(Pos.CENTER);
-		menu.getChildren().add(new ImageView(new Image("Logo.png")));
+		menu.getChildren().add(new ImageView(new Image(ClassLoader.getSystemResource("Logo.png").toString())));
         
 		VBox start = new VBox();
 		start.setAlignment(Pos.CENTER);
-		ImageView imageViewStart = new ImageView(new Image("Start.png"));
+		ImageView imageViewStart = new ImageView(new Image(ClassLoader.getSystemResource("Start.png").toString()));
 		start.getChildren().add(imageViewStart);
 		menu.getChildren().add(start);
 		
 		VBox tutorial = new VBox();
 		tutorial.setAlignment(Pos.CENTER);
-		ImageView imageViewTutorial = new ImageView(new Image("Tutorial.png"));
+		ImageView imageViewTutorial = new ImageView(new Image(ClassLoader.getSystemResource("Tutorial.png").toString()));
 		tutorial.getChildren().add(imageViewTutorial);
 		menu.getChildren().add(tutorial);
 		
 		VBox exit = new VBox();
 		exit.setAlignment(Pos.CENTER);
-		ImageView imageViewExit = new ImageView(new Image("Exit.png"));
+		ImageView imageViewExit = new ImageView(new Image(ClassLoader.getSystemResource("Exit.png").toString()));
 		exit.getChildren().add(imageViewExit);
 		menu.getChildren().add(exit);
 		
@@ -156,7 +156,7 @@ public class Main extends Application {
 		int minPage = 1;
 		int maxPage = 7;
 		VBox root = new VBox();
-		BackgroundImage image= new BackgroundImage(new Image("Wallpaper.jpg",1380,680,false,true),
+		BackgroundImage image= new BackgroundImage(new Image(ClassLoader.getSystemResource("Wallpaper.jpg").toString(),1380,680,false,true),
 		        BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
 		          BackgroundSize.DEFAULT);
 		root.setBackground(new Background(image));
@@ -167,7 +167,7 @@ public class Main extends Application {
 		HBox upRoot = new HBox();
 		VBox back = new VBox();
 		back.setAlignment(Pos.TOP_LEFT);
-		ImageView imageViewBack = new ImageView(new Image("Back.png"));
+		ImageView imageViewBack = new ImageView(new Image(ClassLoader.getSystemResource("Back.png").toString()));
 		back.getChildren().add(imageViewBack);
 		upRoot.getChildren().add(back);
 		back.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -205,12 +205,12 @@ public class Main extends Application {
 		lowRoot.setSpacing(20);
 		lowRoot.setAlignment(Pos.CENTER);
 		VBox arrowLeft = new VBox();
-		ImageView imageViewArrowLeft = new ImageView(new Image("ArrowLeft.png"));
+		ImageView imageViewArrowLeft = new ImageView(new Image(ClassLoader.getSystemResource("ArrowLeft.png").toString()));
 		imageViewArrowLeft.setVisible(false);
 		arrowLeft.getChildren().add(imageViewArrowLeft);
 		lowRoot.getChildren().add(arrowLeft);
 		VBox arrowRight = new VBox();
-		ImageView  imageViewArrowRight = new ImageView(new Image("ArrowRight.png"));
+		ImageView  imageViewArrowRight = new ImageView(new Image(ClassLoader.getSystemResource("ArrowRight.png").toString()));
 		arrowRight.getChildren().add(imageViewArrowRight);
 		lowRoot.getChildren().add(arrowRight);
 		arrowRight.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -224,7 +224,7 @@ public class Main extends Application {
 						imageViewArrowLeft.setVisible(true);
 					}
 					pageTuorial += 1;
-					tu = new ImageView(new Image("Page" + pageTuorial + ".png"));
+					tu = new ImageView(new Image(ClassLoader.getSystemResource("Page" + pageTuorial + ".png").toString()));
 					midRoot.getChildren().remove(0);
 					midRoot.getChildren().add(tu);
 				}
@@ -257,7 +257,7 @@ public class Main extends Application {
 						imageViewArrowRight.setVisible(true);
 					}
 					pageTuorial -= 1;
-					tu = new ImageView(new Image("Page" + pageTuorial + ".png"));
+					tu = new ImageView(new Image(ClassLoader.getSystemResource("Page" + pageTuorial + ".png").toString()));
 					midRoot.getChildren().remove(0);
 					midRoot.getChildren().add(tu);
 				}

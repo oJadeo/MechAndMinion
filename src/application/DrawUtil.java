@@ -15,6 +15,7 @@ public class DrawUtil {
 	private static Image PhaseSprite = new Image(PhasePath);
 	
 	
+	
 	public static void drawTile(GraphicsContext gc,int x,int y,int index) {
 		WritableImage img = new WritableImage(TileSprite.getPixelReader(),index*48,0,48,48);
 		gc.drawImage(img, x, y);
