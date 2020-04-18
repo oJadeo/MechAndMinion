@@ -52,7 +52,7 @@ public class DraftedCard extends HBox {
 						draftedBox.get(i).setGraphic(draftedBox.get(i).getCmdCanvas());
 					}
 				} else {
-					draftedBox.get(i).setCmdCanvas(new Canvas(115, 192));
+					draftedBox.get(i).setCmdCanvas(new Canvas(123, 200));
 					draftedBox.get(i).setGraphic(draftedBox.get(i).getCmdCanvas());
 					draftedBox.get(i).setDisable(true);
 				}
@@ -66,7 +66,7 @@ public class DraftedCard extends HBox {
 					DrawUtil.drawCard(cmdCardGC,4,4,CardSprite.SELECTED_CARD);
 					draftedBox.get(i).setGraphic(draftedBox.get(i).getCmdCanvas());
 				} else {
-					draftedBox.get(i).setCmdCanvas(new Canvas(115, 192));
+					draftedBox.get(i).setCmdCanvas(new Canvas(123, 200));
 					cmdCardGC = draftedBox.get(i).getCmdCanvas().getGraphicsContext2D();
 					draftedBox.get(i).setGraphic(draftedBox.get(i).getCmdCanvas());
 					draftedBox.get(i).setDisable(true);

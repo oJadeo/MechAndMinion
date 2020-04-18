@@ -1,6 +1,7 @@
 package token;
 
 import logic.*;
+import card.base.CmdCard;
 import damagecard.*;
 import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
@@ -69,48 +70,45 @@ public class Mech extends Token {
 	public void damaged() {
 		//Make it show
 		attackedTimes -= 1;
-		int slot = (int) (Math.random() * 6);
+		CmdCard damageCard = null ;
 		switch ((int) (Math.random() * 11)) {
 		case 0:
-			this.cmdBoard.getCmdBox(slot).addDamageCard(new BackMoveCard(this));
+			damageCard = new BackMoveCard(this);
 			break;
 		case 1:
-			this.cmdBoard.getCmdBox(slot).addDamageCard(new ForwardMoveCard(this));
+			damageCard = new ForwardMoveCard(this);
 			break;
 		case 2:
-			this.cmdBoard.getCmdBox(slot).addDamageCard(new LeftMoveCard(this));
+			damageCard = new LeftMoveCard(this);
 			break;
 		case 3:
-			this.cmdBoard.getCmdBox(slot).addDamageCard(new RightMoveCard(this));
+			damageCard = new RightMoveCard(this);
 			break;
 		case 4:
-			this.cmdBoard.getCmdBox(slot).addDamageCard(new Rotate90Card(this));
+			damageCard = new Rotate90Card(this);
 			break;
 		case 5:
-			this.cmdBoard.getCmdBox(slot).addDamageCard(new Rotate180Card(this));
+			damageCard = new Rotate180Card(this);
 			break;
 		case 6:
-			this.cmdBoard.getCmdBox(slot).addDamageCard(new Rotate270Card(this));
+			damageCard = new Rotate270Card(this);
 			break;
 		case 7:
-			Swap12card swap12Card = new Swap12card(this);
-			swap12Card.trigger();
+			damageCard = new Swap12card(this);
 			break;
 		case 8:
-			Swap34card swap34Card = new Swap34card(this);
-			swap34Card.trigger();
+			damageCard = new Swap34card(this);
 			break;
 		case 9:
-			Swap56card swap56Card = new Swap56card(this);
-			swap56Card.trigger();
+			damageCard = new Swap56card(this);
 			break;
 		case 10:
-			Reversecard reverseCard = new Reversecard(this);
-			reverseCard.trigger();
+			damageCard =  new Reversecard(this);
 			break;
 		default:
 			break;
 		}
+		GameController.getCardPane().setDmgCard(damageCard);
 		GameController.addDamgeCount();
 	}
 

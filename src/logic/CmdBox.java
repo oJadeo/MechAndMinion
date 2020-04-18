@@ -50,7 +50,9 @@ public class CmdBox extends Button {
 
 			@Override
 			public void handle(MouseEvent event) {
-				if (GameController.getSelectedCard() != 6) {
+				if (GameController.getCardPane().getSelectedCard() != null) {
+					GameController.getCardPane().setDmgCard(GameController.getCardPane().getSelectedCard());
+				} else if (GameController.getSelectedCard() != 6) {
 					GameController.getCardPane().setShowingCard(
 							GameController.getDraftedCard().getDraftedCardList().get(GameController.getSelectedCard()));
 				}
@@ -138,6 +140,7 @@ public class CmdBox extends Button {
 				boolean success = false;
 				if (db.hasString()) {
 					GameController.setSelectedSlot(programmedMech, thisCmdBox);
+					thisCmdBox.setGraphic(thisCmdBox.getCanvas(false));
 					success = true;
 				}
 				event.setDropCompleted(success);
