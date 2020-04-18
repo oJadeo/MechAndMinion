@@ -14,6 +14,7 @@ public class Swap34card extends CmdCard implements Instant {
 
 	@Override
 	public void trigger() {
+		//TODO Fix
 		CmdBox temp = this.getProgrammedMech().getCmdBoard().getCmdBox(2);
 		this.getProgrammedMech().getCmdBoard().setCmdBox(2, this.getProgrammedMech().getCmdBoard().getCmdBox(2));
 		this.getProgrammedMech().getCmdBoard().setCmdBox(3, temp);

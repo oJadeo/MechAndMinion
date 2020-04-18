@@ -1,9 +1,10 @@
 package damagecard;
 
+import java.util.ArrayList;
+
 import card.base.CmdCard;
 import card.base.Instant;
 import logic.CardSprite;
-import logic.CmdBox;
 import token.Mech;
 
 public class Swap12card extends CmdCard implements Instant {
@@ -14,9 +15,10 @@ public class Swap12card extends CmdCard implements Instant {
 
 	@Override
 	public void trigger() {
-		CmdBox temp = this.getProgrammedMech().getCmdBoard().getCmdBox(0);
-		this.getProgrammedMech().getCmdBoard().setCmdBox(0, this.getProgrammedMech().getCmdBoard().getCmdBox(1));
-		this.getProgrammedMech().getCmdBoard().setCmdBox(1, temp);
+		ArrayList<CmdCard> temp = this.getProgrammedMech().getCmdBoard().getCmdBox(0).getCmdCardList();
+		this.getProgrammedMech().getCmdBoard().getCmdBox(0)
+				.setCmdCardList(this.getProgrammedMech().getCmdBoard().getCmdBox(1).getCmdCardList());
+		this.getProgrammedMech().getCmdBoard().getCmdBox(1).setCmdCardList(temp);
 	}
 
 	@Override
