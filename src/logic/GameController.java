@@ -9,6 +9,8 @@ import gui.CardPane;
 import gui.DirectionPane;
 import gui.HealthPane;
 import gui.PhasePane;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import gui.ScorePane;
 import tile.*;
 import token.*;
@@ -617,7 +619,12 @@ public class GameController {
 					setProgram(selectedMech, selectedCmdBox, selectedCard);
 				} catch (SelectMechException e) {
 					// TODO Auto-generated catch block
-					// Creat new pop up
+					//Creat new pop up
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Alert");
+					alert.setHeaderText(null);
+					alert.setContentText("You must put card in slot");
+					alert.showAndWait();
 				}
 			} else {
 				draftedCard.setSelectedDraftedCard(true);
@@ -633,7 +640,12 @@ public class GameController {
 				setProgram(selectedMech, selectedCmdBox, selectedCard);
 			} catch (SelectMechException e) {
 				// TODO Auto-generated catch block
-				// Creat new pop up
+				//Creat new pop up
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Alert");
+				alert.setHeaderText(null);
+				alert.setContentText("You can put a maximum of 2 cards");
+				alert.showAndWait();
 			}
 		} else {
 			redMech.getCmdBoard().setSelectedCmdBox(selectedCmdBox);
