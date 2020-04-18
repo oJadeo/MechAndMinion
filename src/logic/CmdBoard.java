@@ -41,7 +41,7 @@ public class CmdBoard extends HBox {
 	}
 
 	public void setCmdBox(int slot, CmdBox cmdBox) {
-		this.cmdBoxList.set(slot, cmdBox);
+		this.cmdBoxList.get(slot).setCmdCardList(cmdBox.getCmdCardList());
 	}
 
 	public void draw() {

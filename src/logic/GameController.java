@@ -111,7 +111,6 @@ public class GameController {
 			randomX = (int) (Math.random() * 10);
 			randomY = (int) (Math.random() * 10);
 		} while (board.isSpecial(randomX, randomY));
-
 		board.setTile(randomX, randomY, new SpawnTile(randomX, randomY));
 	}
 
@@ -212,6 +211,7 @@ public class GameController {
 		if (selectTimes == 0) {
 			nextPhase();
 		}
+		board.drawGameBoard();
 	}
 
 	public static void minionMove(Direction dir) {
@@ -684,6 +684,7 @@ public class GameController {
 	public static ScorePane getScorePane() {
 		return scorePane;
 	}
+
 	public static CardPane getCardPane() {
 		return cardPane;
 	}

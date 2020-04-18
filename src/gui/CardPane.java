@@ -118,8 +118,10 @@ public class CardPane extends VBox {
 
 				@Override
 				public void handle(ActionEvent arg0) {
+					damageCard.getProgrammedMech().getCmdBoard().setDisableSlot(false);
 					damageCard.getProgrammedMech().getCmdBoard().getCmdBox(slot).addCmdCard(damageCard);
 					damageCard.getProgrammedMech().getCmdBoard().draw();
+					damageCard.getProgrammedMech().getCmdBoard().setDisableSlot(true);
 					selectedCard = null;
 					executeButton.setDisable(true);
 				}
@@ -130,9 +132,11 @@ public class CardPane extends VBox {
 			executeButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
+					damageCard.getProgrammedMech().getCmdBoard().setDisableSlot(false);
 					((Instant) damageCard).trigger();
 					damageCard.getProgrammedMech().getCmdBoard().draw();
 					selectedCard = null;
+					damageCard.getProgrammedMech().getCmdBoard().setDisableSlot(true);
 					executeButton.setDisable(true);
 				}
 			});
@@ -198,7 +202,7 @@ public class CardPane extends VBox {
 
 	public void setImage(CmdCard showingCard) {
 		GraphicsContext cardGC = cardCanvas.getGraphicsContext2D();
-		cardGC.restore();
+		cardGC.clearRect(0, 0, 345, 192);
 		if (showingCard instanceof BlueAttackCard) {
 			DrawUtil.drawCard(cardGC, 0, 0, CardSprite.BLUE_ATTACK_CARD_1);
 			DrawUtil.drawCard(cardGC, 115, 0, CardSprite.BLUE_ATTACK_CARD_2);
