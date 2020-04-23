@@ -10,6 +10,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import logic.Direction;
 import logic.GameController;
 import logic.Phase;
@@ -40,6 +42,10 @@ public class DirectionPane extends HBox {
 
 					@Override
 					public void handle(ActionEvent arg0) {
+						Media musicFile = new Media(ClassLoader.getSystemResource("click.mp3").toString());
+						MediaPlayer mediaPlayer = new MediaPlayer(musicFile);
+						mediaPlayer.setAutoPlay(true);
+						mediaPlayer.setVolume(0.3);
 						GameController.getDirectionPane().drawDirection();
 						if (GameController.getCurrentPhase() == Phase.Execute) {
 							GameController.select(Direction.UP);
@@ -54,6 +60,10 @@ public class DirectionPane extends HBox {
 
 					@Override
 					public void handle(ActionEvent arg0) {
+						Media musicFile = new Media(ClassLoader.getSystemResource("click.mp3").toString());
+						MediaPlayer mediaPlayer = new MediaPlayer(musicFile);
+						mediaPlayer.setAutoPlay(true);
+						mediaPlayer.setVolume(0.3);
 						GameController.getDirectionPane().drawDirection();
 						if (GameController.getCurrentPhase() == Phase.Execute) {
 							GameController.select(Direction.DOWN);
@@ -68,6 +78,10 @@ public class DirectionPane extends HBox {
 
 					@Override
 					public void handle(ActionEvent arg0) {
+						Media musicFile = new Media(ClassLoader.getSystemResource("click.mp3").toString());
+						MediaPlayer mediaPlayer = new MediaPlayer(musicFile);
+						mediaPlayer.setAutoPlay(true);
+						mediaPlayer.setVolume(0.3);
 						GameController.getDirectionPane().drawDirection();
 						if (GameController.getCurrentPhase() == Phase.Execute) {
 							GameController.select(Direction.RIGHT);
@@ -82,6 +96,10 @@ public class DirectionPane extends HBox {
 
 					@Override
 					public void handle(ActionEvent arg0) {
+						Media musicFile = new Media(ClassLoader.getSystemResource("click.mp3").toString());
+						MediaPlayer mediaPlayer = new MediaPlayer(musicFile);
+						mediaPlayer.setAutoPlay(true);
+						mediaPlayer.setVolume(0.3);
 						GameController.getDirectionPane().drawDirection();
 						if (GameController.getCurrentPhase() == Phase.Execute) {
 							GameController.select(Direction.LEFT);

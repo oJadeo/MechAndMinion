@@ -2,6 +2,8 @@ package tile;
 
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import logic.Direction;
 import logic.GameController;
 import logic.Phase;
@@ -19,6 +21,7 @@ public class SpawnTile extends Tile {
 
 			@Override
 			public void handle(Event event) {
+				
 				if (selectable) {
 					if (GameController.getCurrentPhase() == Phase.Execute) {
 						if (selectable) {
@@ -47,6 +50,10 @@ public class SpawnTile extends Tile {
 	}
 
 	public void spawn() {
+		Media musicFile = new Media(ClassLoader.getSystemResource("spawn.mp3").toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(musicFile);
+		mediaPlayer.setAutoPlay(true);
+		mediaPlayer.setVolume(0.3);
 		GameController.setSelectTimes(GameController.getSelectTimes() - 1);
 		if (this.getToken() == null) {
 			new Minion(Direction.UP, this);

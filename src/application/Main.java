@@ -1,8 +1,7 @@
 package application;
 
-import java.io.FileWriter;
-import java.io.IOException;
-
+import java.io.FileInputStream;
+import java.io.InputStream;
 import gui.DirectionPane;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -23,11 +22,14 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import logic.CmdBoard;
 import logic.DraftedCard;
 import logic.GameController;
+
 
 public class Main extends Application {
 
@@ -35,10 +37,10 @@ public class Main extends Application {
 	Stage window;
 	ImageView tu;
 	int pageTuorial;
+	
 
 	@Override
 	public void start(Stage primaryStage) {
-
 		VBox menu = new VBox();
 		menu.setSpacing(20);
 
@@ -47,29 +49,39 @@ public class Main extends Application {
 		          BackgroundSize.DEFAULT);
 		menu.setBackground(new Background(myImage));
 		menu.setAlignment(Pos.CENTER);
-		menu.getChildren().add(new ImageView(new Image(ClassLoader.getSystemResource("Logo.png").toString())));
-       
+		menu.setSpacing(450);
+		VBox logo = new VBox();
+		ImageView imageViewLogo = new ImageView(new Image(ClassLoader.getSystemResource("Logo.png").toString()));
+		logo.getChildren().add(imageViewLogo);
+		logo.setAlignment(Pos.CENTER);
+		menu.getChildren().add(logo);
+        VBox menu1 = new VBox();
+        
 		VBox start = new VBox();
 		start.setAlignment(Pos.CENTER);
 		ImageView imageViewStart = new ImageView(new Image(ClassLoader.getSystemResource("Start.png").toString()));
 		start.getChildren().add(imageViewStart);
-		menu.getChildren().add(start);
+		menu1.getChildren().add(start);
 
 		VBox tutorial = new VBox();
 		tutorial.setAlignment(Pos.CENTER);
 		ImageView imageViewTutorial = new ImageView(new Image(ClassLoader.getSystemResource("Tutorial.png").toString()));
 		tutorial.getChildren().add(imageViewTutorial);
-		menu.getChildren().add(tutorial);
+		menu1.getChildren().add(tutorial);
 
 		VBox exit = new VBox();
 		exit.setAlignment(Pos.CENTER);
 		ImageView imageViewExit = new ImageView(new Image(ClassLoader.getSystemResource("Exit.png").toString()));
 		exit.getChildren().add(imageViewExit);
-		menu.getChildren().add(exit);
-
+		menu1.getChildren().add(exit);
+		
+		menu.getChildren().add(menu1);
 		start.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			public void handle(MouseEvent arg0) {
+				MediaPlayer mediaPlayer = new MediaPlayer(new Media(ClassLoader.getSystemResource("click.mp3").toString()));
+				mediaPlayer.setAutoPlay(true);
+				mediaPlayer.setVolume(0.3);
 				GameController.initializeGame();
 				primaryStage.setScene(creatGameScene());
 				primaryStage.setFullScreen(true);
@@ -81,22 +93,25 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				ColorAdjust colorAdjust = new ColorAdjust(0, 0, 0.3, 0);
-				imageViewStart.setEffect(colorAdjust);
+				imageViewStart.setImage(new Image(ClassLoader.getSystemResource("Start1.png").toString()));
 			}
 		});
 		start.setOnMouseExited(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				ColorAdjust colorAdjust = new ColorAdjust(0, 0, 0, 0);
-				imageViewStart.setEffect(colorAdjust);
+				imageViewStart.setImage(new Image(ClassLoader.getSystemResource("Start.png").toString()));
 			}
 		});
 		tutorial.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			public void handle(MouseEvent arg0) {
+				MediaPlayer mediaPlayer = new MediaPlayer(new Media(ClassLoader.getSystemResource("click.mp3").toString()));
+				mediaPlayer.setAutoPlay(true);
+				mediaPlayer.setVolume(0.3);
 				primaryStage.setScene(tutorialGame());
+				primaryStage.setResizable(false);
+				primaryStage.setFullScreen(true);
 				primaryStage.show();
 
 			}
@@ -105,22 +120,23 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				ColorAdjust colorAdjust = new ColorAdjust(0, 0, 0.3, 0);
-				imageViewTutorial.setEffect(colorAdjust);
+				imageViewTutorial.setImage(new Image(ClassLoader.getSystemResource("Tutorial1.png").toString()));
 			}
 		});
 		tutorial.setOnMouseExited(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				ColorAdjust colorAdjust = new ColorAdjust(0, 0, 0, 0);
-				imageViewTutorial.setEffect(colorAdjust);
+				imageViewTutorial.setImage(new Image(ClassLoader.getSystemResource("Tutorial.png").toString()));
 			}
 		});
 
 		exit.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			public void handle(MouseEvent arg0) {
+				MediaPlayer mediaPlayer = new MediaPlayer(new Media(ClassLoader.getSystemResource("click.mp3").toString()));
+				mediaPlayer.setAutoPlay(true);
+				mediaPlayer.setVolume(0.3);
 				primaryStage.close();
 
 			}
@@ -129,16 +145,14 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				ColorAdjust colorAdjust = new ColorAdjust(0, 0, 0.3, 0);
-				imageViewExit.setEffect(colorAdjust);
+				imageViewExit.setImage(new Image(ClassLoader.getSystemResource("Exit1.png").toString()));
 			}
 		});
 		exit.setOnMouseExited(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				ColorAdjust colorAdjust = new ColorAdjust(0, 0, 0, 0);
-				imageViewExit.setEffect(colorAdjust);
+				imageViewExit.setImage(new Image(ClassLoader.getSystemResource("Exit.png").toString()));
 			}
 		});
 
@@ -155,15 +169,15 @@ public class Main extends Application {
 	public Scene tutorialGame() {
 
 		int minPage = 1;
-		int maxPage = 7;
+		int maxPage = 4;
 		VBox root = new VBox();
 
-		BackgroundImage image= new BackgroundImage(new Image(ClassLoader.getSystemResource("Wallpaper.jpg").toString(),1380,680,false,true),
+		BackgroundImage image= new BackgroundImage(new Image(ClassLoader.getSystemResource("Wallpaper.jpg").toString(),1920,1080,false,true),
 		        BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
 		          BackgroundSize.DEFAULT);
 
 		root.setBackground(new Background(image));
-		root.setSpacing(20);
+		root.setSpacing(50);
 
 		HBox upRoot = new HBox();
 		VBox back = new VBox();
@@ -173,7 +187,12 @@ public class Main extends Application {
 		upRoot.getChildren().add(back);
 		back.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent arg0) {
+				MediaPlayer mediaPlayer = new MediaPlayer(new Media(ClassLoader.getSystemResource("click.mp3").toString()));
+				mediaPlayer.setAutoPlay(true);
+				mediaPlayer.setVolume(0.3);
 				window.setScene(firstScene);
+				window.setResizable(false);
+				window.setFullScreen(true);
 				window.show();
 			}
 		});
@@ -181,16 +200,15 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				ColorAdjust colorAdjust = new ColorAdjust(0, 0, 0.3, 0);
-				imageViewBack.setEffect(colorAdjust);
+				imageViewBack.setImage(new Image(ClassLoader.getSystemResource("Back1.png").toString()));
+				
 			}
 		});
 		back.setOnMouseExited(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				ColorAdjust colorAdjust = new ColorAdjust(0, 0, 0, 0);
-				imageViewBack.setEffect(colorAdjust);
+				imageViewBack.setImage(new Image(ClassLoader.getSystemResource("Back.png").toString()));
 			}
 		});
 
@@ -213,9 +231,13 @@ public class Main extends Application {
 
 		arrowRight.getChildren().add(imageViewArrowRight);
 		lowRoot.getChildren().add(arrowRight);
+		lowRoot.setSpacing(30);
 		arrowRight.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
+				MediaPlayer mediaPlayer = new MediaPlayer(new Media(ClassLoader.getSystemResource("click.mp3").toString()));
+				mediaPlayer.setAutoPlay(true);
+				mediaPlayer.setVolume(0.3);
 				if (pageTuorial < maxPage) {
 					if (pageTuorial == maxPage - 1) {
 						imageViewArrowRight.setVisible(false);
@@ -249,6 +271,9 @@ public class Main extends Application {
 		arrowLeft.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
+				MediaPlayer mediaPlayer = new MediaPlayer(new Media(ClassLoader.getSystemResource("click.mp3").toString()));
+				mediaPlayer.setAutoPlay(true);
+				mediaPlayer.setVolume(0.3);
 				if (pageTuorial > minPage) {
 					if (pageTuorial == minPage + 1) {
 						imageViewArrowLeft.setVisible(false);

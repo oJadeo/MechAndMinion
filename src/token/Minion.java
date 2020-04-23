@@ -2,6 +2,8 @@ package token;
 
 import java.util.ArrayList;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import logic.Direction;
 import logic.GameController;
 import tile.Tile;
@@ -16,6 +18,10 @@ public class Minion extends Token {
 
 	@Override
 	public void damaged() {
+		Media musicFile = new Media(ClassLoader.getSystemResource("hit.mp3").toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(musicFile);
+		mediaPlayer.setAutoPlay(true);
+		mediaPlayer.setVolume(0.08);
 		GameController.getBoard().getMinionList().remove(this);
 		this.getSelfTile().setToken(null);
 		GameController.addScore();
