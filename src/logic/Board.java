@@ -1,6 +1,8 @@
 package logic;
 
 import java.util.ArrayList;
+
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
@@ -22,8 +24,9 @@ public class Board extends GridPane{
 	public Board() {
 		super();
 		this.setAlignment(Pos.CENTER);
-		this.setPrefWidth(480);
-		this.setPrefHeight(480);
+		this.setPrefWidth(520);
+		this.setPrefHeight(520);
+		this.setPadding(new Insets(20));
 		this.setBorder(new Border(new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, 
 				CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 		

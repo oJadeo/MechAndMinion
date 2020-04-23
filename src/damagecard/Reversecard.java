@@ -12,6 +12,7 @@ public class Reversecard extends CmdCard implements Instant {
 
 	@Override
 	public void trigger() {
+		//TODO FIx
 		CmdBox temp = this.getProgrammedMech().getCmdBoard().getCmdBox(0);
 		this.getProgrammedMech().getCmdBoard().setCmdBox(0, this.getProgrammedMech().getCmdBoard().getCmdBox(5));
 		this.getProgrammedMech().getCmdBoard().setCmdBox(5, temp);

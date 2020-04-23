@@ -24,22 +24,44 @@ public class CmdBox extends Button {
 
 	// for drafted Card
 	public CmdBox(int a) {
-		cmdCanvas = new Canvas(115, 192);
+		cmdCanvas = new Canvas(123, 200);
 		this.cmdCardList = new ArrayList<CmdCard>();
 		this.cmdCardList.add(null);
 
 		this.setPadding(new Insets(0));
 		this.setPrefSize(115, 192);
 		this.setGraphic(getCanvas(true));
-		this.setOnMouseClicked((e) -> {
+		this.setOnMouseClicked((event) -> {
 			GameController.setSelectedCard(a);
 		});
+		this.setOnMouseEntered(new EventHandler<MouseEvent>() {
 
+			@Override
+			public void handle(MouseEvent event) {
+				System.out.println("enter");
+				if (GameController.getDraftedCard().getDraftedCardList().get(a) != null) {
+					GameController.getCardPane()
+							.setShowingCard(GameController.getDraftedCard().getDraftedCardList().get(a));
+				}
+			}
+
+		});
+		this.setOnMouseExited(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				if (GameController.getCardPane().getSelectedCard() != null) {
+					GameController.getCardPane().setDmgCard(GameController.getCardPane().getSelectedCard());
+				} else if (GameController.getSelectedCard() != 6) {
+					GameController.getCardPane().setShowingCard(
+							GameController.getDraftedCard().getDraftedCardList().get(GameController.getSelectedCard()));
+				}
+			}
+		});
 		this.setOnDragDetected(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent event) {
-				System.out.println("On drag");
 				Dragboard db = ((Button) event.getSource()).startDragAndDrop(TransferMode.MOVE);
 				ClipboardContent content = new ClipboardContent();
 				content.putString(Integer.toString(a));
@@ -55,7 +77,7 @@ public class CmdBox extends Button {
 	public CmdBox(Mech programmedMech) {
 		super();
 
-		cmdCanvas = new Canvas(115, 192);
+		cmdCanvas = new Canvas(123, 200);
 		this.cmdCardList = new ArrayList<CmdCard>();
 		this.cmdCardList.add(null);
 
@@ -76,7 +98,7 @@ public class CmdBox extends Button {
 				GameController.getBlueMech().getCmdBoard().setSelectedCmdBox(null);
 				Dragboard db = event.getDragboard();
 				GraphicsContext cmdGC = thisCmdBox.cmdCanvas.getGraphicsContext2D();
-				cmdGC.clearRect(0, 0, 115, 192);
+				cmdGC.clearRect(0, 0, 123, 200);
 				int upgraded = 0;
 				if (thisCmdBox.cmdCardList.get(0) != null
 						&& thisCmdBox.cmdCardList.get(0).getCardType().equals(GameController.getDraftedCard()
@@ -96,9 +118,9 @@ public class CmdBox extends Button {
 						break;
 					}
 				}
-				DrawUtil.drawCard(cmdGC,0,0,GameController.getDraftedCard().getDraftedCardList()
+				DrawUtil.drawCard(cmdGC, 4, 4, GameController.getDraftedCard().getDraftedCardList()
 						.get(Integer.parseInt(db.getString())).getSpriteValue() + upgraded);
-				DrawUtil.drawCard(cmdGC, 0, 0,CardSprite.SELECTED_CARD);
+				DrawUtil.drawCard(cmdGC, 4, 4, CardSprite.SELECTED_CARD);
 				thisCmdBox.setGraphic(thisCmdBox.cmdCanvas);
 				event.consume();
 			}
@@ -114,11 +136,11 @@ public class CmdBox extends Button {
 		this.setOnDragDropped(new EventHandler<DragEvent>() {
 			@Override
 			public void handle(DragEvent event) {
-				System.out.println("Drop");
 				Dragboard db = event.getDragboard();
 				boolean success = false;
 				if (db.hasString()) {
 					GameController.setSelectedSlot(programmedMech, thisCmdBox);
+					thisCmdBox.setGraphic(thisCmdBox.getCanvas(false));
 					success = true;
 				}
 				event.setDropCompleted(success);
@@ -167,10 +189,10 @@ public class CmdBox extends Button {
 		GraphicsContext cmdGC = this.cmdCanvas.getGraphicsContext2D();
 		cmdGC.clearRect(0, 0, 115, 192);
 		if (this.cmdCardList.get(this.cmdCardList.size() - 1) != null) {
-			DrawUtil.drawCard(cmdGC,0,0,this.cmdCardList.get(this.cmdCardList.size() - 1).getSpriteValue());
+			DrawUtil.drawCard(cmdGC, 4, 4, this.cmdCardList.get(this.cmdCardList.size() - 1).getSpriteValue());
 		}
 		if (selected) {
-			DrawUtil.drawCard(cmdGC,0,0,CardSprite.SELECTED_CARD);
+			DrawUtil.drawCard(cmdGC, 4, 4, CardSprite.SELECTED_CARD);
 		}
 		return cmdCanvas;
 	}

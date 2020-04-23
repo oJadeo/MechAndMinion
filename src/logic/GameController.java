@@ -5,10 +5,13 @@ import card.base.*;
 import cmdcard.*;
 import damagecard.*;
 import exception.SelectMechException;
+import gui.CardPane;
 import gui.DirectionPane;
+import gui.HealthPane;
 import gui.PhasePane;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import gui.ScorePane;
 import tile.*;
 import token.*;
 
@@ -23,9 +26,14 @@ public class GameController {
 	private static int selectedCard;
 	private static CmdBox selectedCmdBox;
 	private static Mech selectedMech;
+	private static int spawnNo;
+
+	// Gui
 	private static PhasePane phasePane;
 	private static DirectionPane directionPane;
-	private static int spawnNo;
+	private static HealthPane healthPane;
+	private static ScorePane scorePane;
+	private static CardPane cardPane;
 
 	// Drafted Card Variable
 	private static DraftedCard draftedCard;
@@ -52,6 +60,9 @@ public class GameController {
 		programCount = 0;
 		phasePane = new PhasePane();
 		directionPane = new DirectionPane();
+		healthPane = new HealthPane();
+		scorePane = new ScorePane();
+		cardPane = new CardPane();
 		board.drawGameBoard();
 	}
 
@@ -102,7 +113,6 @@ public class GameController {
 			randomX = (int) (Math.random() * 10);
 			randomY = (int) (Math.random() * 10);
 		} while (board.isSpecial(randomX, randomY));
-
 		board.setTile(randomX, randomY, new SpawnTile(randomX, randomY));
 	}
 
@@ -164,7 +174,7 @@ public class GameController {
 			turnCount += 1;
 			if (turnCount % 3 == 0) {
 				creatSpawnTile();
-				System.out.println("SpawnTile is created");
+				board.drawGameBoard();
 			}
 			selectedCard = 6;
 			selectedCmdBox = null;
@@ -203,6 +213,7 @@ public class GameController {
 		if (selectTimes == 0) {
 			nextPhase();
 		}
+		board.drawGameBoard();
 	}
 
 	public static void minionMove(Direction dir) {
@@ -482,6 +493,7 @@ public class GameController {
 
 	public static void addScore() {
 		score += 1;
+		scorePane.drawScore();
 	}
 
 	// For testing
@@ -675,5 +687,17 @@ public class GameController {
 
 	public static int getSpawnNo() {
 		return spawnNo;
+	}
+
+	public static HealthPane getHealthPane() {
+		return healthPane;
+	}
+
+	public static ScorePane getScorePane() {
+		return scorePane;
+	}
+
+	public static CardPane getCardPane() {
+		return cardPane;
 	}
 }
