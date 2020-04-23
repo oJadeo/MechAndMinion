@@ -19,7 +19,6 @@ public class Rotate180Card extends CmdCard implements OnGoing {
 	@Override
 	public void execute(int tier) {
 		ArrayList<Object> result = new ArrayList<Object>();
-		// TODO Auto-generated method stub
 		switch (this.getProgrammedMech().getDirection()) {
 		case UP:
 			result.add((Object) Direction.DOWN);
