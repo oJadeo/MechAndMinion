@@ -2,7 +2,6 @@ package application;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
-
 import gui.DirectionPane;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -20,6 +19,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -363,4 +363,5 @@ public class Main extends Application {
 		upRight.getChildren().add(draftedCardsBox);
 		return upRight;
 	}
+	
 }

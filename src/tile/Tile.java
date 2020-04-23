@@ -52,10 +52,6 @@ public class Tile extends Pane {
 							GameController.getRedMech().getSelfTile().setSelectToken(false);
 							GameController.getBlueMech().getSelfTile().setSelectable(false);
 							GameController.getBlueMech().getSelfTile().setSelectToken(false);
-							if (GameController.getBlueMech().getAttackedTimes() == 0
-									&& GameController.getRedMech().getAttackedTimes() == 0) {
-								GameController.nextPhase();
-							}
 							GameController.getBoard().drawGameBoard();
 						}
 					}

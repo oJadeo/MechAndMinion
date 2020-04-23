@@ -31,7 +31,6 @@ public class GameController {
 	private static int damageCount;
 	private static int selectedCard;
 	private static CmdBox selectedCmdBox;
-	private static Mech selectedMech;
 	private static int spawnNo;
 
 	// Gui
@@ -133,7 +132,6 @@ public class GameController {
 			programCount = 0;
 			selectedCard = 6;
 			selectedCmdBox = null;
-			selectedMech = null;
 			execute(programCount);
 			break;
 		case Execute:
@@ -184,7 +182,6 @@ public class GameController {
 			}
 			selectedCard = 6;
 			selectedCmdBox = null;
-			selectedMech = null;
 			break;
 		default:
 			break;
@@ -235,23 +232,22 @@ public class GameController {
 		nextPhase();
 	}
 
-	public static void setProgram(Mech selectedMech, CmdBox selectedCmdBox, int selectedDraftedCard)
+	public static void setProgram(CmdBox selectedCmdBox, int selectedDraftedCard)
 			throws SelectMechException {
 		CmdCard selectedCard = draftedCard.getDraftedCardList().get(selectedDraftedCard);
-		if (selectedMech.getProgramedCount() == 2) {
-			throw new SelectMechException(selectedMech);
+		if (selectedCmdBox.getProgrammedMech().getProgramedCount() == 2) {
+			throw new SelectMechException(selectedCmdBox.getProgrammedMech());
 		}
 		Media musicFile = new Media(ClassLoader.getSystemResource("card.mp3").toString());
 		MediaPlayer mediaPlayer = new MediaPlayer(musicFile);
 		mediaPlayer.setAutoPlay(true);
 		mediaPlayer.setVolume(0.08);
-		selectedCard.setProgrammedMech(selectedMech);
+		selectedCard.setProgrammedMech(selectedCmdBox.getProgrammedMech());
 		selectedCmdBox.addCmdCard(selectedCard);
 		draftedCard.remove(selectedDraftedCard);
-		selectedMech.setProgramedCount(selectedMech.getProgramedCount() + 1);
+		selectedCmdBox.getProgrammedMech().setProgramedCount(selectedCmdBox.getProgrammedMech().getProgramedCount() + 1);
 		redMech.getCmdBoard().draw();
 		blueMech.getCmdBoard().draw();
-		GameController.selectedMech = null;
 		GameController.selectedCmdBox = null;
 		GameController.selectedCard = 6;
 		draftedCard.setSelectedDraftedCard(false);
@@ -508,6 +504,7 @@ public class GameController {
 
 	public static void addDamgeCount() {
 		damageCount += 1;
+		healthPane.drawHealth();
 		if (damageCount == 10) {
 			// TODO Make game End Scene
 		}
@@ -636,12 +633,11 @@ public class GameController {
 	public static void setSelectedCard(int selectedCard) {
 		if (draftedCard.getDraftedCardList().get(selectedCard) != null) {
 			GameController.selectedCard = selectedCard;
-			if (selectedMech != null && selectedCmdBox != null) {
+			if (selectedCmdBox != null) {
 				try {
-					setProgram(selectedMech, selectedCmdBox, selectedCard);
+					setProgram(selectedCmdBox, selectedCard);
 				} catch (SelectMechException e) {
 					selectedCard = 6;
-					GameController.selectedMech = null;
 					GameController.selectedCmdBox = null;
 					draftedCard.setSelectedDraftedCard(false);
 					GameController.getRedMech().getCmdBoard().draw();
@@ -659,15 +655,13 @@ public class GameController {
 		}
 	}
 
-	public static void setSelectedSlot(Mech selectedMech, CmdBox selectedCmdBox) {
-		GameController.selectedMech = selectedMech;
+	public static void setSelectedSlot(CmdBox selectedCmdBox) {
 		GameController.selectedCmdBox = selectedCmdBox;
 		if (selectedCard != 6) {
 			try {
-				setProgram(selectedMech, selectedCmdBox, selectedCard);
+				setProgram(selectedCmdBox, selectedCard);
 			} catch (SelectMechException e) {
 				selectedCard = 6;
-				GameController.selectedMech = null;
 				GameController.selectedCmdBox = null;
 				draftedCard.setSelectedDraftedCard(false);
 				GameController.getRedMech().getCmdBoard().draw();
