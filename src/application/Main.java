@@ -43,26 +43,33 @@ public class Main extends Application {
 		          BackgroundSize.DEFAULT);
 		menu.setBackground(new Background(myImage));
 		menu.setAlignment(Pos.CENTER);
-		menu.getChildren().add(new ImageView(new Image(ClassLoader.getSystemResource("Logo.png").toString())));
-       
+		menu.setSpacing(450);
+		VBox logo = new VBox();
+		ImageView imageViewLogo = new ImageView(new Image(ClassLoader.getSystemResource("Logo.png").toString()));
+		logo.getChildren().add(imageViewLogo);
+		logo.setAlignment(Pos.CENTER);
+		menu.getChildren().add(logo);
+        VBox menu1 = new VBox();
+        
 		VBox start = new VBox();
 		start.setAlignment(Pos.CENTER);
 		ImageView imageViewStart = new ImageView(new Image(ClassLoader.getSystemResource("Start.png").toString()));
 		start.getChildren().add(imageViewStart);
-		menu.getChildren().add(start);
+		menu1.getChildren().add(start);
 
 		VBox tutorial = new VBox();
 		tutorial.setAlignment(Pos.CENTER);
 		ImageView imageViewTutorial = new ImageView(new Image(ClassLoader.getSystemResource("Tutorial.png").toString()));
 		tutorial.getChildren().add(imageViewTutorial);
-		menu.getChildren().add(tutorial);
+		menu1.getChildren().add(tutorial);
 
 		VBox exit = new VBox();
 		exit.setAlignment(Pos.CENTER);
 		ImageView imageViewExit = new ImageView(new Image(ClassLoader.getSystemResource("Exit.png").toString()));
 		exit.getChildren().add(imageViewExit);
-		menu.getChildren().add(exit);
-
+		menu1.getChildren().add(exit);
+		
+		menu.getChildren().add(menu1);
 		start.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			public void handle(MouseEvent arg0) {
@@ -77,22 +84,22 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				ColorAdjust colorAdjust = new ColorAdjust(0, 0, 0.3, 0);
-				imageViewStart.setEffect(colorAdjust);
+				imageViewStart.setImage(new Image(ClassLoader.getSystemResource("Start1.png").toString()));
 			}
 		});
 		start.setOnMouseExited(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				ColorAdjust colorAdjust = new ColorAdjust(0, 0, 0, 0);
-				imageViewStart.setEffect(colorAdjust);
+				imageViewStart.setImage(new Image(ClassLoader.getSystemResource("Start.png").toString()));
 			}
 		});
 		tutorial.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			public void handle(MouseEvent arg0) {
 				primaryStage.setScene(tutorialGame());
+				primaryStage.setResizable(false);
+				primaryStage.setFullScreen(true);
 				primaryStage.show();
 
 			}
@@ -101,16 +108,14 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				ColorAdjust colorAdjust = new ColorAdjust(0, 0, 0.3, 0);
-				imageViewTutorial.setEffect(colorAdjust);
+				imageViewTutorial.setImage(new Image(ClassLoader.getSystemResource("Tutorial1.png").toString()));
 			}
 		});
 		tutorial.setOnMouseExited(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				ColorAdjust colorAdjust = new ColorAdjust(0, 0, 0, 0);
-				imageViewTutorial.setEffect(colorAdjust);
+				imageViewTutorial.setImage(new Image(ClassLoader.getSystemResource("Tutorial.png").toString()));
 			}
 		});
 
@@ -125,16 +130,14 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				ColorAdjust colorAdjust = new ColorAdjust(0, 0, 0.3, 0);
-				imageViewExit.setEffect(colorAdjust);
+				imageViewExit.setImage(new Image(ClassLoader.getSystemResource("Exit1.png").toString()));
 			}
 		});
 		exit.setOnMouseExited(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				ColorAdjust colorAdjust = new ColorAdjust(0, 0, 0, 0);
-				imageViewExit.setEffect(colorAdjust);
+				imageViewExit.setImage(new Image(ClassLoader.getSystemResource("Exit.png").toString()));
 			}
 		});
 
@@ -151,15 +154,15 @@ public class Main extends Application {
 	public Scene tutorialGame() {
 
 		int minPage = 1;
-		int maxPage = 7;
+		int maxPage = 4;
 		VBox root = new VBox();
 
-		BackgroundImage image= new BackgroundImage(new Image(ClassLoader.getSystemResource("Wallpaper.jpg").toString(),1380,680,false,true),
+		BackgroundImage image= new BackgroundImage(new Image(ClassLoader.getSystemResource("Wallpaper.jpg").toString(),1920,1080,false,true),
 		        BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
 		          BackgroundSize.DEFAULT);
 
 		root.setBackground(new Background(image));
-		root.setSpacing(20);
+		root.setSpacing(50);
 
 		HBox upRoot = new HBox();
 		VBox back = new VBox();
@@ -170,6 +173,8 @@ public class Main extends Application {
 		back.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent arg0) {
 				window.setScene(firstScene);
+				window.setResizable(false);
+				window.setFullScreen(true);
 				window.show();
 			}
 		});
