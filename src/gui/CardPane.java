@@ -5,17 +5,7 @@ import card.base.CmdCard;
 import card.base.Instant;
 import card.base.OnGoing;
 import cmdcard.*;
-import damagecard.BackMoveCard;
-import damagecard.ForwardMoveCard;
-import damagecard.LeftMoveCard;
-import damagecard.Reversecard;
-import damagecard.RightMoveCard;
-import damagecard.Rotate180Card;
-import damagecard.Rotate270Card;
-import damagecard.Rotate90Card;
-import damagecard.Swap12card;
-import damagecard.Swap34card;
-import damagecard.Swap56card;
+import damagecard.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -38,13 +28,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import logic.CardSprite;
 import logic.GameController;
+import logic.Phase;
 
 public class CardPane extends VBox {
 	private CmdCard selectedCard;
 	private Label textLabel;
 	private Canvas cardCanvas;
 	private Label descriptionLabel;
-	private Button executeButton;
+	private Button triggerButton;
 
 	public CardPane() {
 		super();
@@ -78,16 +69,16 @@ public class CardPane extends VBox {
 		descriptionPane.getChildren().add(descriptionLabel);
 		this.getChildren().add(descriptionPane);
 
-		executeButton = new Button();
-		executeButton.setPrefSize(420, 80);
-		executeButton.setText("Trigger");
-		executeButton.setFont(new Font(30));
-		executeButton.setDisable(true);
-		this.getChildren().add(executeButton);
+		triggerButton = new Button();
+		triggerButton.setPrefSize(420, 80);
+		triggerButton.setText("Trigger");
+		triggerButton.setFont(new Font(30));
+		triggerButton.setDisable(true);
+		this.getChildren().add(triggerButton);
 	}
 
 	public void setDmgCard(CmdCard damageCard) {
-		executeButton.setDisable(false);
+		triggerButton.setDisable(false);
 		selectedCard = damageCard;
 		setTextLabel(damageCard);
 		setImage(damageCard);
@@ -116,7 +107,7 @@ public class CardPane extends VBox {
 				description += "BlueMech";
 			}
 			descriptionLabel.setText(description);
-			executeButton.setOnAction(new EventHandler<ActionEvent>() {
+			triggerButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent arg0) {
@@ -126,21 +117,29 @@ public class CardPane extends VBox {
 					damageCard.getProgrammedMech().getCmdBoard().setDisableSlot(true);
 					selectedCard = null;
 					setShowingCard(selectedCard);
-					if (GameController.getRedMech().getAttackedTimes() != 0) {
-						GameController.getBlueMech().getSelfTile().setSelectable(true);
-						GameController.getBlueMech().getSelfTile().setSelectToken(true);
+					if (GameController.getCurrentPhase() == Phase.MinionAttack) {
+						if (GameController.getRedMech().getAttackedTimes() != 0) {
+							GameController.getBlueMech().getSelfTile().setSelectable(true);
+							GameController.getBlueMech().getSelfTile().setSelectToken(true);
+						}
+						if (GameController.getBlueMech().getAttackedTimes() != 0) {
+							GameController.getBlueMech().getSelfTile().setSelectable(true);
+							GameController.getBlueMech().getSelfTile().setSelectToken(true);
+						}
+						if(GameController.getBlueMech().getAttackedTimes() == 0 && GameController.getRedMech().getAttackedTimes() == 0) {
+							GameController.nextPhase();
+						}
+					}else if(GameController.getCurrentPhase()== Phase.Execute) {
+						GameController.setProgramCount(GameController.getProgramCount()+1);
+						GameController.execute(GameController.getProgramCount());
 					}
-					if (GameController.getBlueMech().getAttackedTimes() != 0) {
-						GameController.getBlueMech().getSelfTile().setSelectable(true);
-						GameController.getBlueMech().getSelfTile().setSelectToken(true);
-					}
-					executeButton.setDisable(true);
+					triggerButton.setDisable(true);
 				}
 			});
 
 		} else if (damageCard instanceof Instant) {
 			setDescription(damageCard);
-			executeButton.setOnAction(new EventHandler<ActionEvent>() {
+			triggerButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent arg0) {
 					damageCard.getProgrammedMech().getCmdBoard().setDisableSlot(false);
@@ -157,7 +156,7 @@ public class CardPane extends VBox {
 						GameController.getBlueMech().getSelfTile().setSelectable(true);
 						GameController.getBlueMech().getSelfTile().setSelectToken(true);
 					}
-					executeButton.setDisable(true);
+					triggerButton.setDisable(true);
 				}
 			});
 		}
@@ -217,7 +216,7 @@ public class CardPane extends VBox {
 		} else if (showingCard instanceof Reversecard) {
 			textLabel.setText("ReverseCard");
 		}
-		
+
 	}
 
 	public void setImage(CmdCard showingCard) {
@@ -300,34 +299,28 @@ public class CardPane extends VBox {
 		// TODO description for everyCard
 		if (showingCard instanceof BlueAttackCard) {
 			descriptionLabel.setText("1:Damage 1 target in same line at any range\n"
-					+ "2:Damage 2 target in same line at any range\n"
-					+ "3:Damage 3 target in same line at any range\n"
+					+ "2:Damage 2 target in same line at any range\n" + "3:Damage 3 target in same line at any range\n"
 					+ "\nDamage first unique target(Minion or Mech)");
 		} else if (showingCard instanceof BlueMoveCard) {
-			descriptionLabel.setText("1:Move forward 1 steps\n"
-					+ "2:Move forward 2 steps\n"
-					+ "3:Move forward 3 steps\n"
-					+ "\nDamage any target in the ways");
+			descriptionLabel.setText("1:Move forward 1 steps\n" + "2:Move forward 2 steps\n"
+					+ "3:Move forward 3 steps\n" + "\nDamage any target in the ways");
 		} else if (showingCard instanceof BlueRotateCard) {
 			descriptionLabel.setText("1:Rotate 90 or 270 degrees and damgage 1 target within 1 range\n"
 					+ "2:Rotate 90, 180 or 270 degrees and damgage 2 target within 1 range\n"
 					+ "3:Rotate to any directions and damgage 3 target within 1 range\n");
 		} else if (showingCard instanceof GreenAttackCard) {
-			descriptionLabel.setText("1:Damage 1 target within 1 range\n"
-					+ "2:Damage 1 target within 2 range\n"
+			descriptionLabel.setText("1:Damage 1 target within 1 range\n" + "2:Damage 1 target within 2 range\n"
 					+ "3:Damage 1 target within 3 range\n");
 		} else if (showingCard instanceof GreenMoveCard) {
 			descriptionLabel.setText("1:Move 1 space forward, left or right\n"
-					+ "2:Move 2 space forward, left or right\n"
-					+ "3:Move 3 space forward, left or right\n");
+					+ "2:Move 2 space forward, left or right\n" + "3:Move 3 space forward, left or right\n");
 		} else if (showingCard instanceof GreenRotateCard) {
 			descriptionLabel.setText("1:Rotate 90 or 270 degrees and damgage 1 target within 1 range\n"
 					+ "2:Rotate 90, 180 or 270 degrees and damgage 1 target within 2 range\n"
 					+ "3:Rotate to any directions and damgage 1 target within 3 range\n");
 		} else if (showingCard instanceof RedAttackCard) {
 			descriptionLabel.setText("1:Damage all target within area of effect\n"
-					+ "2:Damage all target within area of effect\n"
-					+ "3:Damage all target within area of effect\n");
+					+ "2:Damage all target within area of effect\n" + "3:Damage all target within area of effect\n");
 		} else if (showingCard instanceof RedMoveCard) {
 			descriptionLabel.setText("1:Move forward 1 steps and damage 2 target(left&Right)\n"
 					+ "2:Move forward 2 steps and damage 2 target(left&Right)\n"
@@ -337,13 +330,11 @@ public class CardPane extends VBox {
 					+ "2:Rotate 90, 180 or 270 degrees and damgage all target within area of effect\n"
 					+ "3:Rotate to any directions and damgage all target within area of effect\n");
 		} else if (showingCard instanceof YellowAttackCard) {
-			descriptionLabel.setText("1:Damage 1 target and chain 1 times\n"
-					+ "2:Damage 1 target and chain 3 times\n"
+			descriptionLabel.setText("1:Damage 1 target and chain 1 times\n" + "2:Damage 1 target and chain 3 times\n"
 					+ "3:Damage 1 target and chain 5 times\n");
 		} else if (showingCard instanceof YellowMoveCard) {
-			descriptionLabel.setText("1:Move forward 1 - 2 steps\n"
-					+ "2:Move forward 2 - 4 steps\n"
-					+ "3:Move forward 3 - 6 steps\n");
+			descriptionLabel.setText(
+					"1:Move forward 1 - 2 steps\n" + "2:Move forward 2 - 4 steps\n" + "3:Move forward 3 - 6 steps\n");
 		} else if (showingCard instanceof YellowRotateCard) {
 			descriptionLabel.setText("1:Rotate 90 or 270 degrees and damgage 1 target within 1 range\n"
 					+ "2:Rotate 90, 180 or 270 degrees and damgage 1 target within 2 range\n"
@@ -369,7 +360,7 @@ public class CardPane extends VBox {
 			} else {
 				description += "BlueMech";
 			}
-			descriptionLabel.setText(description);		
+			descriptionLabel.setText(description);
 		} else if (showingCard instanceof Swap34card) {
 			String description = "Swap Command Cards in slot 3 and 4 of ";
 			if (showingCard.getProgrammedMech().equals(GameController.getRedMech())) {

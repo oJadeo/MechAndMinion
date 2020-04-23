@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import application.DrawUtil;
 import card.base.*;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
@@ -23,11 +24,13 @@ import token.Mech;
 public class CmdBox extends Button {
 
 	private ArrayList<CmdCard> cmdCardList;
+	private Mech programmedMech;
 	private Canvas cmdCanvas;
 	int no = 0;
 
 	// for drafted Card
 	public CmdBox(int a) {
+		super();
 		cmdCanvas = new Canvas(123, 200);
 		this.cmdCardList = new ArrayList<CmdCard>();
 		this.cmdCardList.add(null);
@@ -36,8 +39,12 @@ public class CmdBox extends Button {
 		this.setPrefSize(123, 200);
 		this.drawCanvas(true);
 		this.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
-		this.setOnMouseClicked((event) -> {
-			GameController.setSelectedCard(a);
+		this.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				GameController.setSelectedCard(a);
+			}
+			
 		});
 		this.setOnMouseEntered(new EventHandler<MouseEvent>() {
 
@@ -76,12 +83,12 @@ public class CmdBox extends Button {
 				}
 			};
 		});
-
 	}
 
 	// for Mech
 	public CmdBox(Mech programmedMech) {
 		super();
+		this.setProgrammedMech(programmedMech);
 
 		cmdCanvas = new Canvas(123, 200);
 		this.cmdCardList = new ArrayList<CmdCard>();
@@ -94,7 +101,7 @@ public class CmdBox extends Button {
 		CmdBox thisCmdBox = this;
 		this.setOnMouseClicked((e) -> {
 			if (GameController.getCurrentPhase() == Phase.Program) {
-				GameController.setSelectedSlot(programmedMech, thisCmdBox);
+				GameController.setSelectedSlot(thisCmdBox);
 			}
 		});
 		this.setOnDragEntered(new EventHandler<DragEvent>() {
@@ -140,13 +147,20 @@ public class CmdBox extends Button {
 				event.consume();
 			}
 		});
+		this.setOnDragExited(new EventHandler<DragEvent>() {
+
+			@Override
+			public void handle(DragEvent arg0) {
+				thisCmdBox.drawCanvas(true);
+			}
+		});
 		this.setOnDragDropped(new EventHandler<DragEvent>() {
 			@Override
 			public void handle(DragEvent event) {
 				Dragboard db = event.getDragboard();
 				boolean success = false;
 				if (db.hasString()) {
-					GameController.setSelectedSlot(programmedMech, thisCmdBox);
+					GameController.setSelectedSlot(thisCmdBox);
 					success = true;
 				}
 				event.setDropCompleted(success);
@@ -254,5 +268,11 @@ public class CmdBox extends Button {
 
 	public void setCmdCanvas(Canvas cmdCanvas) {
 		this.cmdCanvas = cmdCanvas;
+	}
+	public void setProgrammedMech(Mech programmedMech) {
+		this.programmedMech = programmedMech;
+	}
+	public Mech getProgrammedMech() {
+		return programmedMech;
 	}
 }
