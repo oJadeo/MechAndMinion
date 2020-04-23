@@ -34,10 +34,10 @@ public class SpawnTile extends Tile {
 					} else if (GameController.getCurrentPhase() == Phase.MinionAttack) {
 						if (selectable && selectToken) {
 							((Mech) token).damaged();
-							if (((Mech) token).getAttackedTimes() == 0) {
-								token.getSelfTile().setSelectable(false);
-								token.getSelfTile().setSelectToken(false);
-							}
+							GameController.getRedMech().getSelfTile().setSelectable(false);
+							GameController.getRedMech().getSelfTile().setSelectToken(false);
+							GameController.getBlueMech().getSelfTile().setSelectable(false);
+							GameController.getBlueMech().getSelfTile().setSelectToken(false);
 							if (GameController.getBlueMech().getAttackedTimes() == 0
 									&& GameController.getRedMech().getAttackedTimes() == 0) {
 								GameController.nextPhase();

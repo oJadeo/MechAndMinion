@@ -42,6 +42,7 @@ public class DraftedCard extends HBox {
 			for (int i = 0; i < 6; i++) {
 				CmdCard cmdCard = GameController.getDraftedCard().getDraftedCardList().get(i);
 				GraphicsContext selectedCardGC = draftedBox.get(i).getCmdCanvas().getGraphicsContext2D();
+				selectedCardGC.clearRect(0, 0, 123, 200);
 				if (cmdCard != null) {
 					if (i == GameController.getSelectedCard()) {
 						DrawUtil.drawCard(selectedCardGC,4,4,cmdCard.getSpriteValue());
@@ -61,6 +62,7 @@ public class DraftedCard extends HBox {
 			for (int i = 0; i < 6; i++) {
 				CmdCard cmdCard = GameController.getDraftedCard().getDraftedCardList().get(i);
 				GraphicsContext cmdCardGC = draftedBox.get(i).getCmdCanvas().getGraphicsContext2D();
+				cmdCardGC.clearRect(0, 0, 123, 200);
 				if (cmdCard != null) {
 					DrawUtil.drawCard(cmdCardGC,4,4,cmdCard.getSpriteValue());
 					DrawUtil.drawCard(cmdCardGC,4,4,CardSprite.SELECTED_CARD);

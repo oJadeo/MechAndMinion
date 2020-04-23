@@ -14,6 +14,10 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import token.Mech;
 
 public class CmdBox extends Button {
@@ -29,8 +33,9 @@ public class CmdBox extends Button {
 		this.cmdCardList.add(null);
 
 		this.setPadding(new Insets(0));
-		this.setPrefSize(115, 192);
-		this.setGraphic(getCanvas(true));
+		this.setPrefSize(123, 200);
+		this.drawCanvas(true);
+		this.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 		this.setOnMouseClicked((event) -> {
 			GameController.setSelectedCard(a);
 		});
@@ -38,7 +43,6 @@ public class CmdBox extends Button {
 
 			@Override
 			public void handle(MouseEvent event) {
-				System.out.println("enter");
 				if (GameController.getDraftedCard().getDraftedCardList().get(a) != null) {
 					GameController.getCardPane()
 							.setShowingCard(GameController.getDraftedCard().getDraftedCardList().get(a));
@@ -62,12 +66,14 @@ public class CmdBox extends Button {
 
 			@Override
 			public void handle(MouseEvent event) {
-				Dragboard db = ((Button) event.getSource()).startDragAndDrop(TransferMode.MOVE);
-				ClipboardContent content = new ClipboardContent();
-				content.putString(Integer.toString(a));
-				db.setContent(content);
-				GameController.setSelectedCard(a);
-				event.consume();
+				if (GameController.getCurrentPhase() == Phase.Program) {
+					Dragboard db = ((Button) event.getSource()).startDragAndDrop(TransferMode.MOVE);
+					ClipboardContent content = new ClipboardContent();
+					content.putString(Integer.toString(a));
+					db.setContent(content);
+					GameController.setSelectedCard(a);
+					event.consume();
+				}
 			};
 		});
 
@@ -82,8 +88,9 @@ public class CmdBox extends Button {
 		this.cmdCardList.add(null);
 
 		this.setPadding(new Insets(0));
-		this.setPrefSize(115, 192);
-		this.setGraphic(getCanvas(true));
+		this.setPrefSize(123, 200);
+		this.drawCanvas(true);
+		this.setBackground(new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
 		CmdBox thisCmdBox = this;
 		this.setOnMouseClicked((e) -> {
 			if (GameController.getCurrentPhase() == Phase.Program) {
@@ -140,11 +147,33 @@ public class CmdBox extends Button {
 				boolean success = false;
 				if (db.hasString()) {
 					GameController.setSelectedSlot(programmedMech, thisCmdBox);
-					thisCmdBox.setGraphic(thisCmdBox.getCanvas(false));
 					success = true;
 				}
 				event.setDropCompleted(success);
 				event.consume();
+			}
+		});
+		this.setOnMouseEntered(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				if (thisCmdBox.getCmdCardList().get(cmdCardList.size() - 1) != null) {
+					GameController.getCardPane()
+							.setShowingCard(thisCmdBox.getCmdCardList().get(cmdCardList.size() - 1));
+				}
+			}
+
+		});
+		this.setOnMouseExited(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				if (GameController.getCardPane().getSelectedCard() != null) {
+					GameController.getCardPane().setDmgCard(GameController.getCardPane().getSelectedCard());
+				} else if (GameController.getSelectedCard() != 6) {
+					GameController.getCardPane().setShowingCard(
+							GameController.getDraftedCard().getDraftedCardList().get(GameController.getSelectedCard()));
+				}
 			}
 		});
 	}
@@ -153,7 +182,8 @@ public class CmdBox extends Button {
 		if (this.cmdCardList.get(this.cmdCardList.size() - 1) == null) {
 			this.cmdCardList.clear();
 			this.cmdCardList.add(selectedCard);
-		} else if (this.cmdCardList.get(this.cmdCardList.size() - 1).getCardType().equals(selectedCard.getCardType())) {
+		} else if (this.cmdCardList.get(this.cmdCardList.size() - 1).getCardType() != null
+				&& this.cmdCardList.get(this.cmdCardList.size() - 1).getCardType().equals(selectedCard.getCardType())) {
 			switch (this.cmdCardList.size()) {
 			case 0:
 				this.cmdCardList.add(selectedCard);
@@ -185,16 +215,16 @@ public class CmdBox extends Button {
 		damageCard.setCmdBox(this);
 	}
 
-	public Canvas getCanvas(boolean selected) {
-		GraphicsContext cmdGC = this.cmdCanvas.getGraphicsContext2D();
-		cmdGC.clearRect(0, 0, 115, 192);
+	public void drawCanvas(boolean selected) {
+		GraphicsContext cmdGC = cmdCanvas.getGraphicsContext2D();
+		cmdGC.clearRect(0, 0, 123, 200);
 		if (this.cmdCardList.get(this.cmdCardList.size() - 1) != null) {
 			DrawUtil.drawCard(cmdGC, 4, 4, this.cmdCardList.get(this.cmdCardList.size() - 1).getSpriteValue());
 		}
 		if (selected) {
 			DrawUtil.drawCard(cmdGC, 4, 4, CardSprite.SELECTED_CARD);
 		}
-		return cmdCanvas;
+		this.setGraphic(cmdCanvas);
 	}
 
 	public void execute() {

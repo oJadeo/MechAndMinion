@@ -20,7 +20,7 @@ public class HealthPane extends HBox {
 		healthGC.clearRect(0, 0, 900, 60);
 		DrawUtil.drawPhase(healthGC, 100, 0, 6);
 		for (int i = 0; i < GameController.getDamageCount(); i++) {
-			DrawUtil.drawTile(healthGC, 250 + 48 * i, 0, TileSprite.LOSE_HEALTH);
+			//DrawUtil.drawTile(healthGC, 250 + 48 * i, 0, TileSprite.LOSE_HEALTH);
 		}
 		for (int i = 0; i < GameController.getHealth(); i++) {
 			DrawUtil.drawTile(healthGC, 250 + 48 * (i + GameController.getDamageCount()), 0, TileSprite.REMAIN_HEALTH);

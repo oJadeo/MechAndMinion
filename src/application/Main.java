@@ -38,7 +38,7 @@ public class Main extends Application {
 		VBox menu = new VBox();
 		menu.setSpacing(20);
 
-		BackgroundImage myImage= new BackgroundImage(new Image(ClassLoader.getSystemResource("Wallpaper.jpg").toString(),1380,680,false,true),
+		BackgroundImage myImage= new BackgroundImage(new Image(ClassLoader.getSystemResource("Wallpaper.jpg").toString(),1920,1080,false,true),
 		        BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
 		          BackgroundSize.DEFAULT);
 		menu.setBackground(new Background(myImage));
@@ -138,11 +138,12 @@ public class Main extends Application {
 			}
 		});
 
-		firstScene = new Scene(menu, 1380, 680);
+		firstScene = new Scene(menu, 1920, 1080);
 		window = primaryStage;
 		primaryStage.setTitle("Mech and Minion");
 		primaryStage.setScene(firstScene);
 		primaryStage.setResizable(false);
+		primaryStage.setFullScreen(true);
 		primaryStage.show();
 
 	}

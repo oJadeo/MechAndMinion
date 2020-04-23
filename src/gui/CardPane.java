@@ -73,6 +73,8 @@ public class CardPane extends VBox {
 		descriptionLabel = new Label();
 		descriptionLabel.setFont(new Font(30));
 		descriptionLabel.relocate(40, 40);
+		descriptionLabel.setMaxWidth(420);
+		descriptionLabel.setWrapText(true);
 		descriptionPane.getChildren().add(descriptionLabel);
 		this.getChildren().add(descriptionPane);
 
@@ -92,22 +94,22 @@ public class CardPane extends VBox {
 		if (damageCard instanceof OnGoing) {
 			String description = "";
 			if (damageCard instanceof BackMoveCard) {
-				description = "when execute: move back 1 step \n";
+				description = "When execute: move South 1 step\n";
 			} else if (damageCard instanceof ForwardMoveCard) {
-				description = "when execute: move back 1 step \n";
+				description = "When execute: move North 1 step\n";
 			} else if (damageCard instanceof LeftMoveCard) {
-				description = "when execute: move back 1 step \n";
+				description = "When execute: move West 1 step\n";
 			} else if (damageCard instanceof RightMoveCard) {
-				description = "when execute: move back 1 step \n";
+				description = "When execute: move East 1 step\n";
 			} else if (damageCard instanceof Rotate90Card) {
-				description = "when execute: move back 1 step \n";
+				description = "When execute: rotate 90 degrees clockwise\n";
 			} else if (damageCard instanceof Rotate180Card) {
-				description = "when execute: move back 1 step \n";
+				description = "When execute: rotate 180 degrees clockwise\n";
 			} else if (damageCard instanceof Rotate270Card) {
-				description = "when execute: move back 1 step \n";
+				description = "When execute: rotate 270 degrees clockwise\n";
 			}
 			int slot = (int) (Math.random() * 6);
-			description += "when trigger: this will be added to " + slot + " slot of ";
+			description += "\nWhen trigger: this will be added to slot " + (slot + 1) + " of ";
 			if (damageCard.getProgrammedMech().equals(GameController.getRedMech())) {
 				description += "RedMech";
 			} else {
@@ -123,6 +125,15 @@ public class CardPane extends VBox {
 					damageCard.getProgrammedMech().getCmdBoard().draw();
 					damageCard.getProgrammedMech().getCmdBoard().setDisableSlot(true);
 					selectedCard = null;
+					setShowingCard(selectedCard);
+					if (GameController.getRedMech().getAttackedTimes() != 0) {
+						GameController.getBlueMech().getSelfTile().setSelectable(true);
+						GameController.getBlueMech().getSelfTile().setSelectToken(true);
+					}
+					if (GameController.getBlueMech().getAttackedTimes() != 0) {
+						GameController.getBlueMech().getSelfTile().setSelectable(true);
+						GameController.getBlueMech().getSelfTile().setSelectToken(true);
+					}
 					executeButton.setDisable(true);
 				}
 			});
@@ -136,7 +147,16 @@ public class CardPane extends VBox {
 					((Instant) damageCard).trigger();
 					damageCard.getProgrammedMech().getCmdBoard().draw();
 					selectedCard = null;
+					setShowingCard(selectedCard);
 					damageCard.getProgrammedMech().getCmdBoard().setDisableSlot(true);
+					if (GameController.getRedMech().getAttackedTimes() != 0) {
+						GameController.getBlueMech().getSelfTile().setSelectable(true);
+						GameController.getBlueMech().getSelfTile().setSelectToken(true);
+					}
+					if (GameController.getBlueMech().getAttackedTimes() != 0) {
+						GameController.getBlueMech().getSelfTile().setSelectable(true);
+						GameController.getBlueMech().getSelfTile().setSelectToken(true);
+					}
 					executeButton.setDisable(true);
 				}
 			});
@@ -147,7 +167,6 @@ public class CardPane extends VBox {
 		setTextLabel(showingCard);
 		setImage(showingCard);
 		setDescription(showingCard);
-
 	}
 
 	public void setTextLabel(CmdCard showingCard) {
@@ -198,6 +217,7 @@ public class CardPane extends VBox {
 		} else if (showingCard instanceof Reversecard) {
 			textLabel.setText("ReverseCard");
 		}
+		
 	}
 
 	public void setImage(CmdCard showingCard) {
@@ -278,7 +298,107 @@ public class CardPane extends VBox {
 
 	public void setDescription(CmdCard showingCard) {
 		// TODO description for everyCard
+		if (showingCard instanceof BlueAttackCard) {
+			descriptionLabel.setText("1:Damage 1 target in same line at any range\n"
+					+ "2:Damage 2 target in same line at any range\n"
+					+ "3:Damage 3 target in same line at any range\n"
+					+ "\nDamage first unique target(Minion or Mech)");
+		} else if (showingCard instanceof BlueMoveCard) {
+			descriptionLabel.setText("1:Move forward 1 steps\n"
+					+ "2:Move forward 2 steps\n"
+					+ "3:Move forward 3 steps\n"
+					+ "\nDamage any target in the ways");
+		} else if (showingCard instanceof BlueRotateCard) {
+			descriptionLabel.setText("1:Rotate 90 or 270 degrees and damgage 1 target within 1 range\n"
+					+ "2:Rotate 90, 180 or 270 degrees and damgage 2 target within 1 range\n"
+					+ "3:Rotate to any directions and damgage 3 target within 1 range\n");
+		} else if (showingCard instanceof GreenAttackCard) {
+			descriptionLabel.setText("1:Damage 1 target within 1 range\n"
+					+ "2:Damage 1 target within 2 range\n"
+					+ "3:Damage 1 target within 3 range\n");
+		} else if (showingCard instanceof GreenMoveCard) {
+			descriptionLabel.setText("1:Move 1 space forward, left or right\n"
+					+ "2:Move 2 space forward, left or right\n"
+					+ "3:Move 3 space forward, left or right\n");
+		} else if (showingCard instanceof GreenRotateCard) {
+			descriptionLabel.setText("1:Rotate 90 or 270 degrees and damgage 1 target within 1 range\n"
+					+ "2:Rotate 90, 180 or 270 degrees and damgage 1 target within 2 range\n"
+					+ "3:Rotate to any directions and damgage 1 target within 3 range\n");
+		} else if (showingCard instanceof RedAttackCard) {
+			descriptionLabel.setText("1:Damage all target within area of effect\n"
+					+ "2:Damage all target within area of effect\n"
+					+ "3:Damage all target within area of effect\n");
+		} else if (showingCard instanceof RedMoveCard) {
+			descriptionLabel.setText("1:Move forward 1 steps and damage 2 target(left&Right)\n"
+					+ "2:Move forward 2 steps and damage 2 target(left&Right)\n"
+					+ "3:Move forward 3 steps and damage 2 target(left&Right)\n");
+		} else if (showingCard instanceof RedRotateCard) {
+			descriptionLabel.setText("1:Rotate 90 or 270 degrees and damgage all target within area of effect\n"
+					+ "2:Rotate 90, 180 or 270 degrees and damgage all target within area of effect\n"
+					+ "3:Rotate to any directions and damgage all target within area of effect\n");
+		} else if (showingCard instanceof YellowAttackCard) {
+			descriptionLabel.setText("1:Damage 1 target and chain 1 times\n"
+					+ "2:Damage 1 target and chain 3 times\n"
+					+ "3:Damage 1 target and chain 5 times\n");
+		} else if (showingCard instanceof YellowMoveCard) {
+			descriptionLabel.setText("1:Move forward 1 - 2 steps\n"
+					+ "2:Move forward 2 - 4 steps\n"
+					+ "3:Move forward 3 - 6 steps\n");
+		} else if (showingCard instanceof YellowRotateCard) {
+			descriptionLabel.setText("1:Rotate 90 or 270 degrees and damgage 1 target within 1 range\n"
+					+ "2:Rotate 90, 180 or 270 degrees and damgage 1 target within 2 range\n"
+					+ "3:Rotate to any directions and damgage 1 target within 3 range\n");
+		} else if (showingCard instanceof BackMoveCard) {
+			descriptionLabel.setText("Move back 1 step\n");
+		} else if (showingCard instanceof ForwardMoveCard) {
+			descriptionLabel.setText("Move forward 1 step\n");
+		} else if (showingCard instanceof LeftMoveCard) {
+			descriptionLabel.setText("Move left 1 step\n");
+		} else if (showingCard instanceof RightMoveCard) {
+			descriptionLabel.setText("Move right 1 step\n");
+		} else if (showingCard instanceof Rotate90Card) {
+			descriptionLabel.setText("Rotate 90 degrees clockwise\n");
+		} else if (showingCard instanceof Rotate180Card) {
+			descriptionLabel.setText("Rotate 180 degrees clockwise\n");
+		} else if (showingCard instanceof Rotate270Card) {
+			descriptionLabel.setText("Rotate 270 degrees clockwise\n");
+		} else if (showingCard instanceof Swap12card) {
+			String description = "Swap Command Card in slot 1 and 2 of ";
+			if (showingCard.getProgrammedMech().equals(GameController.getRedMech())) {
+				description += "RedMech";
+			} else {
+				description += "BlueMech";
+			}
+			descriptionLabel.setText(description);		
+		} else if (showingCard instanceof Swap34card) {
+			String description = "Swap Command Cards in slot 3 and 4 of ";
+			if (showingCard.getProgrammedMech().equals(GameController.getRedMech())) {
+				description += "RedMech";
+			} else {
+				description += "BlueMech";
+			}
+			descriptionLabel.setText(description);
+		} else if (showingCard instanceof Swap56card) {
+			String description = "Swap Command Cards in slot 5 and 6 of ";
+			if (showingCard.getProgrammedMech().equals(GameController.getRedMech())) {
+				description += "RedMech";
+			} else {
+				description += "BlueMech";
+			}
+			descriptionLabel.setText(description);
+		} else if (showingCard instanceof Reversecard) {
+			String description = "Swap Command Cards in \nslot 1 and 6,\nslot 2 and 5, \nslot 3 and 4 \nof ";
+			if (showingCard.getProgrammedMech().equals(GameController.getRedMech())) {
+				description += "RedMech";
+			} else {
+				description += "BlueMech";
+			}
+			descriptionLabel.setText(description);
+		} else {
+			textLabel.setText("");
+		}
 	}
+
 	public CmdCard getSelectedCard() {
 		return selectedCard;
 	}

@@ -4,7 +4,7 @@ import logic.*;
 import token.Mech;
 
 public abstract class CmdCard {
-	private String cardType;
+	private String cardType = null;
 	private Mech programmedMech;
 	protected int spriteValue;
 	private CmdBox cmdBox;

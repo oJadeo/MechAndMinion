@@ -218,7 +218,12 @@ public class GameController {
 
 	public static void minionMove(Direction dir) {
 		for (Minion minion : getBoard().getMinionList()) {
-			move(minion, dir);
+			minion.setMove(true);
+		}
+		for (Minion minion : getBoard().getMinionList()) {
+			if (minion.getMove()) {
+				move(minion, dir);
+			}
 		}
 		board.drawGameBoard();
 		nextPhase();
@@ -248,6 +253,9 @@ public class GameController {
 	public static boolean move(Token selectedToken, Direction dir) {
 		if (getBoard().getAdjacentTile(selectedToken.getSelfTile(), 1, dir).size() == 0) {
 			return false;
+		}
+		if(selectedToken instanceof Minion) {
+			((Minion) selectedToken).setMove(false);
 		}
 		if (getBoard().getAdjacentTile(selectedToken.getSelfTile(), 1, dir).get(0).getToken() == null
 				|| move(getBoard().getAdjacentTile(selectedToken.getSelfTile(), 1, dir).get(0).getToken(), dir)) {
@@ -618,12 +626,17 @@ public class GameController {
 				try {
 					setProgram(selectedMech, selectedCmdBox, selectedCard);
 				} catch (SelectMechException e) {
-					// TODO Auto-generated catch block
-					//Creat new pop up
+					selectedCard = 6;
+					GameController.selectedMech = null;
+					GameController.selectedCmdBox = null;
+					draftedCard.setSelectedDraftedCard(false);
+					GameController.getRedMech().getCmdBoard().draw();
+					GameController.getBlueMech().getCmdBoard().draw();
+					// Creat new pop up
 					Alert alert = new Alert(AlertType.INFORMATION);
 					alert.setTitle("Alert");
 					alert.setHeaderText(null);
-					alert.setContentText("You must put card in slot");
+					alert.setContentText("You can put a maximum of 2 cards");
 					alert.showAndWait();
 				}
 			} else {
@@ -639,12 +652,17 @@ public class GameController {
 			try {
 				setProgram(selectedMech, selectedCmdBox, selectedCard);
 			} catch (SelectMechException e) {
-				// TODO Auto-generated catch block
-				//Creat new pop up
+				selectedCard = 6;
+				GameController.selectedMech = null;
+				GameController.selectedCmdBox = null;
+				draftedCard.setSelectedDraftedCard(false);
+				GameController.getRedMech().getCmdBoard().draw();
+				GameController.getBlueMech().getCmdBoard().draw();
+				// Creat new pop up
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Alert");
 				alert.setHeaderText(null);
-				alert.setContentText("You can put a maximum of 2 cards");
+				alert.setContentText("You can put a maximum of 2 cards on " + e.message);
 				alert.showAndWait();
 			}
 		} else {

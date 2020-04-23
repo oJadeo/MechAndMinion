@@ -23,9 +23,9 @@ public class CmdBoard extends HBox {
 	public void setSelectedCmdBox(CmdBox SelectedCmdBox) {
 		for (CmdBox cmdBox : cmdBoxList) {
 			if (cmdBox.equals(SelectedCmdBox)) {
-				cmdBox.setGraphic(cmdBox.getCanvas(true));
+				cmdBox.drawCanvas(true);
 			} else {
-				cmdBox.setGraphic(cmdBox.getCanvas(false));
+				cmdBox.drawCanvas(false);
 			}
 		}
 	}
@@ -46,7 +46,7 @@ public class CmdBoard extends HBox {
 
 	public void draw() {
 		for (CmdBox cmdBox : cmdBoxList) {
-			cmdBox.setGraphic(cmdBox.getCanvas(true));
+			cmdBox.drawCanvas(true);
 		}
 	}
 }

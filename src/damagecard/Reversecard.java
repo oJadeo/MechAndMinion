@@ -1,5 +1,7 @@
 package damagecard;
 
+import java.util.ArrayList;
+
 import card.base.*;
 import logic.*;
 import token.*;
@@ -13,17 +15,20 @@ public class Reversecard extends CmdCard implements Instant {
 	@Override
 	public void trigger() {
 		//TODO FIx
-		CmdBox temp = this.getProgrammedMech().getCmdBoard().getCmdBox(0);
-		this.getProgrammedMech().getCmdBoard().setCmdBox(0, this.getProgrammedMech().getCmdBoard().getCmdBox(5));
-		this.getProgrammedMech().getCmdBoard().setCmdBox(5, temp);
-
-		temp = this.getProgrammedMech().getCmdBoard().getCmdBox(1);
-		this.getProgrammedMech().getCmdBoard().setCmdBox(1, this.getProgrammedMech().getCmdBoard().getCmdBox(4));
-		this.getProgrammedMech().getCmdBoard().setCmdBox(4, temp);
-
-		temp = this.getProgrammedMech().getCmdBoard().getCmdBox(2);
-		this.getProgrammedMech().getCmdBoard().setCmdBox(2, this.getProgrammedMech().getCmdBoard().getCmdBox(3));
-		this.getProgrammedMech().getCmdBoard().setCmdBox(3, temp);
+		ArrayList<CmdCard> temp = this.getProgrammedMech().getCmdBoard().getCmdBox(0).getCmdCardList();
+		this.getProgrammedMech().getCmdBoard().getCmdBox(0)
+				.setCmdCardList(this.getProgrammedMech().getCmdBoard().getCmdBox(5).getCmdCardList());
+		this.getProgrammedMech().getCmdBoard().getCmdBox(5).setCmdCardList(temp);
+		
+		temp = this.getProgrammedMech().getCmdBoard().getCmdBox(1).getCmdCardList();
+		this.getProgrammedMech().getCmdBoard().getCmdBox(1)
+				.setCmdCardList(this.getProgrammedMech().getCmdBoard().getCmdBox(4).getCmdCardList());
+		this.getProgrammedMech().getCmdBoard().getCmdBox(4).setCmdCardList(temp);
+		
+		temp = this.getProgrammedMech().getCmdBoard().getCmdBox(2).getCmdCardList();
+		this.getProgrammedMech().getCmdBoard().getCmdBox(2)
+				.setCmdCardList(this.getProgrammedMech().getCmdBoard().getCmdBox(3).getCmdCardList());
+		this.getProgrammedMech().getCmdBoard().getCmdBox(3).setCmdCardList(temp);
 	}
 
 	@Override
