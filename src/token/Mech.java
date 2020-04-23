@@ -7,6 +7,8 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import tile.Tile;
 
@@ -69,6 +71,11 @@ public class Mech extends Token {
 	@Override
 	public void damaged() {
 		//Make it show
+		Media musicFile = new Media(ClassLoader.getSystemResource("hited.mp3").toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(musicFile);
+		mediaPlayer.setAutoPlay(true);
+		mediaPlayer.setVolume(0.08);
+		
 		attackedTimes -= 1;
 		CmdCard damageCard = null ;
 		switch ((int) (Math.random() * 11)) {
