@@ -1,8 +1,5 @@
 package application;
 
-import java.io.FileWriter;
-import java.io.IOException;
-
 import gui.DirectionPane;
 import javafx.application.Application;
 import javafx.event.EventHandler;
