@@ -1,5 +1,8 @@
 package application;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
+
 import gui.DirectionPane;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -19,11 +22,14 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import logic.CmdBoard;
 import logic.DraftedCard;
 import logic.GameController;
+
 
 public class Main extends Application {
 
@@ -31,10 +37,10 @@ public class Main extends Application {
 	Stage window;
 	ImageView tu;
 	int pageTuorial;
+	
 
 	@Override
 	public void start(Stage primaryStage) {
-
 		VBox menu = new VBox();
 		menu.setSpacing(20);
 
@@ -73,6 +79,9 @@ public class Main extends Application {
 		start.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			public void handle(MouseEvent arg0) {
+				MediaPlayer mediaPlayer = new MediaPlayer(new Media(ClassLoader.getSystemResource("click.mp3").toString()));
+				mediaPlayer.setAutoPlay(true);
+				mediaPlayer.setVolume(0.3);
 				GameController.initializeGame();
 				primaryStage.setScene(creatGameScene());
 				primaryStage.setFullScreen(true);
@@ -97,6 +106,9 @@ public class Main extends Application {
 		tutorial.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			public void handle(MouseEvent arg0) {
+				MediaPlayer mediaPlayer = new MediaPlayer(new Media(ClassLoader.getSystemResource("click.mp3").toString()));
+				mediaPlayer.setAutoPlay(true);
+				mediaPlayer.setVolume(0.3);
 				primaryStage.setScene(tutorialGame());
 				primaryStage.setResizable(false);
 				primaryStage.setFullScreen(true);
@@ -122,6 +134,9 @@ public class Main extends Application {
 		exit.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			public void handle(MouseEvent arg0) {
+				MediaPlayer mediaPlayer = new MediaPlayer(new Media(ClassLoader.getSystemResource("click.mp3").toString()));
+				mediaPlayer.setAutoPlay(true);
+				mediaPlayer.setVolume(0.3);
 				primaryStage.close();
 
 			}
@@ -172,6 +187,9 @@ public class Main extends Application {
 		upRoot.getChildren().add(back);
 		back.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent arg0) {
+				MediaPlayer mediaPlayer = new MediaPlayer(new Media(ClassLoader.getSystemResource("click.mp3").toString()));
+				mediaPlayer.setAutoPlay(true);
+				mediaPlayer.setVolume(0.3);
 				window.setScene(firstScene);
 				window.setResizable(false);
 				window.setFullScreen(true);
@@ -182,16 +200,15 @@ public class Main extends Application {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				ColorAdjust colorAdjust = new ColorAdjust(0, 0, 0.3, 0);
-				imageViewBack.setEffect(colorAdjust);
+				imageViewBack.setImage(new Image(ClassLoader.getSystemResource("Back1.png").toString()));
+				
 			}
 		});
 		back.setOnMouseExited(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent arg0) {
-				ColorAdjust colorAdjust = new ColorAdjust(0, 0, 0, 0);
-				imageViewBack.setEffect(colorAdjust);
+				imageViewBack.setImage(new Image(ClassLoader.getSystemResource("Back.png").toString()));
 			}
 		});
 
@@ -214,9 +231,13 @@ public class Main extends Application {
 
 		arrowRight.getChildren().add(imageViewArrowRight);
 		lowRoot.getChildren().add(arrowRight);
+		lowRoot.setSpacing(30);
 		arrowRight.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
+				MediaPlayer mediaPlayer = new MediaPlayer(new Media(ClassLoader.getSystemResource("click.mp3").toString()));
+				mediaPlayer.setAutoPlay(true);
+				mediaPlayer.setVolume(0.3);
 				if (pageTuorial < maxPage) {
 					if (pageTuorial == maxPage - 1) {
 						imageViewArrowRight.setVisible(false);
@@ -250,6 +271,9 @@ public class Main extends Application {
 		arrowLeft.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
+				MediaPlayer mediaPlayer = new MediaPlayer(new Media(ClassLoader.getSystemResource("click.mp3").toString()));
+				mediaPlayer.setAutoPlay(true);
+				mediaPlayer.setVolume(0.3);
 				if (pageTuorial > minPage) {
 					if (pageTuorial == minPage + 1) {
 						imageViewArrowLeft.setVisible(false);

@@ -1,6 +1,9 @@
 package logic;
 
 import java.util.ArrayList;
+
+
+
 import card.base.*;
 import cmdcard.*;
 import damagecard.*;
@@ -11,9 +14,12 @@ import gui.HealthPane;
 import gui.PhasePane;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import gui.ScorePane;
 import tile.*;
 import token.*;
+
 
 public class GameController {
 	private static Board board;
@@ -235,6 +241,10 @@ public class GameController {
 		if (selectedMech.getProgramedCount() == 2) {
 			throw new SelectMechException(selectedMech);
 		}
+		Media musicFile = new Media(ClassLoader.getSystemResource("card.mp3").toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(musicFile);
+		mediaPlayer.setAutoPlay(true);
+		mediaPlayer.setVolume(0.08);
 		selectedCard.setProgrammedMech(selectedMech);
 		selectedCmdBox.addCmdCard(selectedCard);
 		draftedCard.remove(selectedDraftedCard);
@@ -262,6 +272,10 @@ public class GameController {
 			getBoard().getAdjacentTile(selectedToken.getSelfTile(), 1, dir).get(0).setToken(selectedToken);
 			selectedToken.getSelfTile().setToken(null);
 			selectedToken.setSelfTile(getBoard().getAdjacentTile(selectedToken.getSelfTile(), 1, dir).get(0));
+			Media musicFile = new Media(ClassLoader.getSystemResource("walk.mp3").toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(musicFile);
+			mediaPlayer.setAutoPlay(true);
+			mediaPlayer.setVolume(0.3);
 			// add trigger SpecialTile
 			if (selectedToken.getSelfTile() instanceof ExplosiveTile || selectedToken.getSelfTile() instanceof MoveTile
 					|| selectedToken.getSelfTile() instanceof SpinTile) {
