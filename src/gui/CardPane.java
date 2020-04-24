@@ -121,10 +121,12 @@ public class CardPane extends VBox {
 						if (GameController.getRedMech().getAttackedTimes() != 0) {
 							GameController.getBlueMech().getSelfTile().setSelectable(true);
 							GameController.getBlueMech().getSelfTile().setSelectToken(true);
+							GameController.getBoard().drawGameBoard();
 						}
 						if (GameController.getBlueMech().getAttackedTimes() != 0) {
 							GameController.getBlueMech().getSelfTile().setSelectable(true);
 							GameController.getBlueMech().getSelfTile().setSelectToken(true);
+							GameController.getBoard().drawGameBoard();
 						}
 						if(GameController.getBlueMech().getAttackedTimes() == 0 && GameController.getRedMech().getAttackedTimes() == 0) {
 							GameController.nextPhase();
