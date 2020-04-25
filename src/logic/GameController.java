@@ -14,9 +14,11 @@ import gui.HealthPane;
 import gui.PhasePane;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import gui.ScorePane;
+import gui.endGamePane;
 import tile.*;
 import token.*;
 
@@ -32,6 +34,7 @@ public class GameController {
 	private static int selectedCard;
 	private static CmdBox selectedCmdBox;
 	private static int spawnNo;
+	private static StackPane gamePane;
 
 	// Gui
 	private static PhasePane phasePane;
@@ -506,7 +509,7 @@ public class GameController {
 		damageCount += 1;
 		healthPane.drawHealth();
 		if (damageCount == 10) {
-			// TODO Make game End Scene
+			endGame();
 		}
 	}
 
@@ -725,5 +728,12 @@ public class GameController {
 
 	public static CardPane getCardPane() {
 		return cardPane;
+	}
+	public static void setGamePane(StackPane gamePane) {
+		GameController.gamePane = gamePane;
+	}
+	
+	public static void endGame() {
+		gamePane.getChildren().add(new endGamePane());
 	}
 }

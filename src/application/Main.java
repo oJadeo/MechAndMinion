@@ -1,7 +1,5 @@
 package application;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
 import gui.DirectionPane;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -19,8 +17,8 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -314,6 +312,7 @@ public class Main extends Application {
 	}
 
 	public Scene creatGameScene() {
+		StackPane root = new StackPane();
 		HBox sceneRoot = new HBox();
 		
 		// UpHalf
@@ -339,7 +338,9 @@ public class Main extends Application {
 		//CardPart
 		sceneRoot.getChildren().add(basicRoot);
 		sceneRoot.getChildren().add(GameController.getCardPane());
-		return new Scene(sceneRoot);
+		root.getChildren().add(sceneRoot);
+		GameController.setGamePane(root);
+		return new Scene(root);
 	}
 
 	public static void main(String[] args) {
