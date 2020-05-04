@@ -1,9 +1,6 @@
 package logic;
 
 import java.util.ArrayList;
-
-
-
 import card.base.*;
 import cmdcard.*;
 import damagecard.*;
@@ -223,10 +220,11 @@ public class GameController {
 	}
 
 	public static void minionMove(Direction dir) {
-		for (Minion minion : getBoard().getMinionList()) {
+		ArrayList<Minion> MinionList = board.getMinionList();
+		for (Minion minion : MinionList) {
 			minion.setMove(true);
 		}
-		for (Minion minion : getBoard().getMinionList()) {
+		for (Minion minion : MinionList) {
 			if (minion.getMove()) {
 				move(minion, dir);
 			}
@@ -315,6 +313,9 @@ public class GameController {
 					setSelectable(((BlueMoveCard) executingProgram).attack(1));
 					if (selectable.size() == 0) {
 						setSelectable(((BlueMoveCard) executingProgram).move(1));
+						if(selectable.size()==0) {
+							setSelectTimes(0);
+						}
 					}
 				}
 			} else if (selectedObject instanceof Token) {

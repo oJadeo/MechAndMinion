@@ -8,12 +8,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+import application.Main;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -25,6 +29,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import logic.GameController;
@@ -48,7 +54,43 @@ public class endGamePane extends VBox {
 		scoreGridPane = new GridPane();
 		scoreGridPane.setAlignment(Pos.CENTER);
 		scoreGridPane.setPrefSize(1920, 880);
+		
+		HBox buttonPane = new HBox();
+		buttonPane.setAlignment(Pos.CENTER);
+		buttonPane.setPrefSize(1920, 200);
+		buttonPane.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+		VBox exit = new VBox();
+		exit.setAlignment(Pos.CENTER);
+		ImageView imageViewExit = new ImageView(new Image(ClassLoader.getSystemResource("Exit.png").toString()));
+		exit.getChildren().add(imageViewExit);
+		exit.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
+			public void handle(MouseEvent event) {
+				MediaPlayer mediaPlayer = new MediaPlayer(
+						new Media(ClassLoader.getSystemResource("click.mp3").toString()));
+				mediaPlayer.setAutoPlay(true);
+				mediaPlayer.setVolume(0.3);
+				Main.getWindow().close();
+			}
+		});
+		exit.setOnMouseEntered(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				imageViewExit.setImage(new Image(ClassLoader.getSystemResource("Exit1.png").toString()));
+			}
+		});
+		exit.setOnMouseExited(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				imageViewExit.setImage(new Image(ClassLoader.getSystemResource("Exit.png").toString()));
+			}
+		});
+		exit.setDisable(true);
+		exit.setVisible(false);
+		buttonPane.getChildren().add(exit);
+		
 		HBox headRankPane = new HBox();
 		headRankPane.setPrefSize(100, 40);
 		headRankPane.setBorder(new Border(new BorderStroke(Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK,
@@ -94,11 +136,12 @@ public class endGamePane extends VBox {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				saveNewScore(nameInput.getText());
 				playerNameLabel.setVisible(true);
 				nameInput.setDisable(true);
 				nameInput.setVisible(false);
+				exit.setDisable(false);
+				exit.setVisible(true);
 			}
 		});
 
@@ -107,7 +150,7 @@ public class endGamePane extends VBox {
 		try {
 			getTopScore();
 		} catch (FileNotFoundException e) {
-			// TODO write new file
+			// TODO 
 		}
 		int rank = getRank();
 		setTopScore(rank);
@@ -121,9 +164,6 @@ public class endGamePane extends VBox {
 		scoreGridPane.add(scoreText, 2, 11);
 		this.getChildren().add(scoreGridPane);
 
-		HBox buttonPane = new HBox();
-		buttonPane.setPrefSize(1920, 200);
-		buttonPane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 		this.getChildren().add(buttonPane);
 	}
 
@@ -195,9 +235,8 @@ public class endGamePane extends VBox {
 
 	public void setTopScore(int rank) {
 		if (rank < 10) {
-			// TODO make bind at rank
 			if (scoreList.size() < 10) {
-				for (int i = 0; i < scoreList.size()+1; i++) {
+				for (int i = 0; i < scoreList.size() + 1; i++) {
 					if (i < rank) {
 						Label rankLabel = new Label(Integer.toString(i + 1));
 						rankLabel.setFont(new Font(30));
@@ -252,14 +291,14 @@ public class endGamePane extends VBox {
 						scoreGridPane.add(scoreLabel, 2, i + 1);
 					}
 				}
-				for(int i = 0; i < 10-(scoreList.size()+1); i++) {
+				for (int i = 0; i < 10 - (scoreList.size() + 1); i++) {
 					HBox namePane = new HBox();
 					namePane.setPrefSize(600, 40);
 					namePane.setPadding(new Insets(8));
-					namePane.setBorder(new Border(new BorderStroke(Color.BLACK, Color.BLACK, Color.BLACK,
-							Color.BLACK, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.NONE,
+					namePane.setBorder(new Border(new BorderStroke(Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK,
+							BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.NONE,
 							BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1), Insets.EMPTY)));
-					scoreGridPane.add(namePane, 1, i+scoreList.size()+1);
+					scoreGridPane.add(namePane, 1, i + scoreList.size() + 1);
 				}
 			} else {
 				for (int i = 0; i < 10; i++) {
@@ -349,7 +388,7 @@ public class endGamePane extends VBox {
 
 	public void saveNewScore(String Name) {
 		try {
-			FileWriter writer = new FileWriter("res/score.txt", true);
+			FileWriter writer = new FileWriter(new File(ClassLoader.getSystemResource("score.txt").getFile()), true);
 			writer.write(Name.trim() + "\n");
 			writer.write(GameController.getScore() + "\n");
 			writer.close();

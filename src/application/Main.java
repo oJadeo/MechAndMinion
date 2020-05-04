@@ -32,7 +32,7 @@ import logic.GameController;
 public class Main extends Application {
 
 	Scene firstScene;
-	Stage window;
+	static Stage window;
 	ImageView tu;
 	int pageTuorial;
 	
@@ -363,6 +363,10 @@ public class Main extends Application {
 		DraftedCard draftedCardsBox = GameController.getDraftedCard();
 		upRight.getChildren().add(draftedCardsBox);
 		return upRight;
+	}
+	
+	public static Stage getWindow() {
+		return window;
 	}
 	
 }

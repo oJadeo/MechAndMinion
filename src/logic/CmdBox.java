@@ -44,7 +44,7 @@ public class CmdBox extends Button {
 			public void handle(ActionEvent arg0) {
 				GameController.setSelectedCard(a);
 			}
-			
+
 		});
 		this.setOnMouseEntered(new EventHandler<MouseEvent>() {
 
@@ -196,8 +196,10 @@ public class CmdBox extends Button {
 		if (this.cmdCardList.get(this.cmdCardList.size() - 1) == null) {
 			this.cmdCardList.clear();
 			this.cmdCardList.add(selectedCard);
-		} else if (this.cmdCardList.get(this.cmdCardList.size() - 1).getCardType() != null
-				&& this.cmdCardList.get(this.cmdCardList.size() - 1).getCardType().equals(selectedCard.getCardType())) {
+		} else if (this.cmdCardList.get(this.cmdCardList.size() - 1).getCardType() == "Damage") {
+			cmdCardList.clear();
+			cmdCardList.add(selectedCard);
+		} else if (this.cmdCardList.get(this.cmdCardList.size() - 1).getCardType().equals(selectedCard.getCardType())) {
 			switch (this.cmdCardList.size()) {
 			case 0:
 				this.cmdCardList.add(selectedCard);
@@ -216,9 +218,6 @@ public class CmdBox extends Button {
 				selectedCard.setSpriteValue(3);
 				break;
 			}
-		} else {
-			cmdCardList.clear();
-			cmdCardList.add(selectedCard);
 		}
 		selectedCard.setCmdBox(this);
 	}
@@ -254,7 +253,7 @@ public class CmdBox extends Button {
 		}
 	}
 
-	public void setCmdCardList(ArrayList<CmdCard> cmdCardList) {
+	public void setCmdCardList(ArrayList<CmdCard> cmdCardList) {	
 		this.cmdCardList = cmdCardList;
 	}
 
@@ -269,9 +268,11 @@ public class CmdBox extends Button {
 	public void setCmdCanvas(Canvas cmdCanvas) {
 		this.cmdCanvas = cmdCanvas;
 	}
+
 	public void setProgrammedMech(Mech programmedMech) {
 		this.programmedMech = programmedMech;
 	}
+
 	public Mech getProgrammedMech() {
 		return programmedMech;
 	}
