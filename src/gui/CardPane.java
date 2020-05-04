@@ -75,6 +75,7 @@ public class CardPane extends VBox {
 		triggerButton.setFont(new Font(30));
 		triggerButton.setDisable(true);
 		this.getChildren().add(triggerButton);
+		
 	}
 
 	public void setDmgCard(CmdCard damageCard) {
@@ -114,17 +115,19 @@ public class CardPane extends VBox {
 					damageCard.getProgrammedMech().getCmdBoard().setDisableSlot(false);
 					damageCard.getProgrammedMech().getCmdBoard().getCmdBox(slot).addCmdCard(damageCard);
 					damageCard.getProgrammedMech().getCmdBoard().draw();
-					damageCard.getProgrammedMech().getCmdBoard().setDisableSlot(true);
+					//damageCard.getProgrammedMech().getCmdBoard().setDisableSlot(true);
 					selectedCard = null;
 					setShowingCard(selectedCard);
 					if (GameController.getCurrentPhase() == Phase.MinionAttack) {
 						if (GameController.getRedMech().getAttackedTimes() != 0) {
-							GameController.getBlueMech().getSelfTile().setSelectable(true);
-							GameController.getBlueMech().getSelfTile().setSelectToken(true);
+							GameController.getRedMech().getSelfTile().setSelectable(true);
+							GameController.getRedMech().getSelfTile().setSelectToken(true);
+							GameController.getBoard().drawGameBoard();
 						}
 						if (GameController.getBlueMech().getAttackedTimes() != 0) {
 							GameController.getBlueMech().getSelfTile().setSelectable(true);
 							GameController.getBlueMech().getSelfTile().setSelectToken(true);
+							GameController.getBoard().drawGameBoard();
 						}
 						if(GameController.getBlueMech().getAttackedTimes() == 0 && GameController.getRedMech().getAttackedTimes() == 0) {
 							GameController.nextPhase();
@@ -147,14 +150,24 @@ public class CardPane extends VBox {
 					damageCard.getProgrammedMech().getCmdBoard().draw();
 					selectedCard = null;
 					setShowingCard(selectedCard);
-					damageCard.getProgrammedMech().getCmdBoard().setDisableSlot(true);
-					if (GameController.getRedMech().getAttackedTimes() != 0) {
-						GameController.getBlueMech().getSelfTile().setSelectable(true);
-						GameController.getBlueMech().getSelfTile().setSelectToken(true);
-					}
-					if (GameController.getBlueMech().getAttackedTimes() != 0) {
-						GameController.getBlueMech().getSelfTile().setSelectable(true);
-						GameController.getBlueMech().getSelfTile().setSelectToken(true);
+					//damageCard.getProgrammedMech().getCmdBoard().setDisableSlot(true);
+					if (GameController.getCurrentPhase() == Phase.MinionAttack) {
+						if (GameController.getRedMech().getAttackedTimes() != 0) {
+							GameController.getRedMech().getSelfTile().setSelectable(true);
+							GameController.getRedMech().getSelfTile().setSelectToken(true);
+							GameController.getBoard().drawGameBoard();
+						}
+						if (GameController.getBlueMech().getAttackedTimes() != 0) {
+							GameController.getBlueMech().getSelfTile().setSelectable(true);
+							GameController.getBlueMech().getSelfTile().setSelectToken(true);
+							GameController.getBoard().drawGameBoard();
+						}
+						if(GameController.getBlueMech().getAttackedTimes() == 0 && GameController.getRedMech().getAttackedTimes() == 0) {
+							GameController.nextPhase();
+						}
+					}else if(GameController.getCurrentPhase()== Phase.Execute) {
+						GameController.setProgramCount(GameController.getProgramCount()+1);
+						GameController.execute(GameController.getProgramCount());
 					}
 					triggerButton.setDisable(true);
 				}
@@ -194,13 +207,13 @@ public class CardPane extends VBox {
 		} else if (showingCard instanceof YellowRotateCard) {
 			textLabel.setText("YellowRotateCard");
 		} else if (showingCard instanceof BackMoveCard) {
-			textLabel.setText("BackMoveCard");
+			textLabel.setText("MoveSouthCard");
 		} else if (showingCard instanceof ForwardMoveCard) {
-			textLabel.setText("ForwardMoveCard");
+			textLabel.setText("MoveNorthCard");
 		} else if (showingCard instanceof LeftMoveCard) {
-			textLabel.setText("LeftMoveCard");
+			textLabel.setText("MoveWestCard");
 		} else if (showingCard instanceof RightMoveCard) {
-			textLabel.setText("RightMoveCard");
+			textLabel.setText("MoveEastCard");
 		} else if (showingCard instanceof Rotate90Card) {
 			textLabel.setText("Rotate90Card");
 		} else if (showingCard instanceof Rotate180Card) {
@@ -215,6 +228,8 @@ public class CardPane extends VBox {
 			textLabel.setText("Swap56card");
 		} else if (showingCard instanceof Reversecard) {
 			textLabel.setText("ReverseCard");
+		}else {
+			textLabel.setText("");
 		}
 
 	}
@@ -340,13 +355,13 @@ public class CardPane extends VBox {
 					+ "2:Rotate 90, 180 or 270 degrees and damgage 1 target within 2 range\n"
 					+ "3:Rotate to any directions and damgage 1 target within 3 range\n");
 		} else if (showingCard instanceof BackMoveCard) {
-			descriptionLabel.setText("Move back 1 step\n");
+			descriptionLabel.setText("Move South 1 step\n");
 		} else if (showingCard instanceof ForwardMoveCard) {
-			descriptionLabel.setText("Move forward 1 step\n");
+			descriptionLabel.setText("Move North 1 step\n");
 		} else if (showingCard instanceof LeftMoveCard) {
-			descriptionLabel.setText("Move left 1 step\n");
+			descriptionLabel.setText("Move West 1 step\n");
 		} else if (showingCard instanceof RightMoveCard) {
-			descriptionLabel.setText("Move right 1 step\n");
+			descriptionLabel.setText("Move East 1 step\n");
 		} else if (showingCard instanceof Rotate90Card) {
 			descriptionLabel.setText("Rotate 90 degrees clockwise\n");
 		} else if (showingCard instanceof Rotate180Card) {
@@ -386,7 +401,7 @@ public class CardPane extends VBox {
 			}
 			descriptionLabel.setText(description);
 		} else {
-			textLabel.setText("");
+			descriptionLabel.setText("");
 		}
 	}
 
