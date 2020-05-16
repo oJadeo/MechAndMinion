@@ -34,7 +34,7 @@ public class Main extends Application {
 	Scene firstScene;
 	static Stage window;
 	ImageView tu;
-	int pageTuorial;
+	int pageTuorial = 1;
 	
 
 	@Override
