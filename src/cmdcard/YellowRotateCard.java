@@ -9,7 +9,7 @@ import token.*;
 public class YellowRotateCard extends CmdCard implements Rotate, Attack, OnGoing {
 
 	public YellowRotateCard() {
-		this.spriteValue = CardSprite.YELLOW_ROTATE_CARD_1;
+		super.setSpriteValue(CardSprite.YELLOW_ROTATE_CARD_1);
 		this.setCardType("Yellow");
 	}
 
@@ -99,13 +99,13 @@ public class YellowRotateCard extends CmdCard implements Rotate, Attack, OnGoing
 	public void setSpriteValue(int tier) {
 		switch (tier) {
 		case 1:
-			this.spriteValue = CardSprite.YELLOW_ROTATE_CARD_1;
+			super.setSpriteValue(CardSprite.YELLOW_ROTATE_CARD_1);
 			break;
 		case 2:
-			this.spriteValue = CardSprite.YELLOW_ROTATE_CARD_2;
+			super.setSpriteValue(CardSprite.YELLOW_ROTATE_CARD_2);
 			break;
 		case 3:
-			this.spriteValue = CardSprite.YELLOW_ROTATE_CARD_3;
+			super.setSpriteValue(CardSprite.YELLOW_ROTATE_CARD_3);
 			break;
 		}
 

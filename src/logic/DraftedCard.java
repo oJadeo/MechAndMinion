@@ -13,76 +13,67 @@ import card.base.CmdCard;
 
 public class DraftedCard extends HBox {
 	private ArrayList<CmdCard> draftedCardList;
-	private ArrayList<CmdBox> draftedBox;
+	private ArrayList<CmdBox> draftedBoxList;
 
 	public DraftedCard() {
 		super(10);
 		this.setAlignment(Pos.CENTER);
 		this.draftedCardList = new ArrayList<CmdCard>();
-		this.draftedBox = new ArrayList<CmdBox>();
+		this.draftedBoxList = new ArrayList<CmdBox>();
 		for (int i = 0; i < 6; i++) {
 			this.draftedCardList.add(randomCard());
 		}
 
 		for (int i = 0; i < 6; i++) {
 			CmdCard cmdCard = this.draftedCardList.get(i);
-			draftedBox.add(new CmdBox(i));
-			GraphicsContext selectedCardGC = draftedBox.get(i).getCmdCanvas().getGraphicsContext2D();
+			draftedBoxList.add(new CmdBox(i));
+			GraphicsContext selectedCardGC = draftedBoxList.get(i).getCmdCanvas().getGraphicsContext2D();
 			if (cmdCard != null) {
 				DrawUtil.drawCard(selectedCardGC,4,4,cmdCard.getSpriteValue());
 				DrawUtil.drawCard(selectedCardGC,4,4,CardSprite.SELECTED_CARD);
-				draftedBox.get(i).setGraphic(draftedBox.get(i).getCmdCanvas());
+				draftedBoxList.get(i).setGraphic(draftedBoxList.get(i).getCmdCanvas());
 			}
 		}
-		this.getChildren().addAll(draftedBox);
+		this.getChildren().addAll(draftedBoxList);
 	}
 
 	public void setSelectedDraftedCard(boolean selectCard) {
 		if (selectCard) {
 			for (int i = 0; i < 6; i++) {
 				CmdCard cmdCard = GameController.getDraftedCard().getDraftedCardList().get(i);
-				GraphicsContext selectedCardGC = draftedBox.get(i).getCmdCanvas().getGraphicsContext2D();
+				GraphicsContext selectedCardGC = draftedBoxList.get(i).getCmdCanvas().getGraphicsContext2D();
 				selectedCardGC.clearRect(0, 0, 123, 200);
 				if (cmdCard != null) {
 					if (i == GameController.getSelectedCard()) {
 						DrawUtil.drawCard(selectedCardGC,4,4,cmdCard.getSpriteValue());
 						DrawUtil.drawCard(selectedCardGC,4,4,CardSprite.SELECTED_CARD);
-						draftedBox.get(i).setGraphic(draftedBox.get(i).getCmdCanvas());
+						draftedBoxList.get(i).setGraphic(draftedBoxList.get(i).getCmdCanvas());
 					} else {
 						DrawUtil.drawCard(selectedCardGC,4,4,cmdCard.getSpriteValue());
-						draftedBox.get(i).setGraphic(draftedBox.get(i).getCmdCanvas());
+						draftedBoxList.get(i).setGraphic(draftedBoxList.get(i).getCmdCanvas());
 					}
 				} else {
-					draftedBox.get(i).setCmdCanvas(new Canvas(123, 200));
-					draftedBox.get(i).setGraphic(draftedBox.get(i).getCmdCanvas());
-					draftedBox.get(i).setDisable(true);
+					draftedBoxList.get(i).setCmdCanvas(new Canvas(123, 200));
+					draftedBoxList.get(i).setGraphic(draftedBoxList.get(i).getCmdCanvas());
+					draftedBoxList.get(i).setDisable(true);
 				}
 			}
 		} else {
 			for (int i = 0; i < 6; i++) {
 				CmdCard cmdCard = GameController.getDraftedCard().getDraftedCardList().get(i);
-				GraphicsContext cmdCardGC = draftedBox.get(i).getCmdCanvas().getGraphicsContext2D();
+				GraphicsContext cmdCardGC = draftedBoxList.get(i).getCmdCanvas().getGraphicsContext2D();
 				cmdCardGC.clearRect(0, 0, 123, 200);
 				if (cmdCard != null) {
 					DrawUtil.drawCard(cmdCardGC,4,4,cmdCard.getSpriteValue());
 					DrawUtil.drawCard(cmdCardGC,4,4,CardSprite.SELECTED_CARD);
-					draftedBox.get(i).setGraphic(draftedBox.get(i).getCmdCanvas());
+					draftedBoxList.get(i).setGraphic(draftedBoxList.get(i).getCmdCanvas());
 				} else {
-					draftedBox.get(i).setCmdCanvas(new Canvas(123, 200));
-					cmdCardGC = draftedBox.get(i).getCmdCanvas().getGraphicsContext2D();
-					draftedBox.get(i).setGraphic(draftedBox.get(i).getCmdCanvas());
-					draftedBox.get(i).setDisable(true);
+					draftedBoxList.get(i).setCmdCanvas(new Canvas(123, 200));
+					cmdCardGC = draftedBoxList.get(i).getCmdCanvas().getGraphicsContext2D();
+					draftedBoxList.get(i).setGraphic(draftedBoxList.get(i).getCmdCanvas());
+					draftedBoxList.get(i).setDisable(true);
 				}
 			}
-		}
-	}
-
-	// for test
-	public DraftedCard(CmdCard cmdCard) {
-		this.draftedCardList = new ArrayList<CmdCard>();
-		for (int i = 0; i < 6; i++) {
-			this.draftedCardList.add(cmdCard);
-
 		}
 	}
 
@@ -144,12 +135,12 @@ public class DraftedCard extends HBox {
 		return draftedCardList;
 	}
 
-	public void remove(int cmdCard) {
-		this.getDraftedCardList().set(cmdCard, null);
+	public void remove(int slot) {
+		this.getDraftedCardList().set(slot, null);
 	}
 
 	public void setDisableButton(boolean disable) {
-		for (Button box : draftedBox) {
+		for (Button box : draftedBoxList) {
 			box.setDisable(disable);
 		}
 	}

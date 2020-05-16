@@ -18,8 +18,8 @@ import logic.Phase;
 import logic.TileSprite;
 
 public class DirectionPane extends HBox {
-	ArrayList<Canvas> directionCanvas;
-	ArrayList<Button> directionButton;
+	private ArrayList<Canvas> directionCanvas;
+	private ArrayList<Button> directionButton;
 
 	public DirectionPane() {
 		Canvas textCanvas = new Canvas(400, 48);

@@ -8,7 +8,7 @@ import token.*;
 public class GreenMoveCard extends CmdCard implements Move ,OnGoing{
 
 	public GreenMoveCard() {
-		this.spriteValue = CardSprite.GREEN_MOVE_CARD_1;
+		super.setSpriteValue(CardSprite.GREEN_MOVE_CARD_1);
 		this.setCardType("Green");
 	}
 
@@ -50,16 +50,17 @@ public class GreenMoveCard extends CmdCard implements Move ,OnGoing{
 		GameController.setSelectTimes(tier);
 	}
 
+	@Override
 	public void setSpriteValue(int tier) {
 		switch (tier) {
 		case 1:
-			this.spriteValue = CardSprite.GREEN_MOVE_CARD_1;
+			super.setSpriteValue(CardSprite.GREEN_MOVE_CARD_1);
 			break;
 		case 2:
-			this.spriteValue = CardSprite.GREEN_MOVE_CARD_2;
+			super.setSpriteValue(CardSprite.GREEN_MOVE_CARD_2);
 			break;
 		case 3:
-			this.spriteValue = CardSprite.GREEN_MOVE_CARD_3;
+			super.setSpriteValue(CardSprite.GREEN_MOVE_CARD_3);
 			break;
 
 		}

@@ -31,9 +31,4 @@ public class Reversecard extends CmdCard implements Instant {
 		this.getProgrammedMech().getCmdBoard().getCmdBox(3).setCmdCardList(temp);
 	}
 
-	@Override
-	public void setSpriteValue(int spriteValue) {
-		this.spriteValue = spriteValue;
-	}
-
 }

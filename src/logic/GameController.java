@@ -15,7 +15,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import gui.ScorePane;
-import gui.endGamePane;
+import gui.EndGamePane;
 import tile.*;
 import token.*;
 
@@ -28,12 +28,9 @@ public class GameController {
 	private static int turnCount;
 	private static int score;
 	private static int damageCount;
-	private static int selectedCard;
-	private static CmdBox selectedCmdBox;
-	private static int spawnNo;
-	private static StackPane gamePane;
-
+	
 	// Gui
+	private static StackPane gamePane;
 	private static PhasePane phasePane;
 	private static DirectionPane directionPane;
 	private static HealthPane healthPane;
@@ -42,6 +39,8 @@ public class GameController {
 
 	// Drafted Card Variable
 	private static DraftedCard draftedCard;
+	private static int selectedCard;
+	private static CmdBox selectedCmdBox;
 
 	// ExecutintProgram variable
 	private static int programCount;
@@ -157,16 +156,48 @@ public class GameController {
 				}
 			} else {
 				currentPhase = Phase.MinionSpawn;
-				minionSpawn();
+				selectTimes = 0;
+				for (SpawnTile spawnTile : getBoard().getSpawnTileList()) {
+					if (spawnTile.getToken() == null) {
+						spawnTile.setSelectable(true);
+						selectTimes += 1;
+					}
+				}
+				if (selectTimes == 0) {
+					nextPhase();
+				}
+				board.drawGameBoard();
 			}
 			break;
 		case MinionMove:
 			currentPhase = Phase.MinionAttack;
-			minionAttack();
+			ArrayList<Token> damagedMechList = new ArrayList<Token>();
+			for (Minion minion : getBoard().getMinionList()) {
+				damagedMechList.addAll(minion.attack());
+			}
+			if (damagedMechList.size() == 0) {
+				nextPhase();
+			} else {
+				for (Token damagedMech : damagedMechList) {
+					damagedMech.getSelfTile().setSelectable(true);
+					damagedMech.getSelfTile().setSelectToken(true);
+				}
+			}
+			board.drawGameBoard();
 			break;
 		case MinionAttack:
 			currentPhase = Phase.MinionSpawn;
-			minionSpawn();
+			selectTimes = 0;
+			for (SpawnTile spawnTile : getBoard().getSpawnTileList()) {
+				if (spawnTile.getToken() == null) {
+					spawnTile.setSelectable(true);
+					selectTimes += 1;
+				}
+			}
+			if (selectTimes == 0) {
+				nextPhase();
+			}
+			board.drawGameBoard();
 			break;
 		case MinionSpawn:
 			currentPhase = Phase.Program;
@@ -187,36 +218,6 @@ public class GameController {
 			break;
 		}
 		phasePane.drawPhase();
-	}
-
-	public static void minionAttack() {
-		ArrayList<Token> damagedMechList = new ArrayList<Token>();
-		for (Minion minion : getBoard().getMinionList()) {
-			damagedMechList.addAll(minion.attack());
-		}
-		if (damagedMechList.size() == 0) {
-			nextPhase();
-		} else {
-			for (Token damagedMech : damagedMechList) {
-				damagedMech.getSelfTile().setSelectable(true);
-				damagedMech.getSelfTile().setSelectToken(true);
-			}
-		}
-		board.drawGameBoard();
-	}
-
-	public static void minionSpawn() {
-		selectTimes = 0;
-		for (SpawnTile spawnTile : getBoard().getSpawnTileList()) {
-			if (spawnTile.getToken() == null) {
-				spawnTile.setSelectable(true);
-				selectTimes += 1;
-			}
-		}
-		if (selectTimes == 0) {
-			nextPhase();
-		}
-		board.drawGameBoard();
 	}
 
 	public static void minionMove(Direction dir) {
@@ -519,33 +520,6 @@ public class GameController {
 		scorePane.drawScore();
 	}
 
-	// For testing
-	public static void initializeTest() {
-		currentPhase = Phase.Program;
-		turnCount = 1;
-		score = 0;
-		damageCount = 0;
-		programCount = 0;
-		board = new Board();
-	}
-
-	public static void setDraftedCard(CmdCard cmdCard) {
-		draftedCard = new DraftedCard(cmdCard);
-	}
-
-	public static void setRedMech(Mech redMech) {
-		GameController.redMech = redMech;
-	}
-
-	public static void setBlueMech(Mech blueMech) {
-		GameController.blueMech = blueMech;
-	}
-
-	public static Minion setMinion(int x, int y) {
-		return new Minion(Direction.UP, board.getTile(x, y));
-
-	}
-
 	// getter setter
 	public static ArrayList<Object> getSelectable() {
 		return selectable;
@@ -711,14 +685,6 @@ public class GameController {
 		return directionPane;
 	}
 
-	public static void setSpawnNo(int spawnNo) {
-		GameController.spawnNo = spawnNo;
-	}
-
-	public static int getSpawnNo() {
-		return spawnNo;
-	}
-
 	public static HealthPane getHealthPane() {
 		return healthPane;
 	}
@@ -735,6 +701,6 @@ public class GameController {
 	}
 	
 	public static void endGame() {
-		gamePane.getChildren().add(new endGamePane());
+		gamePane.getChildren().add(new EndGamePane());
 	}
 }

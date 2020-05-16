@@ -40,9 +40,4 @@ public class Rotate270Card extends CmdCard implements OnGoing {
 
 	}
 
-	@Override
-	public void setSpriteValue(int spriteValue) {
-		this.spriteValue = spriteValue;
-	}
-
 }

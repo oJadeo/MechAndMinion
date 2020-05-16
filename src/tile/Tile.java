@@ -16,11 +16,12 @@ public class Tile extends Pane {
 
 	private int locationX;
 	private int locationY;
-	protected Token token;
 	private int spriteValue;
+	private Canvas tileCanvas;
+	
+	protected Token token;
 	protected boolean selectable;
 	protected boolean selectToken;
-	private Canvas tileCanvas;
 
 	public Tile(int locationX, int locationY) {
 		super();

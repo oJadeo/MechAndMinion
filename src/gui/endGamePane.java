@@ -35,7 +35,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import logic.GameController;
 
-public class endGamePane extends VBox {
+public class EndGamePane extends VBox {
 	private GridPane scoreGridPane;
 	private TextField nameInput;
 	private ArrayList<Integer> scoreList = new ArrayList<Integer>();
@@ -45,7 +45,7 @@ public class endGamePane extends VBox {
 	private ArrayList<String> nameList = new ArrayList<String>();
 	private ArrayList<String> topNameList = new ArrayList<String>();
 
-	public endGamePane() {
+	public EndGamePane() {
 		super();
 		this.setPrefSize(1920, 1080);
 		this.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));

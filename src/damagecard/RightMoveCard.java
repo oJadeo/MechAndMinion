@@ -27,8 +27,4 @@ public class RightMoveCard extends CmdCard implements OnGoing {
 		GameController.setSelectTimes(1);
 	}
 
-	@Override
-	public void setSpriteValue(int spriteValue) {
-		this.spriteValue = spriteValue;
-	}
 }
