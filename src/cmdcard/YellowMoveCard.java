@@ -8,7 +8,7 @@ import tile.*;
 public class YellowMoveCard extends CmdCard implements Move, OnGoing {
 
 	public YellowMoveCard() {
-		this.spriteValue = CardSprite.YELLOW_MOVE_CARD_1;
+		super.setSpriteValue(CardSprite.YELLOW_MOVE_CARD_1);
 		this.setCardType("Yellow");
 	}
 
@@ -39,13 +39,13 @@ public class YellowMoveCard extends CmdCard implements Move, OnGoing {
 	public void setSpriteValue(int tier) {
 		switch (tier) {
 		case 1:
-			this.spriteValue = CardSprite.YELLOW_MOVE_CARD_1;
+			super.setSpriteValue(CardSprite.YELLOW_MOVE_CARD_1);
 			break;
 		case 2:
-			this.spriteValue = CardSprite.YELLOW_MOVE_CARD_2;
+			super.setSpriteValue(CardSprite.YELLOW_MOVE_CARD_2);
 			break;
 		case 3:
-			this.spriteValue = CardSprite.YELLOW_MOVE_CARD_3;
+			super.setSpriteValue(CardSprite.YELLOW_MOVE_CARD_3);
 			break;
 		}
 	}

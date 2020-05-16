@@ -7,7 +7,7 @@ import javafx.scene.layout.HBox;
 import logic.GameController;
 
 public class PhasePane extends HBox {
-	Canvas phaseCanvas;
+	private Canvas phaseCanvas;
 	
 	public PhasePane() {
 		super();

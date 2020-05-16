@@ -15,8 +15,8 @@ import tile.*;
 import token.*;
 
 public class Board extends GridPane{
-	public final int BOARDSIZEX = 10;
-	public final int BOARDSIZEY = 10;
+	private final int BOARDSIZEX = 10;
+	private final int BOARDSIZEY = 10;
 	private ArrayList<ArrayList<Tile>> tileBoard = new ArrayList<ArrayList<Tile>>();
 	private ArrayList<SpawnTile> spawnTileList = new ArrayList<>();
 	private ArrayList<Minion> minionList = new ArrayList<>();

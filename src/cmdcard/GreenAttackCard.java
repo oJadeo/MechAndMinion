@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class GreenAttackCard extends CmdCard implements Attack,OnGoing{
 
 	public GreenAttackCard() {
-		this.spriteValue = CardSprite.GREEN_ATTACK_CARD_1;
+		super.setSpriteValue(CardSprite.GREEN_ATTACK_CARD_1);
 		this.setCardType("Green");
 	}
 
@@ -44,13 +44,13 @@ public class GreenAttackCard extends CmdCard implements Attack,OnGoing{
 	public void setSpriteValue(int tier) {
 		switch (tier) {
 		case 1:
-			this.spriteValue = CardSprite.GREEN_ATTACK_CARD_1;
+			super.setSpriteValue(CardSprite.GREEN_ATTACK_CARD_1);
 			break;
 		case 2:
-			this.spriteValue = CardSprite.GREEN_ATTACK_CARD_2;
+			super.setSpriteValue(CardSprite.GREEN_ATTACK_CARD_2);
 			break;
 		case 3:
-			this.spriteValue = CardSprite.GREEN_ATTACK_CARD_3;
+			super.setSpriteValue(CardSprite.GREEN_ATTACK_CARD_3);
 			break;
 
 		}

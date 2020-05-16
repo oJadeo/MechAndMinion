@@ -29,16 +29,16 @@ public class Mech extends Token {
 			cmdBoard.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
 			switch (dir) {
 			case UP:
-				this.spriteValue = TileSprite.MECH1_UP;
+				this.setSpriteValue(TileSprite.MECH1_UP);
 				break;
 			case RIGHT:
-				this.spriteValue = TileSprite.MECH1_RIGHT;
+				this.setSpriteValue(TileSprite.MECH1_RIGHT);
 				break;
 			case DOWN:
-				this.spriteValue = TileSprite.MECH1_DOWN;
+				this.setSpriteValue(TileSprite.MECH1_DOWN);
 				break;
 			case LEFT:
-				this.spriteValue = TileSprite.MECH1_LEFT;
+				this.setSpriteValue(TileSprite.MECH1_LEFT);
 				break;
 			default:
 				break;
@@ -48,16 +48,16 @@ public class Mech extends Token {
 			cmdBoard.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 			switch (dir) {
 			case UP:
-				this.spriteValue = TileSprite.MECH2_UP;
+				this.setSpriteValue(TileSprite.MECH2_UP);
 				break;
 			case RIGHT:
-				this.spriteValue = TileSprite.MECH2_RIGHT;
+				this.setSpriteValue(TileSprite.MECH2_RIGHT);
 				break;
 			case DOWN:
-				this.spriteValue = TileSprite.MECH2_DOWN;
+				this.setSpriteValue(TileSprite.MECH2_DOWN);
 				break;
 			case LEFT:
-				this.spriteValue = TileSprite.MECH2_LEFT;
+				this.setSpriteValue(TileSprite.MECH2_LEFT);
 				break;
 			default:
 				break;
@@ -70,7 +70,6 @@ public class Mech extends Token {
 
 	@Override
 	public void damaged() {
-		//Make it show
 		Media musicFile = new Media(ClassLoader.getSystemResource("hited.mp3").toString());
 		MediaPlayer mediaPlayer = new MediaPlayer(musicFile);
 		mediaPlayer.setAutoPlay(true);
@@ -133,16 +132,16 @@ public class Mech extends Token {
 		case 0:
 			switch (dir) {
 			case UP:
-				this.spriteValue = TileSprite.MECH1_UP;
+				this.setSpriteValue(TileSprite.MECH1_UP);
 				break;
 			case RIGHT:
-				this.spriteValue = TileSprite.MECH1_RIGHT;
+				this.setSpriteValue(TileSprite.MECH1_RIGHT);
 				break;
 			case DOWN:
-				this.spriteValue = TileSprite.MECH1_DOWN;
+				this.setSpriteValue(TileSprite.MECH1_DOWN);
 				break;
 			case LEFT:
-				this.spriteValue = TileSprite.MECH1_LEFT;
+				this.setSpriteValue(TileSprite.MECH1_LEFT);
 				break;
 			default:
 				break;
@@ -151,16 +150,16 @@ public class Mech extends Token {
 		case 1:
 			switch (dir) {
 			case UP:
-				this.spriteValue = TileSprite.MECH2_UP;
+				this.setSpriteValue(TileSprite.MECH2_UP);
 				break;
 			case RIGHT:
-				this.spriteValue = TileSprite.MECH2_RIGHT;
+				this.setSpriteValue(TileSprite.MECH2_RIGHT);
 				break;
 			case DOWN:
-				this.spriteValue = TileSprite.MECH2_DOWN;
+				this.setSpriteValue(TileSprite.MECH2_DOWN);
 				break;
 			case LEFT:
-				this.spriteValue = TileSprite.MECH2_LEFT;
+				this.setSpriteValue(TileSprite.MECH2_LEFT);
 				break;
 			default:
 				break;

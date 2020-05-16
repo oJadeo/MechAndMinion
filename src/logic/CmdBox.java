@@ -26,10 +26,9 @@ public class CmdBox extends Button {
 	private ArrayList<CmdCard> cmdCardList;
 	private Mech programmedMech;
 	private Canvas cmdCanvas;
-	int no = 0;
 
 	// for drafted Card
-	public CmdBox(int a) {
+	public CmdBox(int slot) {
 		super();
 		cmdCanvas = new Canvas(123, 200);
 		this.cmdCardList = new ArrayList<CmdCard>();
@@ -42,7 +41,7 @@ public class CmdBox extends Button {
 		this.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				GameController.setSelectedCard(a);
+				GameController.setSelectedCard(slot);
 			}
 
 		});
@@ -50,9 +49,9 @@ public class CmdBox extends Button {
 
 			@Override
 			public void handle(MouseEvent event) {
-				if (GameController.getDraftedCard().getDraftedCardList().get(a) != null) {
+				if (GameController.getDraftedCard().getDraftedCardList().get(slot) != null) {
 					GameController.getCardPane()
-							.setShowingCard(GameController.getDraftedCard().getDraftedCardList().get(a));
+							.setShowingCard(GameController.getDraftedCard().getDraftedCardList().get(slot));
 				}
 			}
 
@@ -76,9 +75,9 @@ public class CmdBox extends Button {
 				if (GameController.getCurrentPhase() == Phase.Program) {
 					Dragboard db = ((Button) event.getSource()).startDragAndDrop(TransferMode.MOVE);
 					ClipboardContent content = new ClipboardContent();
-					content.putString(Integer.toString(a));
+					content.putString(Integer.toString(slot));
 					db.setContent(content);
-					GameController.setSelectedCard(a);
+					GameController.setSelectedCard(slot);
 					event.consume();
 				}
 			};

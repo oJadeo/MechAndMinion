@@ -41,10 +41,4 @@ public class Rotate180Card extends CmdCard implements OnGoing {
 
 	}
 
-	@Override
-	public void setSpriteValue(int spriteValue) {
-		// TODO Auto-generated method stub
-		this.spriteValue = spriteValue;
-	}
-
 }
