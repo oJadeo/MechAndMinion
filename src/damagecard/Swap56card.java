@@ -21,9 +21,4 @@ public class Swap56card extends CmdCard implements Instant {
 		this.getProgrammedMech().getCmdBoard().getCmdBox(5).setCmdCardList(temp);
 	}
 
-	@Override
-	public void setSpriteValue(int spriteValue) {
-		this.spriteValue = spriteValue;
-	}
-
 }

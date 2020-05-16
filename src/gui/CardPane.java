@@ -313,7 +313,6 @@ public class CardPane extends VBox {
 	}
 
 	public void setDescription(CmdCard showingCard) {
-		// TODO description for everyCard
 		if (showingCard instanceof BlueAttackCard) {
 			descriptionLabel.setText("1:Damage 1 target in same line at any range\n"
 					+ "2:Damage 2 target in same line at any range\n" + "3:Damage 3 target in same line at any range\n"
@@ -406,7 +405,6 @@ public class CardPane extends VBox {
 			descriptionLabel.setText("");
 		}
 	}
-
 	public CmdCard getSelectedCard() {
 		return selectedCard;
 	}

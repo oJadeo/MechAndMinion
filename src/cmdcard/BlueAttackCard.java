@@ -12,7 +12,7 @@ import card.base.Attack;
 public class BlueAttackCard extends CmdCard implements Attack, OnGoing {
 
 	public BlueAttackCard() {
-		this.spriteValue = CardSprite.BLUE_ATTACK_CARD_1;
+		super.setSpriteValue(CardSprite.BLUE_ATTACK_CARD_1);
 		this.setCardType("Blue");
 	}
 
@@ -45,13 +45,13 @@ public class BlueAttackCard extends CmdCard implements Attack, OnGoing {
 	public void setSpriteValue(int tier) {
 		switch (tier) {
 		case 1:
-			this.spriteValue = CardSprite.BLUE_ATTACK_CARD_1;
+			super.setSpriteValue(CardSprite.BLUE_ATTACK_CARD_1);
 			break;
 		case 2:
-			this.spriteValue = CardSprite.BLUE_ATTACK_CARD_2;
+			super.setSpriteValue(CardSprite.BLUE_ATTACK_CARD_1);
 			break;
 		case 3:
-			this.spriteValue = CardSprite.BLUE_ATTACK_CARD_3;
+			super.setSpriteValue(CardSprite.BLUE_ATTACK_CARD_1);
 			break;
 		}
 

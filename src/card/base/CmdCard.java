@@ -6,20 +6,19 @@ import token.Mech;
 public abstract class CmdCard {
 	private String cardType = null;
 	private Mech programmedMech;
-	protected int spriteValue;
+	private int spriteValue;
 	private CmdBox cmdBox;
-
-	public CmdCard() {
-	}
 
 	public void setCardType(String cardType) {
 		this.cardType = cardType;
 	}
 
-	public abstract void setSpriteValue(int tier);
-
 	public String getCardType() {
 		return this.cardType;
+	}
+
+	public void setSpriteValue(int spriteValue) {
+		this.spriteValue = spriteValue;
 	}
 
 	public int getSpriteValue() {
