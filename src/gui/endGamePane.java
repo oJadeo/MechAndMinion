@@ -150,7 +150,6 @@ public class EndGamePane extends VBox {
 		try {
 			getTopScore();
 		} catch (FileNotFoundException e) {
-			// TODO 
 			System.out.println("FileNotFoundException");
 		}
 		int rank = getRank();

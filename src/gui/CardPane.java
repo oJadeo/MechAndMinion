@@ -69,11 +69,19 @@ public class CardPane extends VBox {
 		descriptionPane.getChildren().add(descriptionLabel);
 		this.getChildren().add(descriptionPane);
 
-		triggerButton = new Button();
+		triggerButton = new Button();		
 		triggerButton.setPrefSize(420, 80);
 		triggerButton.setText("Trigger");
 		triggerButton.setFont(new Font(30));
-		triggerButton.setDisable(true);
+		triggerButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				GameController.endGame();
+			}
+			
+		});
 		this.getChildren().add(triggerButton);
 		
 	}
