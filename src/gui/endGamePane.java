@@ -150,7 +150,12 @@ public class EndGamePane extends VBox {
 		try {
 			getTopScore();
 		} catch (FileNotFoundException e) {
-			// TODO 
+			try {
+			      File scoreFile = new File(ClassLoader.getSystemResource("score.txt").getFile());
+			      scoreFile.createNewFile();
+			    } catch (IOException io) {
+			      System.out.println("IOExceotion in Create new File");
+			    }
 		}
 		int rank = getRank();
 		setTopScore(rank);
@@ -168,7 +173,7 @@ public class EndGamePane extends VBox {
 	}
 
 	public void getTopScore() throws FileNotFoundException {
-		Scanner scanner = new Scanner(new File(ClassLoader.getSystemResource("score.txt").getFile()));
+		Scanner scanner = new Scanner(new File("res/score.txt"));
 		while (scanner.hasNext()) {
 			String read = scanner.next();
 			try {
@@ -388,7 +393,7 @@ public class EndGamePane extends VBox {
 
 	public void saveNewScore(String Name) {
 		try {
-			FileWriter writer = new FileWriter(new File(ClassLoader.getSystemResource("score.txt").getFile()), true);
+			FileWriter writer = new FileWriter("res/score.txt", true);
 			writer.write(Name.trim() + "\n");
 			writer.write(GameController.getScore() + "\n");
 			writer.close();
