@@ -54,7 +54,7 @@ public class EndGamePane extends VBox {
 		scoreGridPane = new GridPane();
 		scoreGridPane.setAlignment(Pos.CENTER);
 		scoreGridPane.setPrefSize(1920, 880);
-		
+
 		HBox buttonPane = new HBox();
 		buttonPane.setAlignment(Pos.CENTER);
 		buttonPane.setPrefSize(1920, 200);
@@ -90,7 +90,7 @@ public class EndGamePane extends VBox {
 		exit.setDisable(true);
 		exit.setVisible(false);
 		buttonPane.getChildren().add(exit);
-		
+
 		HBox headRankPane = new HBox();
 		headRankPane.setPrefSize(100, 40);
 		headRankPane.setBorder(new Border(new BorderStroke(Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK,
@@ -150,7 +150,6 @@ public class EndGamePane extends VBox {
 		try {
 			getTopScore();
 		} catch (FileNotFoundException e) {
-			// TODO 
 			System.out.println("Create score.txt");
 		}
 		int rank = getRank();
