@@ -624,7 +624,7 @@ public class GameController {
 					Alert alert = new Alert(AlertType.INFORMATION);
 					alert.setTitle("Alert");
 					alert.setHeaderText(null);
-					alert.setContentText("You can put a maximum of 2 cards");
+					alert.setContentText("You can put a maximum of 2 cards" + e.message);
 					alert.showAndWait();
 				}
 			} else {
