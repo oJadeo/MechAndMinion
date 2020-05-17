@@ -73,15 +73,7 @@ public class CardPane extends VBox {
 		triggerButton.setPrefSize(420, 80);
 		triggerButton.setText("Trigger");
 		triggerButton.setFont(new Font(30));
-		triggerButton.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				GameController.endGame();
-			}
-			
-		});
+		triggerButton.setDisable(true);
 		this.getChildren().add(triggerButton);
 		
 	}
